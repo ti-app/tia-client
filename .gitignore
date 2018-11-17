@@ -68,3 +68,7 @@ npm-debug.*
 *.mobileprovision
 
 package-lock.json
+
+# Ignore config files
+src/config/FirebaseConfig.js
+src/config/FacebookConfig.js
