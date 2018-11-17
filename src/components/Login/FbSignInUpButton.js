@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Dimensions, Image } from 'react-native';
+import {FontAwesome} from '../../../assets/fonts/FontAwesome.ttf';
 import { RkButton, RkText, RkStyleSheet } from 'react-native-ui-kitten';
-// import { FontAwesome } from './../../assets/fonts';
+
 
 export default class FbSignInUpButton extends Component {
     render() {
@@ -25,17 +26,15 @@ export default class FbSignInUpButton extends Component {
 }
 let styles = RkStyleSheet.create((theme) => ({
     buttons: {
-        flexDirection: 'row',
-        marginBottom: scaleVertical(24),
-        justifyContent: 'space-between',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
     },
     fb: {
-        flex: 4,
-        marginLeft: 10,
-        marginVertical: 1,
-        height: scale(56),
-    },
-}));
+      flex: 4,
+      marginLeft: 10,
+      marginVertical: 1
+    }
+  }));
 
 //   export default connect(mapStateToProps, {
 //     facebookSignin, facebookSignup

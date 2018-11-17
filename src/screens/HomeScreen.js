@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import ProductText from '../components/ProductText';
+import ProductText from '../components/shared/ProductText';
 
 export default class HomeScreen extends React.Component {
     static navigationOptions = {
