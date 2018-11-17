@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { LinearGradient } from 'expo';
 
-export default class BlackFade extends React.Component {
+export default class SplashScreen extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
