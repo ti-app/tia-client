@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Image, TextInput } from 'react-native';
 import ProductText from '../components/ProductText';
-export default class Login extends React.Component {
+import Login from '../components/Login/Login';
+export default class LoginScreen extends React.Component {
     constructor(props) {
         super(props);
         this.state = { text: 'Useless Placeholder' };
@@ -17,6 +18,7 @@ export default class Login extends React.Component {
                             source={require('../../assets/images/icon.png')}
                         />
                         <ProductText>TIA | Tree Irrigation APP</ProductText>
+                    <Login />
                     </View>
                     <View style={styles.formContainer}>
                         <TextInput
