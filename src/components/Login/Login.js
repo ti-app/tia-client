@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { View, Keyboard, Dimensions, LayoutAnimation } from 'react-native';
+import { View, Keyboard, Dimensions, LayoutAnimation, Text } from 'react-native';
 
 import { FbSignInUpButton } from './FbSignInUpButton';
 
-class Login extends Component {
+export default class Login extends Component {
     render(){
         return (
             <View >
-            <FbSignInUpButton />
+            {/* <FbSignInUpButton /> */}
+            <Text> This is sample </Text>
           </View>
         )
     }
