@@ -16,7 +16,7 @@ export default class HomeScreen extends React.Component {
     }
 
     componentDidMount() {
-        setTimeout(() => this.props.navigation.navigate('Login'), 500);
+        setTimeout(() => this.props.navigation.navigate('Reset'), 500);
     }
 }
 

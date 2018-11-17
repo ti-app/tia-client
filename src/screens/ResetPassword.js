@@ -1,22 +1,31 @@
 import React from 'react';
-import { StyleSheet, View, TextIn, Button } from 'react-native';
+import { StyleSheet, View, TextInput, Button } from 'react-native';
 // import LogoWithText from '../components/LogoWithText';
 
 export default class ResetPassword extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = { text: 'Email Address' };
+    }
+
+    onResetPasswordPress() {
+        console.log('Reset Password clicked!');
+    }
+
     render() {
         return (
             <View>
-                <LogoWithText />
-                <View style={styles.formContainer}>
+                {/* <LogoWithText /> */}
+                <View>
                     <TextInput
                         style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
                         onChangeText={(text) => this.setState({ text })}
                         value={this.state.text}
                     />
-                    <Button>SEND PASSWORD RESET LINK</Button>
+                    <Button onPress={this.onResetPasswordPress} title="SEND PASSWORD RESET LINK" />
                 </View>
             </View>
         );
     }
 }
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({ formContainer: {} });
