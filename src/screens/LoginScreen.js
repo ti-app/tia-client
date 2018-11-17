@@ -1,8 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, Image, TextInput } from 'react-native';
-import ProductText from '../components/ProductText';
+import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
+
+import ProductText from '../components/shared/ProductText';
 import Login from '../components/Login/Login';
 export default class LoginScreen extends React.Component {
+    static navigationOptions = {
+        header: null,
+    };
+
     constructor(props) {
         super(props);
         this.state = { text: 'Useless Placeholder' };
@@ -18,15 +23,9 @@ export default class LoginScreen extends React.Component {
                             source={require('../../assets/images/icon.png')}
                         />
                         <ProductText>TIA | Tree Irrigation APP</ProductText>
-                    <Login />
+                        <Login />
                     </View>
-                    <View style={styles.formContainer}>
-                        <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                            onChangeText={(text) => this.setState({ text })}
-                            value={this.state.text}
-                        />
-                    </View>
+                    <View style={styles.formContainer}>{/* <FormInput /> */}</View>
                     <View style={styles.extrasContainer} />
                 </View>
             </View>
