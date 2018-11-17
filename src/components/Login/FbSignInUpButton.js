@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { View, Dimensions, Image } from 'react-native';
-import { connect } from 'react-redux';
 import {
     RkButton,
     RkText,
     RkStyleSheet
   } from 'react-native-ui-kitten';
-  import {FontAwesome} from './../../assets/fonts';
+  import {FontAwesome} from '../../../assets/fonts/FontAwesome.ttf';
 
   class FbSignInUpButton extends Component {
     render() {
@@ -27,14 +26,12 @@ import {
   let styles = RkStyleSheet.create(theme => ({
     buttons: {
       flexDirection: 'row',
-      marginBottom: scaleVertical(24),
       justifyContent: 'space-between',
     },
     fb: {
       flex: 4,
       marginLeft: 10,
-      marginVertical: 1,
-      height: scale(56)
+      marginVertical: 1
     }
   }));
 

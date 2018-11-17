@@ -1,5 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { StackNavigator } from 'react-navigation';
+
+import { LoginScreen } from './src/screens/LoginScreen';
 
 export default class App extends React.Component {
   render() {
@@ -10,6 +13,10 @@ export default class App extends React.Component {
     );
   }
 }
+
+const AppNavigator = StackNavigator({
+  LoginScreen: { screen: LoginScreen} 
+});
 
 const styles = StyleSheet.create({
   container: {
