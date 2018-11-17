@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, Image, TextInput } from 'react-native';
+
 import ProductText from '../components/ProductText';
+
 export default class Login extends React.Component {
     constructor(props) {
         super(props);
@@ -19,11 +21,7 @@ export default class Login extends React.Component {
                         <ProductText>TIA | Tree Irrigation APP</ProductText>
                     </View>
                     <View style={styles.formContainer}>
-                        <TextInput
-                            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-                            onChangeText={(text) => this.setState({ text })}
-                            value={this.state.text}
-                        />
+                        <FormInput />
                     </View>
                     <View style={styles.extrasContainer} />
                 </View>
