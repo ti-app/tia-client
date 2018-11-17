@@ -1,25 +1,17 @@
 import React, { Component } from 'react';
-import { View, Dimensions, Image } from 'react-native';
-import {FontAwesome} from '../../../assets/fonts/FontAwesome.ttf';
+import { View, Dimensions, Image, Text } from 'react-native';
+import { FontAwesome } from '../../../assets/fonts/FontAwesome.ttf';
 import { RkButton, RkText, RkStyleSheet } from 'react-native-ui-kitten';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 export default class FbSignInUpButton extends Component {
     render() {
         return (
             <View style={styles.buttons}>
-                <RkButton style={styles.button} rkType="social">
-                    <RkText
-                        onPress={() => {
-                            this._pressSignInUp();
-                        }}
-                        rkType="awesome hero accentColor"
-                        style={{ fontFamily: 'fontawesome' }}
-                    >
-                        awdawdeawea
-                        {/* {FontAwesome.facebook} */}
-                    </RkText>
-                </RkButton>
+                <Icon.Button name="facebook" backgroundColor="#3b5998" onPress={this.loginWithFacebook}>
+                    Login with Facebook
+                </Icon.Button>
             </View>
         );
     }
