@@ -5,20 +5,21 @@ import LogoWithText from '../components/shared/LogoWithText';
 import LoginForm from '../components/Login/LoginForm';
 import SocialLogin from '../components/Login/SocialLogin';
 import OnboardNavigation from '../components/shared/OnboardNavigation';
+import OnboardDivider from '../components/shared/OnboardDivider';
 
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
-
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.contentContainer}>
-          <LogoWithText />
-          <LoginForm />
-          <SocialLogin />
-          <OnboardNavigation linkToRegister />
+          <LogoWithText style={styles.iconContainer} />
+          <LoginForm style={styles.formContainer} />
+          <OnboardDivider style={styles.dividerContainer} />
+          <SocialLogin style={styles.socialContainer} />
+          <OnboardNavigation style={styles.onboardContainer} linkToRegister />
         </View>
       </View>
     );
@@ -31,6 +32,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderWidth: 1,
     justifyContent: 'center',
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   iconContainer: {
     display: 'flex',
@@ -39,8 +42,16 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   formContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
+    marginBottom: 16,
+  },
+  dividerContainer: {
+    marginBottom: 16,
+  },
+  socialContainer: {
+    marginBottom: 16,
+  },
+  onboardContainer: {
+    alignSelf: 'center',
   },
   loadingText: {
     fontSize: 20,

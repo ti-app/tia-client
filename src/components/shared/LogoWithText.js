@@ -5,14 +5,18 @@ import ProductText from './ProductText';
 
 const styles = StyleSheet.create({
   iconContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 200,
   },
   icon: {
-    height: 30,
-    width: 30,
+    alignSelf: 'center',
+    height: 60,
+    width: 60,
     margin: 20,
+    borderRadius: 12,
+  },
+  appName: {
+    alignSelf: 'center',
+    fontSize: 20,
   },
 });
 

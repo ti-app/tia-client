@@ -1,39 +1,52 @@
 {
-    "name": "tia-client",
-    "main": "node_modules/expo/AppEntry.js",
-    "private": true,
-    "scripts": {
-        "start": "expo start",
-        "android": "expo start --android",
-        "ios": "expo start --ios",
-        "eject": "expo eject"
-    },
-    "dependencies": {
-        "expo": "^31.0.2",
-        "react": "16.5.0",
-        "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
-        "react-native-drawer": "^2.5.1",
-        "react-native-elements": "^0.19.1",
-        "react-native-fontawesome": "^6.0.0",
-        "react-native-ui-kitten": "^3.1.2",
-        "react-native-vector-icons": "^6.1.0",
-        "react-navigation": "^3.0.0",
-        "react-redux": "^5.1.1"
-    },
-    "devDependencies": {
-        "babel-preset-expo": "^5.0.0",
-        "eslint": "^5.9.0",
-        "eslint-config-airbnb": "^17.1.0",
-        "eslint-config-prettier": "^3.3.0",
-        "eslint-plugin-import": "^2.14.0",
-        "eslint-plugin-jsx-a11y": "^6.1.2",
-        "eslint-plugin-prettier": "^3.0.0",
-        "eslint-plugin-react": "^7.11.1",
-        "prettier": "^1.15.2"
-    },
-    "rnpm": {
-        "assets": [
-            "./assets/fonts"
-        ]
+  "name": "tia-client",
+  "main": "node_modules/expo/AppEntry.js",
+  "private": true,
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "eject": "expo eject"
+  },
+  "dependencies": {
+    "expo": "^31.0.2",
+    "react": "16.5.0",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native-drawer": "^2.5.1",
+    "react-native-elements": "^0.19.1",
+    "react-native-fontawesome": "^6.0.0",
+    "react-native-ui-kitten": "^3.1.2",
+    "react-native-vector-icons": "^6.1.0",
+    "react-navigation": "^3.0.0",
+    "react-redux": "^5.1.1",
+    "husky": "^1.1.4",
+    "lint-staged": "^8.0.5"
+  },
+  "devDependencies": {
+    "babel-preset-expo": "^5.0.0",
+    "eslint": "^5.9.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-react": "^7.11.1",
+    "prettier": "^1.15.2"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,json,less,css,md}": [
+      "prettier --write --config ./internals/prettier/.prettierrc",
+      "git add"
+    ]
+  }
 }

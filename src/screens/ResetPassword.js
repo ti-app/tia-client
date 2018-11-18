@@ -15,15 +15,29 @@ export default class ResetPassword extends React.Component {
 
   render() {
     return (
-      <View>
-        <LogoWithText />
+      <View style={styles.container}>
+        <View style={styles.iconContainer}>
+          <LogoWithText />
+        </View>
         <View style={styles.formContainer}>
-          <ResetPasswordForm />
+          <View style={styles.form}>
+            <ResetPasswordForm />
+          </View>
         </View>
       </View>
     );
   }
 }
 const styles = StyleSheet.create({
-  formContainer: {},
+  iconContainer: {
+    marginTop: 60,
+    alignSelf: 'center',
+  },
+  formContainer: {
+    height: 400,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  form: {},
 });
