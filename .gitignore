@@ -70,5 +70,5 @@ npm-debug.*
 package-lock.json
 
 # Ignore config files
-src/config/FirebaseConfig.js
-src/config/FacebookConfig.js
+src/config/auth/FirebaseConfig.js
+src/config/auth/FacebookConfig.js
