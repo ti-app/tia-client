@@ -6,7 +6,7 @@ export default class ProductText extends React.Component {
         return (
             <Text
                 {...this.props}
-                style={[this.props.style, { fontFamily: 'product-sans', color: '#7e7e7e' }]}
+                style={[{ fontFamily: 'product-sans', color: '#7e7e7e' }, this.props.style]}
             />
         );
     }

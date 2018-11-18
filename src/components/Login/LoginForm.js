@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
+import { View } from 'react-native';
 
 import { RkButton } from 'react-native-ui-kitten';
 import { Entypo } from '@expo/vector-icons';
@@ -10,7 +10,7 @@ import ProductText from '../shared/ProductText';
 export default class LoginForm extends React.Component {
     render() {
         return (
-            <View style={styles.container}>
+            <View style={this.props.style}>
                 <FormInput
                     icon={<Entypo name="user" />}
                     placeholder="Email Address"
@@ -37,10 +37,3 @@ export default class LoginForm extends React.Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        paddingLeft: 16,
-        paddingRight: 16,
-    },
-});
