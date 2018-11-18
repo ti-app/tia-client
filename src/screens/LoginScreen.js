@@ -6,6 +6,7 @@ import Login from '../components/Login/Login';
 import LoginForm from '../components/Login/LoginForm';
 import SocialLogin from '../components/Login/SocialLogin';
 import OnboardNavigation from '../components/shared/OnboardNavigation';
+import OnboardDivider from '../components/shared/OnboardDivider';
 
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
@@ -15,7 +16,7 @@ export default class LoginScreen extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.contentContainer}>
+                <View>
                     <View style={styles.iconContainer}>
                         <Image
                             style={styles.icon}
@@ -24,9 +25,10 @@ export default class LoginScreen extends React.Component {
                         <ProductText>TIA | Tree Irrigation APP</ProductText>
                         {/* <Login /> */}
                     </View>
-                    <LoginForm />
-                    <SocialLogin />
-                    <OnboardNavigation linkToRegister />
+                    <LoginForm style={styles.formContainer} />
+                    <OnboardDivider style={styles.dividerContainer} />
+                    <SocialLogin style={styles.socialContainer} />
+                    <OnboardNavigation style={styles.onboardContainer} linkToRegister />
                 </View>
             </View>
         );
@@ -39,6 +41,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderWidth: 1,
         justifyContent: 'center',
+        paddingLeft: 16,
+        paddingRight: 16,
     },
     iconContainer: {
         display: 'flex',
@@ -47,8 +51,16 @@ const styles = StyleSheet.create({
         marginBottom: 32,
     },
     formContainer: {
-        paddingLeft: 16,
-        paddingRight: 16,
+        marginBottom: 16,
+    },
+    dividerContainer: {
+        marginBottom: 16,
+    },
+    socialContainer: {
+        marginBottom: 16,
+    },
+    onboardContainer: {
+        alignSelf: 'center',
     },
     loadingText: {
         fontSize: 20,
