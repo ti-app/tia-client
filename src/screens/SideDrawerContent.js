@@ -1,20 +1,34 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo';
 
-export default class SideDrawerContent extends React.Component {
-    render() {
-        return (
-            <View
-                style={{ 
-                    flex: 1, 
-                    flexDirection: 'column', 
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
-                    backgroundColor: '#EEE' 
-                }}>
-                <Text>OrderList</Text>
-                <Text>Notify</Text>
-            </View>
-        );
-    }
-};
+const styles = StyleSheet.create({
+  contentText: {
+    top: '33%',
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
+export default function SideDrawerContent() {
+  return (
+    <View style={{ flex: 1 }}>
+      <LinearGradient
+        colors={['#FCE38A', '#42E695']}
+        style={{
+          position: 'relative',
+          left: 0,
+          right: 5,
+          top: 0,
+          height: 1000,
+        }}
+      >
+        <Text style={styles.contentText}>CREATING A BETTER TOMORROW</Text>
+      </LinearGradient>
+    </View>
+  );
+}

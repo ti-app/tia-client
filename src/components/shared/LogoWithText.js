@@ -1,15 +1,7 @@
+/* eslint-disable global-require */
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import ProductText from './ProductText';
-
-export const LogoWithText = () => {
-  return (
-    <View style={styles.iconContainer}>
-      <Image style={styles.icon} source={require('../../../assets/images/icon.png')} />
-      <ProductText>TIA | Tree Irrigation APP</ProductText>
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   iconContainer: {
@@ -24,4 +16,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LogoWithText;
+export default function LogoWithText() {
+  return (
+    <View style={styles.iconContainer}>
+      <Image style={styles.icon} source={require('../../../assets/images/icon.png')} />
+      <ProductText>TIA | Tree Irrigation APP</ProductText>
+    </View>
+  );
+}

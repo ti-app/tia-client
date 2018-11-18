@@ -28,8 +28,7 @@ export default class LoginForm extends React.Component {
                 <View>
                     <RkButton
                         rkType="stretch success"
-                        contentStyle={{ fontFamily: 'product-sans' }}
-                    >
+                        contentStyle={{ fontFamily: 'product-sans' }}>
                         LOGIN
                     </RkButton>
                 </View>
@@ -42,5 +41,5 @@ const styles = StyleSheet.create({
     container: {
         paddingLeft: 16,
         paddingRight: 16,
-    },
+    }
 });

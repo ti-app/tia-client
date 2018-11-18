@@ -1,13 +1,16 @@
 import React from 'react';
 import { MapView } from 'expo';
 import Drawer from 'react-native-drawer';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import SideDrawerContent from './SideDrawerContent';
+import { getLocationAsync } from '../utils/Navigator';
 
 export default class HomeScreen extends React.Component {
     state = {
         drawerOpen: false,
         drawerDisabled: false,
+        location: null,
+        errorMessage: null
     };
 
     closeDrawer = () => {
@@ -17,6 +20,17 @@ export default class HomeScreen extends React.Component {
     openDrawer = () => {
         this._drawer.open();
     };
+
+    async componentWillMount() {
+        if (Platform.OS === 'android' && !Constants.isDevice) {
+            this.setState({
+                errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+            });
+        } else {
+            const location = await getLocationAsync();
+            this.setState({ ...this.state, location });
+        }
+    }
 
     render() {
         return (
@@ -41,16 +55,15 @@ export default class HomeScreen extends React.Component {
                 openDrawerOffset={(viewport) => {
                     return 100;
                 }}
-                closedDrawerOffset={() => 50}
-                panOpenMask={0.2}
-                negotiatePan
-            >
+                closedDrawerOffset={() => 10}
+                panOpenMask={0.5}
+                negotiatePan>
                 <View style={{ flex: 1, flexDirection: 'column' }}>
                     <MapView
                         style={{ flex: 1 }}
                         initialRegion={{
-                            latitude: 37.78825,
-                            longitude: -122.4324,
+                            latitude: (this.state.location && this.state.location.latitude) || 18.577943,
+                            longitude: (this.state.location && this.state.location.longitude) || 73.6742973,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
