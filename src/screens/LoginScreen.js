@@ -1,29 +1,24 @@
 import React from 'react';
-import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import ProductText from '../components/shared/ProductText';
-import Login from '../components/Login/Login';
+import LogoWithText from '../components/shared/LogoWithText';
+import LoginForm from '../components/Login/LoginForm';
+import SocialLogin from '../components/Login/SocialLogin';
+import OnboardNavigation from '../components/shared/OnboardNavigation';
+
 export default class LoginScreen extends React.Component {
   static navigationOptions = {
     header: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { text: 'Useless Placeholder' };
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.contentContainer}>
-          <View style={styles.iconContainer}>
-            <Image style={styles.icon} source={require('../../assets/images/icon.png')} />
-            <ProductText>TIA | Tree Irrigation APP</ProductText>
-            <Login />
-          </View>
-          <View style={styles.formContainer}>{/* <FormInput /> */}</View>
-          <View style={styles.extrasContainer} />
+          <LogoWithText />
+          <LoginForm />
+          <SocialLogin />
+          <OnboardNavigation linkToRegister />
         </View>
       </View>
     );
@@ -41,6 +36,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 32,
+  },
+  formContainer: {
+    paddingLeft: 16,
+    paddingRight: 16,
   },
   loadingText: {
     fontSize: 20,

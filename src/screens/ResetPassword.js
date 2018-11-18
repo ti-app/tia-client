@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Button, TextInput } from 'react-native';
-import FormInput from '../components/shared/FormInput';
+import { StyleSheet, View } from 'react-native';
 import LogoWithText from '../components/shared/LogoWithText';
+import ResetPasswordForm from '../components/ResetPassword/ResetPasswordForm';
 
 export default class ResetPassword extends React.Component {
   constructor(props) {
@@ -17,16 +17,13 @@ export default class ResetPassword extends React.Component {
     return (
       <View>
         <LogoWithText />
-        <View>
-          <FormInput
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            onChangeText={(text) => this.setState({ text })}
-            value={this.state.text}
-          />
-          <Button onPress={this.onResetPasswordPress} title="SEND PASSWORD RESET LINK" />
+        <View style={styles.formContainer}>
+          <ResetPasswordForm />
         </View>
       </View>
     );
   }
 }
-const styles = StyleSheet.create({ formContainer: {} });
+const styles = StyleSheet.create({
+  formContainer: {},
+});
