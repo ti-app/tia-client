@@ -1,8 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
-import ProductText from '../components/shared/ProductText';
-import Login from '../components/Login/Login';
+import LogoWithText from '../components/shared/LogoWithText';
 import LoginForm from '../components/Login/LoginForm';
 import SocialLogin from '../components/Login/SocialLogin';
 import OnboardNavigation from '../components/shared/OnboardNavigation';
@@ -12,19 +11,11 @@ export default class LoginScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
-
     render() {
         return (
             <View style={styles.container}>
-                <View>
-                    <View style={styles.iconContainer}>
-                        <Image
-                            style={styles.icon}
-                            source={require('../../assets/images/icon.png')}
-                        />
-                        <ProductText>TIA | Tree Irrigation APP</ProductText>
-                        {/* <Login /> */}
-                    </View>
+                <View style={styles.contentContainer}>
+                    <LogoWithText style={styles.iconContainer} />
                     <LoginForm style={styles.formContainer} />
                     <OnboardDivider style={styles.dividerContainer} />
                     <SocialLogin style={styles.socialContainer} />
