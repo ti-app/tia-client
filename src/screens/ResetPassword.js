@@ -4,27 +4,40 @@ import LogoWithText from '../components/shared/LogoWithText';
 import ResetPasswordForm from '../components/ResetPassword/ResetPasswordForm';
 
 export default class ResetPassword extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = { text: 'Email Address' };
-    }
+  constructor(props) {
+    super(props);
+    this.state = { text: 'Email Address' };
+  }
 
-    onResetPasswordPress() {
-        console.log('Reset Password clicked!');
-    }
+  onResetPasswordPress() {
+    console.log('Reset Password clicked!');
+  }
 
-    render() {
-        return (
-            <View>
-                <LogoWithText />
-                <View style={styles.formContainer}>
-                    <ResetPasswordForm />
-                </View>
-            </View>
-        );
-    }
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.iconContainer}>
+          <LogoWithText />
+        </View>
+        <View style={styles.formContainer}>
+          <View style={styles.form}>
+            <ResetPasswordForm />
+          </View>
+        </View>
+      </View>
+    );
+  }
 }
 const styles = StyleSheet.create({
-  iconContainer: { alignSelf: 'center' },
-  formContainer: {},
+  iconContainer: {
+    marginTop: 60,
+    alignSelf: 'center',
+  },
+  formContainer: {
+    height: 400,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  form: {},
 });

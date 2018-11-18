@@ -4,18 +4,18 @@ import LoginScreen from '../screens/LoginScreen';
 import ResetPasswordScreen from '../screens/ResetPassword';
 
 const AppNavigator = createStackNavigator(
-    {
-        Home: {
-            screen: HomeScreen,
-        },
-        Login: {
-            screen: LoginScreen,
-        },
-        ResetPassword: {
-            screen: ResetPasswordScreen,
-        },
+  {
+    Home: {
+      screen: HomeScreen,
     },
-    { initialRouteName: 'Login' }
+    Login: {
+      screen: LoginScreen,
+    },
+    ResetPassword: {
+      screen: ResetPasswordScreen,
+    },
+  },
+  { initialRouteName: 'ResetPassword' }
 );
 
 export default createAppContainer(AppNavigator);
