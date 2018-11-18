@@ -3,15 +3,14 @@ import { StyleSheet, View, Image, TextInput, Text } from 'react-native';
 
 import ProductText from '../components/shared/ProductText';
 import Login from '../components/Login/Login';
+import LoginForm from '../components/Login/LoginForm';
+import SocialLogin from '../components/Login/SocialLogin';
+import OnboardNavigation from '../components/shared/OnboardNavigation';
+
 export default class LoginScreen extends React.Component {
     static navigationOptions = {
         header: null,
     };
-
-    constructor(props) {
-        super(props);
-        this.state = { text: 'Useless Placeholder' };
-    }
 
     render() {
         return (
@@ -23,10 +22,11 @@ export default class LoginScreen extends React.Component {
                             source={require('../../assets/images/icon.png')}
                         />
                         <ProductText>TIA | Tree Irrigation APP</ProductText>
-                        <Login />
+                        {/* <Login /> */}
                     </View>
-                    <View style={styles.formContainer}>{/* <FormInput /> */}</View>
-                    <View style={styles.extrasContainer} />
+                    <LoginForm />
+                    <SocialLogin />
+                    <OnboardNavigation linkToRegister />
                 </View>
             </View>
         );
@@ -44,6 +44,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        marginBottom: 32,
+    },
+    formContainer: {
+        paddingLeft: 16,
+        paddingRight: 16,
     },
     loadingText: {
         fontSize: 20,
