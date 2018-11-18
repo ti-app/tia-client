@@ -9,7 +9,6 @@
         "eject": "expo eject"
     },
     "dependencies": {
-        "color": "^3.1.0",
         "expo": "^31.0.2",
         "react": "16.5.0",
         "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
@@ -22,11 +21,24 @@
         "react-redux": "^5.1.1"
     },
     "devDependencies": {
-        "babel-preset-expo": "^5.0.0"
+        "babel-preset-expo": "^5.0.0",
+        "husky": "^1.1.4",
+        "lint-staged": "^8.0.5"
     },
     "rnpm": {
         "assets": [
             "./assets/fonts"
+        ]
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "**/*.{js,jsx,json,less,css,md}": [
+            "prettier --write --config ./internals/prettier/.prettierrc",
+            "git add"
         ]
     }
 }

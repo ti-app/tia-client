@@ -1,21 +1,21 @@
-import { createStackNavigator, createAppContainer } from 'react-navigation';
-import HomeScreen from '../screens/HomeScreen';
-import LoginScreen from '../screens/LoginScreen';
-import ResetPasswordScreen from '../screens/ResetPassword';
+import { createStackNavigator, createAppContainer } from "react-navigation";
+import HomeScreen from "../screens/HomeScreen";
+import LoginScreen from "../screens/LoginScreen";
+import ResetPasswordScreen from "../screens/ResetPassword";
 
 const AppNavigator = createStackNavigator(
     {
         Home: {
-            screen: HomeScreen,
+            screen: HomeScreen
         },
         Login: {
-            screen: LoginScreen,
+            screen: LoginScreen
         },
         ResetPassword: {
-            screen: ResetPasswordScreen,
-        },
+            screen: ResetPasswordScreen
+        }
     },
-    { initialRouteName: 'Login' }
+    { initialRouteName: "Login" }
 );
 
 export default createAppContainer(AppNavigator);
