@@ -27,6 +27,6 @@ export default class ResetPassword extends React.Component {
   }
 }
 const styles = StyleSheet.create({
-  iconContainer: {},
+  iconContainer: { alignSelf: 'center' },
   formContainer: {},
 });

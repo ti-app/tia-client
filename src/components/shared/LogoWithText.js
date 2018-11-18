@@ -6,21 +6,26 @@ export const LogoWithText = (props) => {
   return (
     <View style={[styles.iconContainer, props.style]}>
       <Image style={styles.icon} source={require('../../../assets/images/icon.png')} />
-      <ProductText>TIA | Tree Irrigation APP</ProductText>
+      <ProductText style={styles.appName}>Tree Irrigation APP</ProductText>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   iconContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    width: 150,
+    borderWidth: 2,
   },
   icon: {
-    height: 30,
-    width: 30,
+    alignSelf: 'center',
+
+    height: 60,
+    width: 60,
     margin: 20,
+    borderRadius: 2,
+  },
+  appName: {
+    alignSelf: 'center',
   },
 });
 
