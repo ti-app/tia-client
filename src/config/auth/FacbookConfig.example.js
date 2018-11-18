@@ -1,1 +1,1 @@
-export const facebookAppId = "*****";
+export const facebookAppId = '*****';
