@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import ProductText from './ProductText';
 
+import { space } from '../../styles/variables';
+
 export const LogoWithText = (props) => {
     return (
         <View style={[styles.iconContainer, props.style]}>
@@ -20,7 +22,7 @@ const styles = StyleSheet.create({
     icon: {
         height: 30,
         width: 30,
-        margin: 20,
+        margin: space.base,
     },
 });
 

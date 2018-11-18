@@ -3,6 +3,9 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import ProductText from './ProductText';
 
+import { space } from '../../styles/variables';
+import { darkGray } from '../../styles/colors';
+
 const OnboardDivider = (props) => (
     <View style={[styles.container, props.style]}>
         <View style={[styles.line, styles.left]} />
@@ -20,10 +23,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignSelf: 'center',
         borderWidth: 1,
-        borderColor: '#7e7e7e',
+        borderColor: darkGray,
     },
-    left: { marginRight: 12 },
-    right: { marginLeft: 12 },
+    left: { marginRight: space.base },
+    right: { marginLeft: space.base },
 });
 
 export default OnboardDivider;

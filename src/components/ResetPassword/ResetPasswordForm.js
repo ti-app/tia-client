@@ -6,6 +6,8 @@ import { Entypo } from '@expo/vector-icons';
 
 import FormInput from '../shared/FormInput';
 
+import { space } from '../../styles/variables';
+
 export default class ResetPasswordForm extends React.Component {
     render() {
         return (
@@ -30,7 +32,7 @@ export default class ResetPasswordForm extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        paddingLeft: 16,
-        paddingRight: 16,
+        paddingLeft: space.base,
+        paddingRight: space.base,
     },
 });
