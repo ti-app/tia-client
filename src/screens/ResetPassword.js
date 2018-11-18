@@ -16,7 +16,9 @@ export default class ResetPassword extends React.Component {
   render() {
     return (
       <View>
-        <LogoWithText />
+        <View style={styles.iconContainer}>
+          <LogoWithText />
+        </View>
         <View style={styles.formContainer}>
           <ResetPasswordForm />
         </View>
@@ -25,5 +27,6 @@ export default class ResetPassword extends React.Component {
   }
 }
 const styles = StyleSheet.create({
+  iconContainer: {},
   formContainer: {},
 });

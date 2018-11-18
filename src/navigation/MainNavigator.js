@@ -15,7 +15,7 @@ const AppNavigator = createStackNavigator(
       screen: ResetPasswordScreen,
     },
   },
-  { initialRouteName: 'Login' }
+  { initialRouteName: 'ResetPassword' }
 );
 
 export default createAppContainer(AppNavigator);
