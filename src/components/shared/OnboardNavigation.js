@@ -1,16 +1,17 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 
 import ProductText from './ProductText';
 import ProductButton from './ProductButton';
 
-const register = () => (
-	<View>
+const register = ({ navigation }) => (
+	// FIXME: Change 'ResetPassword' to 'Register' after Register screen implemented.
+	<TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
 		<ProductText style={styles.text}>Not a member yet?</ProductText>
 		<ProductButton full transparent success>
 			Register
 		</ProductButton>
-	</View>
+	</TouchableOpacity>
 );
 
 const login = () => (
@@ -24,7 +25,7 @@ const login = () => (
 
 const OnboardNavigation = (props) => (
 	<View style={props.style}>
-		{props.linkToRegister && !props.linkToLogin ? register() : null}
+		{props.linkToRegister && !props.linkToLogin ? register(props) : null}
 		{!props.linkToRegister && props.linkToLogin ? login() : null}
 	</View>
 );

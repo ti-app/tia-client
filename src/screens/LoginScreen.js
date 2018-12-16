@@ -32,7 +32,7 @@ export default class LoginScreen extends React.Component {
 						<LoginForm {...this.props} style={styles.form} />
 						<OnboardDivider style={styles.divider} />
 						<SocialLogin style={styles.social} />
-						<OnboardNavigation style={styles.onboard} linkToRegister />
+						<OnboardNavigation {...this.props} style={styles.onboard} linkToRegister />
 					</Content>
 				</KeyboardAvoidingView>
 			</Container>
