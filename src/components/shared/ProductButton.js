@@ -4,7 +4,7 @@ import { Button } from 'native-base';
 
 import ProductText from './ProductText';
 
-import { black } from '../../styles/colors';
+import { white } from '../../styles/colors';
 
 const ProductButton = (props) => (
 	<Button {...props}>
@@ -14,7 +14,7 @@ const ProductButton = (props) => (
 
 const styles = StyleSheet.create({
 	text: {
-		color: black,
+		color: white,
 		alignSelf: 'center',
 	},
 });
