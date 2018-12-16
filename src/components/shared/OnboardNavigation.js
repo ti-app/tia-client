@@ -6,7 +6,7 @@ import ProductButton from './ProductButton';
 
 const register = ({ navigation }) => (
 	// FIXME: Change 'ResetPassword' to 'Register' after Register screen implemented.
-	<TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
+	<TouchableOpacity onPress={() => navigation.navigate('Register')}>
 		<ProductText style={styles.text}>Not a member yet?</ProductText>
 		<ProductButton full transparent success>
 			Register
@@ -14,19 +14,19 @@ const register = ({ navigation }) => (
 	</TouchableOpacity>
 );
 
-const login = () => (
-	<View>
+const login = ({ navigation }) => (
+	<TouchableOpacity onPress={() => navigation.navigate('Login')}>
 		<ProductText style={styles.text}>Already a member?</ProductText>
 		<ProductButton full transparent success>
 			Login
 		</ProductButton>
-	</View>
+	</TouchableOpacity>
 );
 
 const OnboardNavigation = (props) => (
 	<View style={props.style}>
 		{props.linkToRegister && !props.linkToLogin ? register(props) : null}
-		{!props.linkToRegister && props.linkToLogin ? login() : null}
+		{!props.linkToRegister && props.linkToLogin ? login(props) : null}
 	</View>
 );
 
