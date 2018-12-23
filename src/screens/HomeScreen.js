@@ -12,12 +12,14 @@ export default class HomeScreen extends React.Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
 			headerTitle: <HomeNavigationBar nearbySpotsCount={12} />,
+			headerTransparent: true,
 			headerStyle: {
 				zIndex: 100,
 				height: 80,
 				borderBottomColor: 'red',
 				borderBottomWidth: 2,
-				background: 'rgba(255,255,255,1)',
+				backgroundColor: '#ffff',
+				opacity: 0.8,
 			},
 		};
 	};
