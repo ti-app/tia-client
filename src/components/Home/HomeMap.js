@@ -7,7 +7,7 @@ import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { Container } from 'native-base';
 
-export default class MapContainer extends React.Component {
+export default class HomeMap extends React.Component {
 	state = {
 		region: {
 			latitude: 40.43907562958712,

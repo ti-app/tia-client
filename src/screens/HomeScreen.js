@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 
 import HomeDrawer from '../components/Home/Drawer';
-import MapContainer from '../components/Home/MapContainer';
+import HomeMap from '../components/Home/HomeMap';
 import HomeNavigationBar from '../components/Home/HomeNavigationBar';
 
 export default class HomeScreen extends React.Component {
@@ -17,7 +17,7 @@ export default class HomeScreen extends React.Component {
 	render() {
 		return (
 			<HomeDrawer>
-				<MapContainer />
+				<HomeMap />
 			</HomeDrawer>
 		);
 	}
