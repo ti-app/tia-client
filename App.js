@@ -4,6 +4,8 @@ import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-nativ
 import { StyleProvider } from 'native-base';
 import { AppLoading } from 'expo';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import { Provider } from 'react-redux';
+import store from './src/store';
 
 import AppNavigator from './src/navigation/AppNavigator';
 import loadResourcesAsync from './src/utils/LoadResources';
@@ -57,12 +59,14 @@ export default class App extends React.Component {
 			);
 		} else {
 			return (
-				<StyleProvider style={getTheme(material)}>
-					<View style={styles.container}>
-						{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-						<AppNavigator />
-					</View>
-				</StyleProvider>
+				<Provider store={store}>
+					<StyleProvider style={getTheme(material)}>
+						<View style={styles.container}>
+							{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+							<AppNavigator />
+						</View>
+					</StyleProvider>
+				</Provider>
 			);
 		}
 	}

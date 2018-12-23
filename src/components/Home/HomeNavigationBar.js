@@ -1,37 +1,64 @@
 import React from 'react';
-
-import { StyleSheet } from 'react-native';
-
+import { connect } from 'react-redux';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base';
+import Feather from '@expo/vector-icons/Feather';
+import Foundation from '@expo/vector-icons/Foundation';
+import { toggleDrawer } from '../../store/actions/ui-interactions';
 
-export default ({ nearbySpotsCount }) => (
+const HomeNavigatorBar = ({ nearbySpotsCount, toggleDrawer }) => (
 	<View style={styles.container}>
-		<View style={styles.menuButton} />
-		<View>
+		<TouchableOpacity style={styles.menuButton} onPress={() => toggleDrawer()}>
+			<Feather size={20} name="menu" />
+		</TouchableOpacity>
+		<View style={styles.textContainer}>
 			<Text style={styles.title}> Nearby </Text>
 			<Text style={styles.info}>{nearbySpotsCount} spots around you</Text>
 		</View>
-		<View style={styles.filterButton} />
+		<TouchableOpacity style={styles.filterButton}>
+			<Foundation size={20} name="filter" />
+		</TouchableOpacity>
 	</View>
 );
 
 const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		width: '100%',
-		height: 80,
-		backgroundColor: 'white',
-		borderBottomColor: 'red',
-		borderBottomWidth: 2,
+	},
+	textContainer: {
+		marginTop: 10,
 	},
 	title: {
 		alignSelf: 'center',
+		fontWeight: 'bold',
+		fontSize: 18,
 	},
 	info: {
 		alignSelf: 'center',
+		fontSize: 18,
 	},
-	menuButton: {},
-	filterButton: {},
+	menuButton: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		paddingLeft: 10,
+	},
+	filterButton: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		paddingRight: 10,
+	},
 });
+
+const mapDispatchToProps = (dispatch) => ({
+	toggleDrawer: () => dispatch(toggleDrawer()),
+});
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(HomeNavigatorBar);

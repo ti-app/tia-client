@@ -1,10 +1,11 @@
 import React from 'react';
 import Drawer from 'react-native-drawer';
 import { StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import SideDrawerContent from './SideDrawerContent';
 
-export default class HomeDrawer extends React.Component {
+class HomeDrawer extends React.Component {
 	state = {
 		drawerOpen: false,
 		drawerDisabled: false,
@@ -23,16 +24,11 @@ export default class HomeDrawer extends React.Component {
 		return (
 			<Drawer
 				ref={(ref) => (this._drawer = ref)}
+				open={this.props.isDrawerOpen}
 				type="static"
 				content={<SideDrawerContent />}
 				acceptDoubleTap
 				styles={{ main: { shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15 } }}
-				onOpen={() => {
-					this.setState({ drawerOpen: true });
-				}}
-				onClose={() => {
-					this.setState({ drawerOpen: false });
-				}}
 				captureGestures={false}
 				tweenDuration={100}
 				panThreshold={0.08}
@@ -40,7 +36,6 @@ export default class HomeDrawer extends React.Component {
 				openDrawerOffset={(viewport) => {
 					return 100;
 				}}
-				closedDrawerOffset={() => 20}
 				panOpenMask={0.2}
 				negotiatePan
 			>
@@ -51,3 +46,9 @@ export default class HomeDrawer extends React.Component {
 }
 
 const styles = StyleSheet.create({});
+
+const mapStateToProps = (state) => ({
+	isDrawerOpen: state.ui.isDrawerOpen,
+});
+
+export default connect(mapStateToProps)(HomeDrawer);
