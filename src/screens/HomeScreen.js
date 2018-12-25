@@ -1,12 +1,14 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { connect } from 'react-redux';
 
 import HomeDrawer from '../components/Home/Drawer';
 import HomeMap from '../components/Home/HomeMap';
 import HomeNavigationBar from '../components/Home/HomeNavigationBar';
 import AddActionButton from '../components/shared/AddActionButton';
+import FilterTree from '../components/Home/FilterTree';
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
 	state = {};
 
 	static navigationOptions = ({ navigation }) => {
@@ -25,8 +27,15 @@ export default class HomeScreen extends React.Component {
 	};
 
 	render() {
+		const { isFilterOpen } = this.props;
+
 		return (
 			<HomeDrawer>
+				{isFilterOpen ? (
+					<View style={styles.filterContainer}>
+						<FilterTree />
+					</View>
+				) : null}
 				<HomeMap />
 				<AddActionButton />
 			</HomeDrawer>
@@ -34,4 +43,17 @@ export default class HomeScreen extends React.Component {
 	}
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+	filterContainer: {
+		height: 380,
+		backgroundColor: 'white',
+		borderBottomColor: 'red',
+		borderBottomWidth: 2,
+	},
+});
+
+const mapStateToProps = (state) => ({
+	isFilterOpen: state.ui.isFilterOpen,
+});
+
+export default connect(mapStateToProps)(HomeScreen);
