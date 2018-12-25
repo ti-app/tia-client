@@ -1,12 +1,15 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Text } from 'native-base';
+import { connect } from 'react-redux';
 
 import HomeDrawer from '../components/Home/Drawer';
 import HomeMap from '../components/Home/HomeMap';
 import HomeNavigationBar from '../components/Home/HomeNavigationBar';
 import AddActionButton from '../components/shared/AddActionButton';
+import { fetchCurrentLocation } from '../store/actions/location';
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
 	state = {};
 
 	static navigationOptions = ({ navigation }) => {
@@ -24,7 +27,13 @@ export default class HomeScreen extends React.Component {
 		};
 	};
 
+	componentWillMount() {
+		this.props.fetchCurrentLocation();
+	}
+
 	render() {
+		const { currentLocation } = this.props;
+
 		return (
 			<HomeDrawer>
 				<HomeMap />
@@ -35,3 +44,16 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({});
+
+const mapStateToProps = (state) => ({
+	currentLocation: state.location.currentLocation,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	fetchCurrentLocation: () => dispatch(fetchCurrentLocation()),
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(HomeScreen);

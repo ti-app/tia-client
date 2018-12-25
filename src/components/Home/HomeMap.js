@@ -1,13 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { Marker } from 'react-native-maps';
+import { connect } from 'react-redux';
 
 import Map from '../Map/Map';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { Container } from 'native-base';
 
-export default class HomeMap extends React.Component {
+class HomeMap extends React.Component {
 	state = {
 		region: {
 			latitude: 40.43907562958712,
@@ -42,14 +44,18 @@ export default class HomeMap extends React.Component {
 	};
 
 	render() {
+		const { currentLocation } = this.props;
+
+		const { latitude, longitude } = currentLocation;
+
 		return (
 			<Container style={styles.container}>
 				<Map
 					initialRegion={{
-						latitude: 40.43907562958712,
-						longitude: -122.53999315202236,
-						latitudeDelta: 6.508817991434235,
-						longitudeDelta: 4.45413663983345,
+						latitude,
+						longitude,
+						latitudeDelta: 0.508817991434235,
+						longitudeDelta: 0.15413663983345,
 					}}
 					x
 					data={[
@@ -73,3 +79,23 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 	},
 });
+
+HomeMap.propTypes = {
+	currentLocation: PropTypes.shape({
+		latitude: PropTypes.number,
+		longitude: PropTypes.number,
+	}),
+};
+
+HomeMap.defaultProps = {
+	currentLocation: {
+		latitude: 18.5740821,
+		longitude: 73.7777393,
+	},
+};
+
+const mapStateToProps = (state) => ({
+	currentLocation: state.location.currentLocation,
+});
+
+export default connect(mapStateToProps)(HomeMap);
