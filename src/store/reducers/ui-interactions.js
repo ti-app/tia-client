@@ -1,7 +1,8 @@
-import { TOGGLE_DRAWER } from '../actions/ui-interactions';
+import { TOGGLE_DRAWER, TOGGLE_FILTER } from '../actions/ui-interactions';
 
 const initialState = {
 	isDrawerOpen: false,
+	isFilterOpen: false,
 };
 
 const uiInteractionsReducer = (state = initialState, action) => {
@@ -11,7 +12,11 @@ const uiInteractionsReducer = (state = initialState, action) => {
 				isDrawerOpen: !state.isDrawerOpen,
 			};
 		}
-
+		case TOGGLE_FILTER: {
+			return {
+				isFilterOpen: !state.isFilterOpen,
+			};
+		}
 		default: {
 			return state;
 		}

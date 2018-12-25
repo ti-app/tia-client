@@ -4,9 +4,9 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base';
 import Feather from '@expo/vector-icons/Feather';
 import Foundation from '@expo/vector-icons/Foundation';
-import { toggleDrawer } from '../../store/actions/ui-interactions';
+import { toggleDrawer, toggleFilter } from '../../store/actions/ui-interactions';
 
-const HomeNavigatorBar = ({ nearbySpotsCount, toggleDrawer }) => (
+const HomeNavigatorBar = ({ nearbySpotsCount, toggleDrawer, toggleFilter }) => (
 	<View style={styles.container}>
 		<TouchableOpacity style={styles.menuButton} onPress={() => toggleDrawer()}>
 			<Feather size={20} name="menu" />
@@ -15,7 +15,7 @@ const HomeNavigatorBar = ({ nearbySpotsCount, toggleDrawer }) => (
 			<Text style={styles.title}> Nearby </Text>
 			<Text style={styles.info}>{nearbySpotsCount} spots around you</Text>
 		</View>
-		<TouchableOpacity style={styles.filterButton}>
+		<TouchableOpacity style={styles.filterButton} onPress={() => toggleFilter()}>
 			<Foundation size={20} name="filter" />
 		</TouchableOpacity>
 	</View>
@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
 	toggleDrawer: () => dispatch(toggleDrawer()),
+	toggleFilter: () => dispatch(toggleFilter()),
 });
 
 export default connect(
