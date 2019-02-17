@@ -26,7 +26,7 @@ class HomeMap extends React.Component {
 	renderMarker(data) {
 		return (
 			<Marker key={data.id} coordinate={data.location}>
-				<Tree />
+				<Tree status="healthy" />
 			</Marker>
 		);
 	}
@@ -36,6 +36,12 @@ class HomeMap extends React.Component {
 			coordinate = cluster.coordinate,
 			clusterId = cluster.clusterId;
 
+		// TODO: get all points in a cluster with following commented code
+		// and calculate average of the health status of thee and decide cluster's
+		// health status
+		// const clusteringEngine = this.mapRef.getClusteringEngine(),
+		//   clusteredPoints = clusteringEngine.getLeaves(clusterId, 100);
+
 		return (
 			<Marker
 				key={`cluster-${clusterId}`}
@@ -43,7 +49,7 @@ class HomeMap extends React.Component {
 				coordinate={coordinate}
 				onPress={onPress}
 			>
-				<TreeCluster pointCount={pointCount} />
+				<TreeCluster pointCount={pointCount} status="healthy" />
 			</Marker>
 		);
 	};
@@ -56,7 +62,7 @@ class HomeMap extends React.Component {
 		return (
 			<Container style={styles.container}>
 				<Map
-					ref={(ref) => {
+					onMapLoad={(ref) => {
 						this.mapRef = ref;
 					}}
 					initialRegion={{

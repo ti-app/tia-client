@@ -5,7 +5,17 @@ import ClusteredMapView from 'react-native-maps-super-cluster';
 
 export default class HomeScreen extends React.Component {
 	render() {
-		return <ClusteredMapView style={styles.map} {...this.props} />;
+		const { onMapLoad } = this.props;
+
+		return (
+			<ClusteredMapView
+				ref={(r) => {
+					onMapLoad(r);
+				}}
+				style={styles.map}
+				{...this.props}
+			/>
+		);
 	}
 }
 
