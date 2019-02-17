@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { StyleSheet, Slider } from 'react-native';
 import { Container, Content, View, Text, Button } from 'native-base';
 import { toggleFilter } from '../../store/actions/ui-interactions';
+import { SelectTreeHealth } from '../shared/SelectTreeHealth';
 
 class FilterTree extends React.Component {
 	constructor(props) {
@@ -16,19 +17,10 @@ class FilterTree extends React.Component {
 
 	render() {
 		const { distance } = this.state;
-		const { toggleFilter } = this.props;
 
 		return (
 			<Container style={styles.container}>
-				<View style={styles.header}>
-					<Text style={styles.cancelButton} onPress={() => toggleFilter()}>
-						{' '}
-						Cancel{' '}
-					</Text>
-					<Text style={styles.title}> Filters </Text>
-					<Text style={styles.saveButton}> Save </Text>
-				</View>
-				<Content>
+				<Content style={styles.content}>
 					<Text style={styles.textStyle}>How far from you?</Text>
 					<View style={styles.view}>
 						<Slider
@@ -59,17 +51,12 @@ class FilterTree extends React.Component {
 						</Button>
 					</View>
 					<Text style={styles.textStyle}>Health of the plant(s)</Text>
-					<View style={styles.view}>
-						<Button success>
-							<Text> HEALTHY </Text>
-						</Button>
-						<Button warning>
-							<Text> WEAK </Text>
-						</Button>
-						<Button danger>
-							<Text> ALMOST DEAD </Text>
-						</Button>
-					</View>
+					<SelectTreeHealth
+						onSelectedStatusChange={(selectedStatus) => {
+							console.log(selectedStatus);
+						}}
+						type="multiple"
+					/>
 				</Content>
 			</Container>
 		);
@@ -91,15 +78,11 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		justifyContent: 'center',
 		width: '100%',
-		padding: 10,
+		marginTop: 70,
 		zIndex: 99,
 	},
-	header: {
-		display: 'flex',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		height: 60,
+	content: {
+		padding: 20,
 	},
 	cancelButton: {
 		color: '#000',

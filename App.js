@@ -1,5 +1,4 @@
 import React from 'react';
-import { Location, Permissions } from 'expo';
 
 import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
 import { StyleProvider } from 'native-base';

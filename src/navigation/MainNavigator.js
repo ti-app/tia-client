@@ -3,6 +3,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import RegisterScreen from '../screens/RegisterScreen';
+import AddNewSpotScreen from '../screens/AddNewSpotScreen';
 
 const AppNavigator = createStackNavigator(
 	{
@@ -18,8 +19,11 @@ const AppNavigator = createStackNavigator(
 		Register: {
 			screen: RegisterScreen,
 		},
+		AddNewSpot: {
+			screen: AddNewSpotScreen,
+		},
 	},
-	{ initialRouteName: 'Login' }
+	{ initialRouteName: 'Home' }
 );
 
 export default createAppContainer(AppNavigator);
