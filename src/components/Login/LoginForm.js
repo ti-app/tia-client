@@ -26,7 +26,7 @@ export default class LoginForm extends React.Component {
 					<ProductText>Forgot Password?</ProductText>
 				</TouchableOpacity>
 				<View>
-					<ProductButton full success>
+					<ProductButton full success onPress={() => this.props.navigation.navigate('Home')}>
 						LOGIN
 					</ProductButton>
 				</View>

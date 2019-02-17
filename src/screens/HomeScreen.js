@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { View } from 'native-base';
 import { connect } from 'react-redux';
 
 import HomeDrawer from '../components/Home/Drawer';
@@ -7,27 +8,60 @@ import HomeMap from '../components/Home/HomeMap';
 import HomeNavigationBar from '../components/Home/HomeNavigationBar';
 import AddActionButton from '../components/shared/AddActionButton';
 import FilterTree from '../components/Home/FilterTree';
+import { fetchCurrentLocation } from '../store/actions/location';
 
 class HomeScreen extends React.Component {
-	state = {};
+	state = { isFilterOpen: false };
 
 	static navigationOptions = ({ navigation }) => {
-		return {
+		const header = navigation.getParam('header', {
 			headerTitle: <HomeNavigationBar nearbySpotsCount={12} />,
 			headerTransparent: true,
 			headerStyle: {
-				zIndex: 100,
 				height: 80,
 				borderBottomColor: 'red',
 				borderBottomWidth: 2,
 				backgroundColor: '#ffff',
 				opacity: 0.8,
 			},
-		};
+			headerLeft: null,
+		});
+
+		return header;
 	};
 
+	static getDerivedStateFromProps(nextProps, prevState) {
+		const { isFilterOpen } = nextProps;
+
+		if (isFilterOpen !== prevState.isFilterOpen) {
+			nextProps.navigation.setParams({
+				header: isFilterOpen
+					? { header: null }
+					: {
+							headerTitle: <HomeNavigationBar nearbySpotsCount={12} />,
+							headerTransparent: true,
+							headerStyle: {
+								height: 80,
+								borderBottomColor: 'red',
+								borderBottomWidth: 2,
+								backgroundColor: '#ffff',
+								opacity: 0.8,
+							},
+							headerLeft: null,
+					  },
+			});
+			return { isFilterOpen };
+		} else {
+			return null;
+		}
+	}
+
+	componentDidMount() {
+		this.props.fetchCurrentLocation();
+	}
+
 	render() {
-		const { isFilterOpen } = this.props;
+		const { isFilterOpen } = this.state;
 
 		return (
 			<HomeDrawer>
@@ -56,4 +90,11 @@ const mapStateToProps = (state) => ({
 	isFilterOpen: state.ui.isFilterOpen,
 });
 
-export default connect(mapStateToProps)(HomeScreen);
+const mapDispatchToProps = (dispatch) => ({
+	fetchCurrentLocation: () => dispatch(fetchCurrentLocation()),
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(HomeScreen);

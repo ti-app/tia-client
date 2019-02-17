@@ -6,7 +6,7 @@ import Feather from '@expo/vector-icons/Feather';
 import Foundation from '@expo/vector-icons/Foundation';
 import { toggleDrawer, toggleFilter } from '../../store/actions/ui-interactions';
 
-const HomeNavigatorBar = ({ nearbySpotsCount, toggleDrawer, toggleFilter }) => (
+const HomeNavigationBar = ({ nearbySpotsCount, toggleDrawer, toggleFilter }) => (
 	<View style={styles.container}>
 		<TouchableOpacity style={styles.menuButton} onPress={() => toggleDrawer()}>
 			<Feather size={20} name="menu" />
@@ -62,4 +62,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
 	null,
 	mapDispatchToProps
-)(HomeNavigatorBar);
+)(HomeNavigationBar);
