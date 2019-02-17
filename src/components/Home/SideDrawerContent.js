@@ -13,8 +13,8 @@ export default class SideDrawerContent extends React.Component {
 					backgroundColor: '#EEE',
 				}}
 			>
-				<Text>OrderList</Text>
 				<Text>Notify</Text>
+				<Text>Logout</Text>
 			</View>
 		);
 	}

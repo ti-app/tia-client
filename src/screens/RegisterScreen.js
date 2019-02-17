@@ -52,11 +52,11 @@ export default class Register extends React.Component {
 					</View>
 					<View style={styles.formContainer}>
 						<View style={styles.registerForm}>
-							<RegisterForm />
+							<RegisterForm {...this.props} />
 						</View>
 						<OnboardDivider style={styles.divider} />
 						<View style={styles.socialRegister}>
-							<SocialRegister />
+							<SocialRegister {...this.props} />
 						</View>
 						<OnboardNavigation {...this.props} style={styles.onboard} linkToLogin />
 					</View>

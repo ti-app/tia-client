@@ -1,11 +1,15 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 
 import { Entypo, EvilIcons, AntDesign } from '@expo/vector-icons';
 
 import FormInput from '../shared/FormInput';
 
 import ProductButton from '../shared/ProductButton';
+
+import * as firebase from 'firebase';
+
+import Toast, { DURATION } from 'react-native-easy-toast';
 
 export default class RegisterPasswordForm extends React.Component {
 	constructor(props) {
@@ -31,7 +35,36 @@ export default class RegisterPasswordForm extends React.Component {
 	}
 
 	onRegisterClick() {
-		console.log('register clicked');
+		firebase
+			.auth()
+			.createUserWithEmailAndPassword(this.state.email, this.state.password)
+			.then(
+				(resp) => {
+					firebase
+						.auth()
+						.currentUser.updateProfile({
+							location: this.state.location,
+						})
+						.then(async (updateUser) => {
+							try {
+								this.refs.toast.show(`Welcome ${this.state.email} !`);
+								this.props.navigation.navigate('Home');
+								this.state = {
+									showPassword: false,
+									email: '',
+									password: '',
+									location: '',
+								};
+								await AsyncStorage.setItem('USER', resp);
+							} catch (error) {
+								console.log(error);
+							}
+						});
+				},
+				(error) => {
+					console.log(error.message);
+				}
+			);
 	}
 
 	onTogglePasswordVisiblity() {
@@ -70,6 +103,7 @@ export default class RegisterPasswordForm extends React.Component {
 				<ProductButton full success onPress={this.onRegisterClick.bind(this)}>
 					REGISTER
 				</ProductButton>
+				<Toast ref="toast" />
 			</View>
 		);
 	}
