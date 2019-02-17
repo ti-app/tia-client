@@ -4,7 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { connect } from 'react-redux';
 
-import Map from '../Map/Map';
+import ClusteredMap from '../Map/ClusteredMap';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { Container } from 'native-base';
@@ -61,7 +61,7 @@ class HomeMap extends React.Component {
 
 		return (
 			<Container style={styles.container}>
-				<Map
+				<ClusteredMap
 					onMapLoad={(ref) => {
 						this.mapRef = ref;
 					}}

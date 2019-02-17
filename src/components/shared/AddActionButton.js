@@ -30,7 +30,7 @@ export default class AddActionButton extends Component {
 				<ActionButton.Item
 					buttonColor="#9b59b6"
 					title="Add a tree"
-					onPress={() => console.log('notes tapped!')}
+					onPress={() => this.props.navigation.navigate('AddNewSpot')}
 				>
 					<Entypo name="tree" size={40} style={styles.icon} />
 				</ActionButton.Item>

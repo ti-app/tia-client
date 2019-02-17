@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { MapView } from 'expo';
 import ClusteredMapView from 'react-native-maps-super-cluster';
 
 export default class HomeScreen extends React.Component {
