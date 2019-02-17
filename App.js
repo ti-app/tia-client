@@ -8,15 +8,35 @@ import { Provider } from 'react-redux';
 import store from './src/store';
 
 import AppNavigator from './src/navigation/AppNavigator';
+import MainTabNavigator from './src/navigation/MainNavigator';
 import loadResourcesAsync from './src/utils/LoadResources';
 
 import getTheme from './native-base-theme/components';
 import material from './native-base-theme/variables/material';
 
+import firebaseConfig from './src/config/auth/FirebaseConfig.example';
+import * as firebase from 'firebase';
+
 export default class App extends React.Component {
-	state = {
-		isLoadingComplete: false,
-		showIntroduction: false,
+	constructor(props) {
+		super(props);
+		this.state = {
+			isLoadingComplete: false,
+			showIntroduction: false,
+			isAuthenticationReady: false,
+			isAuthenticated: false,
+		};
+
+		// Initialize firebase...
+		if (!firebase.apps.length) {
+			firebase.initializeApp(firebaseConfig);
+		}
+		firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
+	}
+
+	onAuthStateChanged = (user) => {
+		this.setState({ isAuthenticationReady: true });
+		this.setState({ isAuthenticated: !!user });
 	};
 
 	async componentWillMount() {
@@ -37,7 +57,6 @@ export default class App extends React.Component {
 	getLaunchStatus = async () => {
 		try {
 			const value = await AsyncStorage.getItem('LAUNCH_STATUS');
-
 			return value ? value : 'INITIAL';
 		} catch (error) {
 			console.log(error);
@@ -63,7 +82,7 @@ export default class App extends React.Component {
 					<StyleProvider style={getTheme(material)}>
 						<View style={styles.container}>
 							{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-							<AppNavigator />
+							{this.state.isAuthenticated ? <MainTabNavigator /> : <AppNavigator />}
 						</View>
 					</StyleProvider>
 				</Provider>
