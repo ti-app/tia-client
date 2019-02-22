@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
-import { StyleProvider } from 'native-base';
+import { StyleProvider, Root } from 'native-base';
 import { AppLoading } from 'expo';
 import AppIntroSlider from 'react-native-app-intro-slider';
 import { Provider } from 'react-redux';
@@ -34,9 +34,10 @@ export default class App extends React.Component {
 		firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
 	}
 
-	onAuthStateChanged = (user) => {
+	onAuthStateChanged = async (user) => {
 		this.setState({ isAuthenticationReady: true });
 		this.setState({ isAuthenticated: !!user });
+		await AsyncStorage.setItem('USER', JSON.stringify(user));
 	};
 
 	async componentWillMount() {
@@ -78,14 +79,16 @@ export default class App extends React.Component {
 			);
 		} else {
 			return (
-				<Provider store={store}>
-					<StyleProvider style={getTheme(material)}>
-						<View style={styles.container}>
-							{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-							{this.state.isAuthenticated ? <MainTabNavigator /> : <AppNavigator />}
-						</View>
-					</StyleProvider>
-				</Provider>
+				<Root>
+					<Provider store={store}>
+						<StyleProvider style={getTheme(material)}>
+							<View style={styles.container}>
+								{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+								{this.state.isAuthenticated ? <MainTabNavigator /> : <AppNavigator />}
+							</View>
+						</StyleProvider>
+					</Provider>
+				</Root>
 			);
 		}
 	}
