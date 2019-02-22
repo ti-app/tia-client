@@ -1,22 +1,49 @@
 import React from 'react';
 import { StyleSheet, Image, AsyncStorage } from 'react-native';
-import { Button, Text, Container, List, ListItem, Content, Icon } from 'native-base';
-const routes = ['Home', 'Add a spot', 'Settings', 'Logout'];
+import { Toast, Text, Container, List, ListItem, Content, Icon } from 'native-base';
+import firebase from 'firebase';
+const routes = ['Home', 'Add a spot', 'Settings'];
 
 export default class SideDrawerContent extends React.Component {
-	state = {
-		loggedInUser: '',
-	};
-
-	async componentDidMount() {
-		const user = await AsyncStorage.getItem('USER');
-		this.setState({
-			loggedInUser: JSON.parse(user),
-		});
+	constructor(props) {
+		super(props);
+		state = {
+			loggedInUser: '',
+		};
 	}
 
+	async componentDidMount() {
+		this._isMount = true;
+		const user = await AsyncStorage.getItem('USER');
+		if (this._isMount) {
+			this.setState({
+				loggedInUser: JSON.parse(user),
+			});
+		}
+	}
+
+	componentWillUnmount() {
+		this._isMount = false;
+	}
+
+	logout = async () => {
+		try {
+			await firebase.auth().signOut();
+			this.props.navigation.navigate('login');
+			Toast.show({
+				text: 'Log out successfully',
+				buttonText: 'Okay',
+			});
+		} catch (e) {
+			Toast.show({
+				text: 'Issue while sign out',
+				buttonText: 'Okay',
+			});
+		}
+	};
+
 	render() {
-		const { loggedInUser } = this.state;
+		// const { loggedInUser } = this.state;
 		return (
 			<Container style={styles.container}>
 				<Content>
@@ -35,14 +62,9 @@ export default class SideDrawerContent extends React.Component {
 								'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/logo.png',
 						}}
 					/>
-					<List contentContainerStyle={{ marginTop: 220 }}>
+					<List contentContainerStyle={{ top: 320 }}>
 						<ListItem button onPress={() => this.props.navigation.navigate(data)}>
-							<Text>{loggedInUser.displayName}</Text>
-						</ListItem>
-					</List>
-					<List contentContainerStyle={{ marginTop: 10 }}>
-						<ListItem button onPress={() => this.props.navigation.navigate(data)}>
-							<Text>{loggedInUser.email}</Text>
+							{/* <Text>{this.state.loggedInUser.email}</Text> */}
 						</ListItem>
 					</List>
 					<List
@@ -56,6 +78,11 @@ export default class SideDrawerContent extends React.Component {
 							);
 						}}
 					/>
+					<List>
+						<ListItem button onPress={this.logout}>
+							<Text>Log out</Text>
+						</ListItem>
+					</List>
 				</Content>
 			</Container>
 		);

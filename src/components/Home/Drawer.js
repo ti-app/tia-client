@@ -26,7 +26,7 @@ class HomeDrawer extends React.Component {
 				ref={(ref) => (this._drawer = ref)}
 				open={this.props.isDrawerOpen}
 				type="static"
-				content={<SideDrawerContent />}
+				content={<SideDrawerContent {...this.props} />}
 				acceptDoubleTap
 				styles={{ main: { shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15 } }}
 				captureGestures={false}
