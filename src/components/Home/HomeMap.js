@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Marker } from 'react-native-maps';
 import { connect } from 'react-redux';
 
@@ -8,15 +8,39 @@ import ClusteredMap from '../Map/ClusteredMap';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { Container } from 'native-base';
+import { toggleSpotDetails } from '../../store/actions/ui-interactions';
 
 class HomeMap extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.mapRef = React.createRef();
+		this.clusteredMapRef = React.createRef();
 		this.state = {
 			region: {},
 		};
+
+		this.toggleSpotDetails;
+	}
+
+	componentDidMount() {
+		this.toggleSpotDetails = this.props.toggleSpotDetails;
+	}
+
+	componentDidUpdate(prevProps) {
+		const { latitude: prevLat, longitude: prevLng } = prevProps.currentLocation;
+		const { latitude, longitude } = this.props.currentLocation;
+
+		if ((latitude !== prevLat || longitude !== prevLng) && this.clusteredMapRef) {
+			this.clusteredMapRef.getMapRef().animateToRegion(
+				{
+					latitude,
+					longitude,
+					latitudeDelta: 0.508817991434235,
+					longitudeDelta: 0.15413663983345,
+				},
+				2000
+			);
+		}
 	}
 
 	onRegionChange(region) {
@@ -25,7 +49,19 @@ class HomeMap extends React.Component {
 
 	renderMarker(data) {
 		return (
-			<Marker key={data.id} coordinate={data.location}>
+			<Marker
+				key={data.id}
+				coordinate={data.location}
+				onPress={function() {
+					console.log('Tre emarker clicked.', this);
+					// FIXME: Everything till here was fine. Now I am trying to call following
+					// methods, and it says that this.props is undefined, has to do something with
+					// implementation of clusteredmapview.js
+					// this.props.toggleSpotDetails()
+					// Need to find a way to pass this function in the context where thsi function is called
+					// I know weird right
+				}.bind(this)}
+			>
 				<Tree status="healthy" />
 			</Marker>
 		);
@@ -39,7 +75,7 @@ class HomeMap extends React.Component {
 		// TODO: get all points in a cluster with following commented code
 		// and calculate average of the health status of thee and decide cluster's
 		// health status
-		// const clusteringEngine = this.mapRef.getClusteringEngine(),
+		// const clusteringEngine = this.clusteredMapRef.getClusteringEngine(),
 		//   clusteredPoints = clusteringEngine.getLeaves(clusterId, 100);
 
 		return (
@@ -63,7 +99,8 @@ class HomeMap extends React.Component {
 			<Container style={styles.container}>
 				<ClusteredMap
 					onMapLoad={(ref) => {
-						this.mapRef = ref;
+						this.clusteredMapRef = ref;
+						this.props.onMapLoad(ref);
 					}}
 					initialRegion={{
 						latitude,
@@ -107,4 +144,11 @@ const mapStateToProps = (state) => ({
 	currentLocation: state.location.currentLocation,
 });
 
-export default connect(mapStateToProps)(HomeMap);
+const mapDispatchToProps = (dispatch) => ({
+	toggleSpotDetails: () => dispatch(toggleSpotDetails()),
+});
+
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(HomeMap);

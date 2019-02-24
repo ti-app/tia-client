@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Container, View, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
@@ -11,7 +11,9 @@ import FormInput from '../components/shared/FormInput';
 import { SelectTreeHealth } from '../components/shared/SelectTreeHealth';
 
 class AddNewSpotScreen extends React.Component {
-	state = {};
+	state = {
+		image: null,
+	};
 
 	static navigationOptions = ({ navigation }) => {
 		const header = navigation.getParam('header', {
@@ -41,18 +43,21 @@ class AddNewSpotScreen extends React.Component {
 		return header;
 	};
 
-	uploadImage = async () => {
+	takePhoto = async () => {
 		const { status: cameraPerm } = await Permissions.askAsync(Permissions.CAMERA);
 
 		const { status: cameraRollPerm } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
 		if (cameraPerm === 'granted' && cameraRollPerm === 'granted') {
-			let pickerResult = await ImagePicker.launchCameraAsync({});
-			// TODO: Do something with the picker result
+			console.log('luanching camersa');
+			const pickerResult = await ImagePicker.launchCameraAsync({});
+			console.log(pickerResult);
+			this.setState({ image: pickerResult.uri });
 		}
 	};
 
 	render() {
+		const { image } = this.state;
 		return (
 			<Container style={styles.container}>
 				<MapView
@@ -91,9 +96,19 @@ class AddNewSpotScreen extends React.Component {
 							}}
 						/>
 					</View>
-					<TouchableOpacity style={styles.imageUploadContainer} onPress={this.uploadImage}>
-						<Text> Take a photo</Text>
-					</TouchableOpacity>
+					{image ? (
+						// <View style={styles.imageContainer}>
+						<Image
+							source={{ uri: image }}
+							resizeMode="contain"
+							style={{ width: '100%', height: 150 }}
+						/>
+					) : (
+						// </View>
+						<TouchableOpacity style={styles.imageUploadContainer} onPress={this.takePhoto}>
+							<Text> Take a photo</Text>
+						</TouchableOpacity>
+					)}
 					<View style={styles.addButtonContainer}>
 						<Button
 							style={styles.addButton}
@@ -133,6 +148,13 @@ const styles = StyleSheet.create({
 		width: '100%',
 		height: 150,
 		backgroundColor: 'lightgray',
+	},
+	imageContainer: {
+		width: '100%',
+		height: 150,
+	},
+	image: {
+		width: '100%',
 	},
 	addButtonContainer: {},
 	addButton: { justifyContent: 'center', width: '100%' },

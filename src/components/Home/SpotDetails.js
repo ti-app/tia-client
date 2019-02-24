@@ -19,10 +19,18 @@ class SpotDetails extends React.Component {
 				<Content>
 					<View style={styles.heading}>
 						<Text style={styles.addressLabel}>Two Stones</Text>
-						<Text style={styles.distanceLabel}>1.3 km FROM HOME</Text>
+						<Text style={styles.distanceLabel}>1.3 km FROM YOUR POSITION</Text>
 					</View>
-					<View style={styles.weekStatus}>
-						{this.renderWeekStatus()}
+					<View style={styles.weekStatusContainer}>
+						{this.renderWeekStatus([
+							{ status: 'healthy' },
+							{ status: 'healthy' },
+							{ status: 'healthy' },
+							{ status: 'healthy' },
+							{ status: 'healthy' },
+							{ status: 'healthy' },
+							{ status: 'healthy' },
+						])}
 						<Text style={styles.lastWateredText}>LAST WATERED ON 05/10/2018 05:55 PM</Text>
 					</View>
 					<Image
@@ -51,7 +59,11 @@ const styles = StyleSheet.create({
 	heading: {},
 	addressLabel: {},
 	distanceLabel: {},
-	weekStatus: {},
+	weekStatusContainer: {},
+	weekDot: { width: 10, height: 10, borderRadius: 5 },
+	healthy: { backgroundColor: 'green' },
+	weak: { backgroundColor: 'orange' },
+	almostDead: { backgroundColor: 'red' },
 	lastWateredText: {},
 	wateredText: { width: '100%' },
 });
