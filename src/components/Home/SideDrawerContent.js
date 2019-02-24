@@ -30,6 +30,7 @@ export default class SideDrawerContent extends React.Component {
 		try {
 			await firebase.auth().signOut();
 			this.props.navigation.navigate('login');
+			await AsyncStorage.removeItem('USER');
 			Toast.show({
 				text: 'Log out successfully',
 				buttonText: 'Okay',
@@ -62,9 +63,11 @@ export default class SideDrawerContent extends React.Component {
 								'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/logo.png',
 						}}
 					/>
-					<List contentContainerStyle={{ top: 320 }}>
+				</Content>
+				<Content>
+					<List contentContainerStyle={{ position: 'absolute', top: 20 }}>
 						<ListItem button onPress={() => this.props.navigation.navigate(data)}>
-							{/* <Text>{this.state.loggedInUser.email}</Text> */}
+							{/* <Text>{this.state.loggedInUser.user.email}</Text> */}
 						</ListItem>
 					</List>
 					<List
