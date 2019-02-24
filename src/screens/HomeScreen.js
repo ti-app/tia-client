@@ -99,7 +99,7 @@ class HomeScreen extends React.Component {
 		const { isFilterOpen, isSpotDetailsOpen } = this.props;
 
 		return (
-			<HomeDrawer>
+			<HomeDrawer {...this.props}>
 				{isFilterOpen ? (
 					<View style={styles.filterContainer}>
 						<FilterTree />
