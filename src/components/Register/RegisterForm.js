@@ -11,7 +11,7 @@ import * as firebase from 'firebase';
 
 import Toast, { DURATION } from 'react-native-easy-toast';
 
-export default class RegisterPasswordForm extends React.Component {
+class RegisterPasswordForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -35,6 +35,8 @@ export default class RegisterPasswordForm extends React.Component {
 	}
 
 	onRegisterClick() {
+		const { setLoading } = this.props;
+		setLoading(true);
 		firebase
 			.auth()
 			.createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -47,6 +49,7 @@ export default class RegisterPasswordForm extends React.Component {
 						})
 						.then(async (updateUser) => {
 							try {
+								setLoading(false);
 								this.refs.toast.show(`Welcome ${this.state.email} !`);
 								this.props.navigation.navigate('Home');
 								this.state = {
@@ -112,3 +115,8 @@ export default class RegisterPasswordForm extends React.Component {
 const styles = StyleSheet.create({
 	container: {},
 });
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(RegisterPasswordForm);

@@ -4,7 +4,7 @@ import { Container } from 'native-base';
 
 import LogoWithText from '../components/shared/LogoWithText';
 import RegisterForm from '../components/Register/RegisterForm';
-import SocialRegister from '../components/Register/SocialRegister';
+import SocialLogin from '../components/Login/SocialLogin';
 import { space } from '../styles/variables';
 import OnboardDivider from '../components/shared/OnboardDivider';
 import OnboardNavigation from '../components/shared/OnboardNavigation';
@@ -56,7 +56,7 @@ export default class Register extends React.Component {
 						</View>
 						<OnboardDivider style={styles.divider} />
 						<View style={styles.socialRegister}>
-							<SocialRegister {...this.props} />
+							<SocialLogin {...this.props} />
 						</View>
 						<OnboardNavigation {...this.props} style={styles.onboard} linkToLogin />
 					</View>

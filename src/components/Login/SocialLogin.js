@@ -1,9 +1,11 @@
 import React from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
 import ProductButton from '../shared/ProductButton';
 import * as firebase from 'firebase';
+import { setLoading } from '../../store/actions/ui-interactions';
 
-export default class SocialLogin extends React.Component {
+class SocialLogin extends React.Component {
 	isUserEqual = (googleUser, firebaseUser) => {
 		if (firebaseUser) {
 			var providerData = firebaseUser.providerData;
@@ -19,19 +21,19 @@ export default class SocialLogin extends React.Component {
 		}
 		return false;
 	};
+
 	onSignIn = async (googleUser) => {
 		console.log('Google Auth Response', googleUser);
 		console.log('navigate', this.props.navigation);
-		this.props.navigation.navigate('Home');
 		await AsyncStorage.setItem('USER', JSON.stringify(googleUser));
 		// We need to register an Observer on Firebase Auth to make sure auth is initialized.
-		var unsubscribe = firebase.auth().onAuthStateChanged(
+		const unsubscribe = firebase.auth().onAuthStateChanged(
 			function(firebaseUser) {
 				unsubscribe();
 				// Check if we are already signed-in Firebase with the correct user.
 				if (!this.isUserEqual(googleUser, firebaseUser)) {
 					// Build Firebase credential with the Google ID token.
-					var credential = firebase.auth.GoogleAuthProvider.credential(
+					const credential = firebase.auth.GoogleAuthProvider.credential(
 						googleUser.idToken,
 						googleUser.accessToken
 					);
@@ -41,38 +43,9 @@ export default class SocialLogin extends React.Component {
 						.signInAndRetrieveDataWithCredential(credential)
 						.then(function(result) {
 							console.log('user signed in ');
-							if (result.additionalUserInfo.isNewUser) {
-								firebase
-									.database()
-									.ref('/users/' + result.user.uid)
-									.set({
-										gmail: result.user.email,
-										profile_picture: result.additionalUserInfo.profile.picture,
-										first_name: result.additionalUserInfo.profile.given_name,
-										last_name: result.additionalUserInfo.profile.family_name,
-										created_at: Date.now(),
-									})
-									.then(function(snapshot) {
-										// console.log('Snapshot', snapshot);
-									});
-							} else {
-								firebase
-									.database()
-									.ref('/users/' + result.user.uid)
-									.update({
-										last_logged_in: Date.now(),
-									});
-							}
 						})
 						.catch(function(error) {
-							// Handle Errors here.
-							var errorCode = error.code;
-							var errorMessage = error.message;
-							// The email of the user's account used.
-							var email = error.email;
-							// The firebase.auth.AuthCredential type that was used.
-							var credential = error.credential;
-							// ...
+							console.log('error while singing with firebase', error);
 						});
 				} else {
 					console.log('User already signed-in Firebase.');
@@ -80,8 +53,10 @@ export default class SocialLogin extends React.Component {
 			}.bind(this)
 		);
 	};
+
 	signInWithGoogleAsync = async () => {
 		try {
+			this.props.setLoading(true);
 			const result = await Expo.Google.logInAsync({
 				// androidClientId: YOUR_CLIENT_ID_HERE,
 				behavior: 'web',
@@ -90,15 +65,20 @@ export default class SocialLogin extends React.Component {
 			});
 
 			if (result.type === 'success') {
-				this.onSignIn(result);
+				await this.onSignIn(result);
+				this.props.navigation.navigate('Home');
+				this.props.setLoading(false);
 				return result.accessToken;
 			} else {
+				this.props.setLoading(false);
 				return { cancelled: true };
 			}
 		} catch (e) {
+			this.props.setLoading(false);
 			return { error: true };
 		}
 	};
+
 	render() {
 		return (
 			<View style={[styles.container, this.props.style]}>
@@ -136,3 +116,12 @@ const styles = StyleSheet.create({
 		backgroundColor: '#BD4A39',
 	},
 });
+
+const mapDispatchToProps = (dispatch) => ({
+	setLoading: (flag) => dispatch(setLoading(flag)),
+});
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(SocialLogin);

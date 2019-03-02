@@ -9,7 +9,7 @@ import ProductText from '../shared/ProductText';
 
 import * as firebase from 'firebase';
 
-export default class LoginForm extends React.Component {
+class LoginForm extends React.Component {
 	state = {
 		email: '',
 		password: '',
@@ -25,11 +25,14 @@ export default class LoginForm extends React.Component {
 
 	onLoginClick = async () => {
 		console.log(this.state.email, this.state.password, 'Login Click');
+		const { setLoading } = this.props;
+		setLoading(true);
 		firebase
 			.auth()
 			.signInWithEmailAndPassword(this.state.email, this.state.password)
 			.then(async (firebaseUser) => {
 				try {
+					setLoading(false);
 					Toast.show({
 						text: `Welcome! Successfully logged in`,
 						buttonText: 'Okay',
@@ -41,6 +44,7 @@ export default class LoginForm extends React.Component {
 					console.log('USER', firebaseUser);
 					// this.state({ email: '', password: ''});
 				} catch (error) {
+					setLoading(false);
 					Toast.show({
 						text: error,
 						buttonText: 'Okay',
@@ -50,6 +54,7 @@ export default class LoginForm extends React.Component {
 				}
 			})
 			.catch((error) => {
+				setLoading(false);
 				Toast.show({
 					text: error,
 					buttonText: 'Okay',
@@ -87,3 +92,12 @@ export default class LoginForm extends React.Component {
 		);
 	}
 }
+
+const mapDispatchToProps = (dispatch) => ({
+	setLoading: (flag) => dispatch(setLoading(flag)),
+});
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(LoginForm);
