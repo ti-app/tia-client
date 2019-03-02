@@ -1,21 +1,16 @@
 import React from 'react';
 
-import { Platform, StatusBar, StyleSheet, View, AsyncStorage } from 'react-native';
-import { StyleProvider, Root } from 'native-base';
+import { StyleSheet, AsyncStorage } from 'react-native';
 import { AppLoading } from 'expo';
 import AppIntroSlider from 'react-native-app-intro-slider';
+import { StyleProvider, Root } from 'native-base';
 import { Provider } from 'react-redux';
-import store from './src/store';
-
-import AppNavigator from './src/navigation/AppNavigator';
-import MainTabNavigator from './src/navigation/MainNavigator';
-import loadResourcesAsync from './src/utils/LoadResources';
 
 import getTheme from './native-base-theme/components';
 import material from './native-base-theme/variables/material';
-
-import firebaseConfig from './src/config/auth/FirebaseConfig.example';
-import * as firebase from 'firebase';
+import store from './src/store';
+import AppContent from './src';
+import loadResourcesAsync from './src/utils/LoadResources';
 
 export default class App extends React.Component {
 	constructor(props) {
@@ -23,22 +18,8 @@ export default class App extends React.Component {
 		this.state = {
 			isLoadingComplete: false,
 			showIntroduction: false,
-			isAuthenticationReady: false,
-			isAuthenticated: false,
 		};
-
-		// Initialize firebase...
-		if (!firebase.apps.length) {
-			firebase.initializeApp(firebaseConfig);
-		}
-		firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
 	}
-
-	onAuthStateChanged = async (user) => {
-		this.setState({ isAuthenticationReady: true });
-		this.setState({ isAuthenticated: !!user });
-		await AsyncStorage.setItem('USER', JSON.stringify(user));
-	};
 
 	async componentWillMount() {
 		const launchStatus = await this.getLaunchStatus();
@@ -82,10 +63,7 @@ export default class App extends React.Component {
 				<Root>
 					<Provider store={store}>
 						<StyleProvider style={getTheme(material)}>
-							<View style={styles.container}>
-								{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-								{this.state.isAuthenticated ? <MainTabNavigator /> : <AppNavigator />}
-							</View>
+							<AppContent />
 						</StyleProvider>
 					</Provider>
 				</Root>
@@ -108,6 +86,18 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#fff',
+	},
+	loading: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		alignItems: 'center',
+		justifyContent: 'center',
+		opacity: 0.5,
+		backgroundColor: 'black',
+		zIndex: 99,
 	},
 });
 

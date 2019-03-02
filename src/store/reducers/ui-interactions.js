@@ -1,9 +1,15 @@
-import { TOGGLE_DRAWER, TOGGLE_FILTER, TOGGLE_SPOT_DETAILS } from '../actions/ui-interactions';
+import {
+	TOGGLE_DRAWER,
+	TOGGLE_FILTER,
+	TOGGLE_SPOT_DETAILS,
+	SET_LOADING,
+} from '../actions/ui-interactions';
 
 const initialState = {
 	isDrawerOpen: false,
 	isFilterOpen: false,
 	isSpotDetailsOpen: false,
+	loading: false,
 };
 
 const uiInteractionsReducer = (state = initialState, action) => {
@@ -21,6 +27,18 @@ const uiInteractionsReducer = (state = initialState, action) => {
 		case TOGGLE_SPOT_DETAILS: {
 			return {
 				isSpotDetailsOpen: !state.isSpotDetailsOpen,
+			};
+		}
+
+		case TOGGLE_SPOT_DETAILS: {
+			return {
+				isSpotDetailsOpen: !state.isSpotDetailsOpen,
+			};
+		}
+
+		case SET_LOADING: {
+			return {
+				loading: action.flag,
 			};
 		}
 		default: {
