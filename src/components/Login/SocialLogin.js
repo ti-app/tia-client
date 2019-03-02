@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, AsyncStorage } from 'react-native';
 import ProductButton from '../shared/ProductButton';
 
 export default class SocialLogin extends React.Component {
@@ -20,6 +20,8 @@ export default class SocialLogin extends React.Component {
 	};
 	onSignIn = (googleUser) => {
 		console.log('Google Auth Response', googleUser);
+		console.log('navigate', this.props.navigation);
+		this.props.navigation.navigate('Home');
 		// We need to register an Observer on Firebase Auth to make sure auth is initialized.
 		var unsubscribe = firebase.auth().onAuthStateChanged(
 			function(firebaseUser) {
@@ -81,7 +83,7 @@ export default class SocialLogin extends React.Component {
 			const result = await Expo.Google.logInAsync({
 				// androidClientId: YOUR_CLIENT_ID_HERE,
 				behavior: 'web',
-				iosClientId: '67755937701-9s7v4gstbkiavag2n9uko4nncj37j0hg.apps.googleusercontent.com', //enter ios client id
+				iosClientId: '67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com', //enter ios client id
 				scopes: ['profile', 'email'],
 			});
 

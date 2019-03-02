@@ -31,7 +31,7 @@ export default class LoginScreen extends React.Component {
 						<LogoWithText style={[styles.icon, this.state.isKeyboardOpen ? styles.hide : null]} />
 						<LoginForm {...this.props} style={styles.form} />
 						<OnboardDivider style={styles.divider} />
-						<SocialLogin style={styles.social} />
+						<SocialLogin {...this.props} style={styles.social} />
 						<OnboardNavigation {...this.props} style={styles.onboard} linkToRegister />
 					</Content>
 				</KeyboardAvoidingView>
