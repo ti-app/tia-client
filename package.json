@@ -15,6 +15,7 @@
 		"expo": "^31.0.2",
 		"firebase": "^5.8.3",
 		"native-base": "2.8.2",
+		"prettier": "^1.16.4",
 		"prop-types": "^15.6.2",
 		"react": "16.5.0",
 		"react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
