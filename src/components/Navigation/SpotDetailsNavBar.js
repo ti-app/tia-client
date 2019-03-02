@@ -1,18 +1,17 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base';
+import { AntDesign, Feather } from '@expo/vector-icons';
 
-export const OptionsBar = ({ title, leftOption, rightOption }) => (
+export const SpotDetailsNavBar = ({ leftOption }) => (
 	<View style={styles.container}>
 		<TouchableOpacity style={styles.leftButton} onPress={() => leftOption.action()}>
-			<Text style={styles.leftOptionLabel}> {leftOption.label} </Text>
+			<AntDesign name="arrowleft" size={20} />
 		</TouchableOpacity>
 		<View style={styles.titleContainer}>
-			<Text style={styles.title}> {title} </Text>
+			<Text style={styles.title}> Spot Details </Text>
 		</View>
-		<TouchableOpacity style={styles.rightButton} onPress={() => rightOption.action()}>
-			<Text style={styles.rightOptionLabel}> {rightOption.label} </Text>
-		</TouchableOpacity>
+		<View style={styles.placeholder} />
 	</View>
 );
 
@@ -25,23 +24,21 @@ const styles = StyleSheet.create({
 	},
 	titleContainer: {
 		marginTop: 10,
+		flex: 1,
 	},
 	title: {
 		alignSelf: 'center',
 		fontSize: 18,
 	},
-	leftOptionLabel: {},
-	rightOptionLabel: {},
 	leftButton: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
+		// display: 'flex',
+		// flexDirection: 'column',
+		// justifyContent: 'center',
 		paddingLeft: 10,
+		flex: 1,
 	},
-	rightButton: {
-		display: 'flex',
-		flexDirection: 'column',
-		justifyContent: 'center',
-		paddingRight: 10,
+	leftIcon: { color: '#fff' },
+	placeholder: {
+		flex: 1,
 	},
 });

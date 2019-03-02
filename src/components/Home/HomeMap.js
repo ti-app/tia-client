@@ -47,25 +47,19 @@ class HomeMap extends React.Component {
 		this.setState({ region });
 	}
 
-	renderMarker(data) {
+	renderMarker = (data) => {
 		return (
 			<Marker
 				key={data.id}
 				coordinate={data.location}
-				onPress={function() {
-					console.log('Tre emarker clicked.', this);
-					// FIXME: Everything till here was fine. Now I am trying to call following
-					// methods, and it says that this.props is undefined, has to do something with
-					// implementation of clusteredmapview.js
-					// this.props.toggleSpotDetails()
-					// Need to find a way to pass this function in the context where thsi function is called
-					// I know weird right
-				}.bind(this)}
+				onPress={() => {
+					this.props.toggleSpotDetails();
+				}}
 			>
 				<Tree status="healthy" />
 			</Marker>
 		);
-	}
+	};
 
 	renderCluster = (cluster, onPress) => {
 		const pointCount = cluster.pointCount,

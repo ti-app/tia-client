@@ -12,7 +12,8 @@ import FilterTree from '../components/Home/FilterTree';
 import SpotDetails from '../components/Home/SpotDetails';
 import { fetchCurrentLocation } from '../store/actions/location';
 import { OptionsBar } from '../components/Navigation/OptionsBar';
-import { toggleFilter } from '../store/actions/ui-interactions';
+import { SpotDetailsNavBar } from '../components/Navigation/SpotDetailsNavBar';
+import { toggleFilter, toggleSpotDetails } from '../store/actions/ui-interactions';
 
 class HomeScreen extends React.Component {
 	constructor(props) {
@@ -54,32 +55,50 @@ class HomeScreen extends React.Component {
 	}
 
 	componentDidUpdate(prevProps) {
-		const { isFilterOpen, toggleFilter, navigation } = this.props;
+		const {
+			isFilterOpen,
+			toggleFilter,
+			navigation,
+			isSpotDetailsOpen,
+			toggleSpotDetails,
+		} = this.props;
 		const { defaultHeaderOptions } = this.state;
 		const { headerStyle: defaultHeaderStyle } = defaultHeaderOptions;
 
-		if (isFilterOpen !== prevProps.isFilterOpen) {
+		const changeNavigationBar =
+			isFilterOpen !== prevProps.isFilterOpen || isSpotDetailsOpen !== prevProps.isSpotDetailsOpen;
+
+		const isFilterOrSpotDetailsNavBar = isFilterOpen | isSpotDetailsOpen;
+
+		if (changeNavigationBar) {
 			navigation.setParams({
 				header: {
 					...defaultHeaderOptions,
 					headerStyle: {
 						...defaultHeaderStyle,
-						borderBottomWidth: isFilterOpen ? 0 : 2,
+						borderBottomWidth: isFilterOrSpotDetailsNavBar ? 0 : 2,
 					},
-					headerTitle: isFilterOpen ? (
-						<OptionsBar
-							title="Filters"
-							leftOption={{ label: 'Cancel', action: () => toggleFilter() }}
-							rightOption={{
-								label: 'Save',
-								action: () => {
-									console.log('Save filter option and do something with it');
-								},
-							}}
-						/>
-					) : (
-						<HomeNavigationBar nearbySpotsCount={12} />
-					),
+					headerTitle: (() => {
+						switch (true) {
+							case isFilterOpen:
+								return (
+									<OptionsBar
+										title="Filters"
+										leftOption={{ label: 'Cancel', action: () => toggleFilter() }}
+										rightOption={{
+											label: 'Save',
+											action: () => {
+												console.log('Save filter option and do something with it');
+											},
+										}}
+									/>
+								);
+							case isSpotDetailsOpen:
+								return <SpotDetailsNavBar leftOption={{ action: () => toggleSpotDetails() }} />;
+							default:
+								return <HomeNavigationBar nearbySpotsCount={12} />;
+						}
+					})(),
 				},
 			});
 		}
@@ -142,21 +161,24 @@ const styles = StyleSheet.create({
 	},
 	spotDetailsContainer: {
 		position: 'absolute',
+		left: 0,
 		bottom: 0,
-		height: 500,
+		height: 400,
 		backgroundColor: 'white',
+		width: '100%',
 	},
 });
 
 const mapStateToProps = (state) => ({
 	isFilterOpen: state.ui.isFilterOpen,
 	currentLocation: state.location.currentLocation,
-	isSpotDetailsOpen: state.location.isSpotDetailsOpen,
+	isSpotDetailsOpen: state.ui.isSpotDetailsOpen,
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	toggleFilter: () => dispatch(toggleFilter()),
 	fetchCurrentLocation: () => dispatch(fetchCurrentLocation()),
+	toggleSpotDetails: () => dispatch(toggleSpotDetails()),
 });
 
 export default connect(
