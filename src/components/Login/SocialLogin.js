@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import ProductButton from '../shared/ProductButton';
 import * as firebase from 'firebase';
+import { Google } from 'expo';
 
 export default class SocialLogin extends React.Component {
 	isUserEqual = (googleUser, firebaseUser) => {
@@ -82,10 +83,10 @@ export default class SocialLogin extends React.Component {
 	};
 	signInWithGoogleAsync = async () => {
 		try {
-			const result = await Expo.Google.logInAsync({
-				// androidClientId: YOUR_CLIENT_ID_HERE,
+			const result = await Google.logInAsync({
+				androidClientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
 				behavior: 'web',
-				clientId: '67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com', //enter ios client id
+				iosClientId: '67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com', //enter ios client id
 				scopes: ['profile', 'email'],
 			});
 
