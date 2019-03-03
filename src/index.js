@@ -27,22 +27,6 @@ class AppContent extends React.Component {
 	}
 
 	componentWillMount() {
-		const { setLoading } = this.props;
-		axios.interceptors.request.use(
-			(config) => {
-				setLoading(true);
-				return config;
-			},
-			(error) => Promise.reject(error)
-		);
-		axios.interceptors.response.use(
-			(response) => {
-				setLoading(false);
-				return response;
-			},
-			(error) => Promise.reject(error)
-		);
-
 		setLoading(true);
 		// Initialize firebase...
 		if (!firebase.apps.length) {
@@ -51,12 +35,45 @@ class AppContent extends React.Component {
 		firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
 	}
 
+	componentDidMount() {
+		// const { setLoading, user } = this.props;
+		// if (!user || !user.stsTokenManager) {
+		//   return;
+		// }
+		// const xIdToken = user.stsTokenManager.accessToken;
+	}
+
 	onAuthStateChanged = async (user) => {
 		const { setLoading, updateUser } = this.props;
 		this.setState({ isAuthenticated: !!user });
 		updateUser(!!user, user);
 		await AsyncStorage.setItem('USER', JSON.stringify(user));
 		setLoading(false);
+
+		if (user) {
+			const { accessToken } = JSON.parse(JSON.stringify(user)).stsTokenManager;
+			axios.interceptors.request.use(
+				(config) => {
+					setLoading(true);
+					const { headers, ...rest } = config;
+					return {
+						headers: {
+							'x-id-token': accessToken,
+							...headers,
+						},
+						...rest,
+					};
+				},
+				(error) => Promise.reject(error)
+			);
+			axios.interceptors.response.use(
+				(response) => {
+					setLoading(false);
+					return response;
+				},
+				(error) => Promise.reject(error)
+			);
+		}
 	};
 
 	render() {
@@ -97,6 +114,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
 	loading: state.ui.loading,
+	user: state.auth.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({

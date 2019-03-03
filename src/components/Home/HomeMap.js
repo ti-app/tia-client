@@ -106,8 +106,6 @@ class HomeMap extends React.Component {
 			};
 		});
 
-		console.log(mapData);
-
 		return (
 			<Container style={styles.container}>
 				<ClusteredMap
