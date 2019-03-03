@@ -1,36 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { Marker } from 'react-native-maps';
+import { Container } from 'native-base';
 import { connect } from 'react-redux';
 
 import ClusteredMap from '../Map/ClusteredMap';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
-import { Container } from 'native-base';
 import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
+import { fetchTrees } from '../../store/actions/tree.action';
 
 class HomeMap extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.clusteredMapRef = React.createRef();
-		this.state = {
-			region: {},
-		};
-
-		this.toggleSpotDetails;
+		this.state = {};
 	}
 
-	componentDidMount() {
-		this.toggleSpotDetails = this.props.toggleSpotDetails;
-	}
+	componentDidMount() {}
 
 	componentDidUpdate(prevProps) {
 		const { latitude: prevLat, longitude: prevLng } = prevProps.currentLocation;
-		const { latitude, longitude } = this.props.currentLocation;
+		const { currentLocation, fetchTrees } = this.props;
+		const { latitude, longitude } = currentLocation;
 
 		if ((latitude !== prevLat || longitude !== prevLng) && this.clusteredMapRef) {
+			fetchTrees(currentLocation);
 			this.clusteredMapRef.getMapRef().animateToRegion(
 				{
 					latitude,
@@ -43,34 +40,42 @@ class HomeMap extends React.Component {
 		}
 	}
 
-	onRegionChange(region) {
-		this.setState({ region });
-	}
+	onRegionChange = (region) => {};
 
 	renderMarker = (data) => {
+		const { toggleSpotDetails } = this.props;
 		return (
 			<Marker
 				key={data.id}
 				coordinate={data.location}
 				onPress={() => {
-					this.props.toggleSpotDetails();
+					toggleSpotDetails();
 				}}
 			>
-				<Tree status="healthy" />
+				<Tree status={data.health} />
 			</Marker>
 		);
 	};
 
 	renderCluster = (cluster, onPress) => {
-		const pointCount = cluster.pointCount,
-			coordinate = cluster.coordinate,
-			clusterId = cluster.clusterId;
+		const { pointCount, clusterId, coordinate } = cluster;
 
 		// TODO: get all points in a cluster with following commented code
 		// and calculate average of the health status of thee and decide cluster's
 		// health status
-		// const clusteringEngine = this.clusteredMapRef.getClusteringEngine(),
-		//   clusteredPoints = clusteringEngine.getLeaves(clusterId, 100);
+		const clusteringEngine = this.clusteredMapRef.getClusteringEngine();
+		const clusteredPoints = clusteringEngine.getLeaves(clusterId, 100);
+
+		const healthList = ['almostDead', 'weak', 'healthy'];
+
+		const clusteredPointHealthList = clusteredPoints.map((point) => point.properties.item.health);
+
+		let totalHealthScore = 0;
+		clusteredPointHealthList.forEach((_) => {
+			totalHealthScore += healthList.indexOf(_);
+		});
+		totalHealthScore /= parseFloat(clusteredPoints.length);
+		totalHealthScore = parseInt(Math.round(totalHealthScore), 10);
 
 		return (
 			<Marker
@@ -79,22 +84,36 @@ class HomeMap extends React.Component {
 				coordinate={coordinate}
 				onPress={onPress}
 			>
-				<TreeCluster pointCount={pointCount} status="healthy" />
+				<TreeCluster pointCount={pointCount} status={healthList[totalHealthScore]} />
 			</Marker>
 		);
 	};
 
 	render() {
-		const { currentLocation } = this.props;
+		const { currentLocation, trees } = this.props;
 
 		const { latitude, longitude } = currentLocation;
+		const { onMapLoad } = this.props;
+
+		const mapData = trees.map((aTree) => {
+			const { _id, health, location, ...rest } = aTree;
+			const { coordinates } = location;
+			return {
+				id: _id,
+				health,
+				location: { longitude: coordinates[0], latitude: coordinates[1] },
+				...rest,
+			};
+		});
+
+		console.log(mapData);
 
 		return (
 			<Container style={styles.container}>
 				<ClusteredMap
 					onMapLoad={(ref) => {
 						this.clusteredMapRef = ref;
-						this.props.onMapLoad(ref);
+						onMapLoad(ref);
 					}}
 					initialRegion={{
 						latitude,
@@ -103,15 +122,10 @@ class HomeMap extends React.Component {
 						longitudeDelta: 0.15413663983345,
 					}}
 					x
-					data={[
-						{ id: '1', location: { latitude: 18.527834704573817, longitude: 73.84387493133544 } },
-						{ id: '2', location: { latitude: 18.53426376419619, longitude: 73.84490489959717 } },
-						{ id: '3', location: { latitude: 18.52449800870638, longitude: 73.85129928588867 } },
-						{ id: '4', location: { latitude: 18.525189768078093, longitude: 73.85134220123291 } },
-					]}
+					data={mapData}
 					renderMarker={this.renderMarker}
 					renderCluster={this.renderCluster}
-					onRegionChange={this.onRegionChange.bind(this)}
+					onRegionChange={this.onRegionChange}
 				/>
 			</Container>
 		);
@@ -136,10 +150,12 @@ HomeMap.defaultProps = {};
 
 const mapStateToProps = (state) => ({
 	currentLocation: state.location.currentLocation,
+	trees: state.tree.trees,
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	toggleSpotDetails: () => dispatch(toggleSpotDetails()),
+	fetchTrees: (...param) => dispatch(fetchTrees(...param)),
 });
 
 export default connect(

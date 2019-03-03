@@ -2,7 +2,7 @@ import { Toast } from 'native-base';
 import { setLoading } from '../store/actions/ui-interactions.action';
 
 const showErrorToast = (message, err, dispatch) => {
-	console.log('Error adding a tree', err);
+	console.log('Error:', err);
 	Toast.show({
 		text: message,
 		buttonText: 'Damn',

@@ -55,8 +55,6 @@ class SocialLogin extends React.Component {
 				scopes: ['profile', 'email'],
 			});
 
-			console.log(result);
-
 			if (result.type === 'success') {
 				await this.onSignIn(result);
 				navigation.navigate('Home');

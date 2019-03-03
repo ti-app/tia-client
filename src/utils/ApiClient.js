@@ -1,8 +1,6 @@
 import axios from 'axios';
-import config from '../config/common';
+import commonConfig from '../config/common';
 
-const apiClient = axios.create({
-	baseUrl: config.api.base,
-});
+const apiClient = (config) => axios({ baseURL: commonConfig.api.base, ...config });
 
 export default apiClient;

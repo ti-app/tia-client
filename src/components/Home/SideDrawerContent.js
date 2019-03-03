@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import { connect } from 'react-redux';
-import { Toast, Text, Container, List, ListItem, View } from 'native-base';
+import { Toast, Text, List, ListItem, View } from 'native-base';
 import { FontAwesome } from '@expo/vector-icons';
 import { LinearGradient } from 'expo';
 import firebase from 'firebase';

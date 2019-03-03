@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
+import axios from 'axios';
 
 import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainNavigator';
 import firebaseConfig from './config/auth/FirebaseConfig.example';
 import { setLoading } from './store/actions/ui-interactions.action';
-import apiClient from './utils/ApiClient';
 import { updateUserStatus } from './store/actions/auth.action';
 
 class AppContent extends React.Component {
@@ -28,14 +28,14 @@ class AppContent extends React.Component {
 
 	componentWillMount() {
 		const { setLoading } = this.props;
-		apiClient.interceptors.request.use(
+		axios.interceptors.request.use(
 			(config) => {
 				setLoading(true);
 				return config;
 			},
 			(error) => Promise.reject(error)
 		);
-		apiClient.interceptors.response.use(
+		axios.interceptors.response.use(
 			(response) => {
 				setLoading(false);
 				return response;
@@ -54,7 +54,6 @@ class AppContent extends React.Component {
 	onAuthStateChanged = async (user) => {
 		const { setLoading, updateUser } = this.props;
 		this.setState({ isAuthenticated: !!user });
-		console.log('initial on authstate changed observalble use', user);
 		updateUser(!!user, user);
 		await AsyncStorage.setItem('USER', JSON.stringify(user));
 		setLoading(false);
