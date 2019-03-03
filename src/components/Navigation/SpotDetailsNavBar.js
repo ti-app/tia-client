@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base';
-import { AntDesign, Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 export const SpotDetailsNavBar = ({ leftOption }) => (
 	<View style={styles.container}>

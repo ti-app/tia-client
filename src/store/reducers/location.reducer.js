@@ -1,4 +1,4 @@
-import { FETCH_CURRENT_LOCATION_SUCCESS } from '../actions/location';
+import { FETCH_CURRENT_LOCATION_SUCCESS } from '../actions/location.action';
 
 const initialState = {
 	currentLocation: {

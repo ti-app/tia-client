@@ -1,15 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, AsyncStorage } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
-import ProductButton from '../shared/ProductButton';
 import * as firebase from 'firebase';
-import { setLoading } from '../../store/actions/ui-interactions';
+import { Google } from 'expo';
+
+import ProductButton from '../shared/ProductButton';
+import { setLoading } from '../../store/actions/ui-interactions.action';
+import { updateUserStatus } from '../../store/actions/auth.action';
 
 class SocialLogin extends React.Component {
 	isUserEqual = (googleUser, firebaseUser) => {
 		if (firebaseUser) {
-			var providerData = firebaseUser.providerData;
-			for (var i = 0; i < providerData.length; i++) {
+			const { providerData } = firebaseUser;
+			for (let i = 0; i < providerData.length; i += 1) {
 				if (
 					providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
 					providerData[i].uid === googleUser.getBasicProfile().getId()
@@ -23,65 +26,57 @@ class SocialLogin extends React.Component {
 	};
 
 	onSignIn = async (googleUser) => {
-		console.log('Google Auth Response', googleUser);
-		console.log('navigate', this.props.navigation);
-		await AsyncStorage.setItem('USER', JSON.stringify(googleUser));
-		// We need to register an Observer on Firebase Auth to make sure auth is initialized.
-		const unsubscribe = firebase.auth().onAuthStateChanged(
-			function(firebaseUser) {
-				unsubscribe();
-				// Check if we are already signed-in Firebase with the correct user.
-				if (!this.isUserEqual(googleUser, firebaseUser)) {
-					// Build Firebase credential with the Google ID token.
-					const credential = firebase.auth.GoogleAuthProvider.credential(
-						googleUser.idToken,
-						googleUser.accessToken
-					);
-					// Sign in with credential from the Google user.
-					firebase
-						.auth()
-						.signInAndRetrieveDataWithCredential(credential)
-						.then(function(result) {
-							console.log('user signed in ');
-						})
-						.catch(function(error) {
-							console.log('error while singing with firebase', error);
-						});
-				} else {
-					console.log('User already signed-in Firebase.');
-				}
-			}.bind(this)
+		// Build Firebase credential with the Google ID token.
+		const credential = firebase.auth.GoogleAuthProvider.credential(
+			googleUser.idToken,
+			googleUser.accessToken
 		);
+		// Sign in with credential from the Google user.
+		firebase
+			.auth()
+			.signInAndRetrieveDataWithCredential(credential)
+			.then(async (result) => {
+				console.log('user registered in firebase', result);
+			})
+			.catch((error) => {
+				console.log('error while singing with firebase', error);
+			});
 	};
 
 	signInWithGoogleAsync = async () => {
+		const { setLoading, navigation } = this.props;
 		try {
-			this.props.setLoading(true);
-			const result = await Expo.Google.logInAsync({
-				// androidClientId: YOUR_CLIENT_ID_HERE,
+			const result = await Google.logInAsync({
+				androidClientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
 				behavior: 'web',
-				clientId: '67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com', //enter ios client id
+				iosClientId: '67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com',
+				androidStandaloneAppClientId:
+					'67755937701-bh1enrj7rlg0s5hi131qsf4emo76vi3t.apps.googleusercontent.com',
 				scopes: ['profile', 'email'],
 			});
 
+			console.log(result);
+
 			if (result.type === 'success') {
 				await this.onSignIn(result);
-				this.props.navigation.navigate('Home');
-				this.props.setLoading(false);
+				navigation.navigate('Home');
+				setLoading(false);
 				return result.accessToken;
-			} else {
-				this.props.setLoading(false);
-				return { cancelled: true };
 			}
+			setLoading(false);
+			console.log('sign in with google canceled by user');
+			return { cancelled: true };
 		} catch (e) {
-			this.props.setLoading(false);
+			setLoading(false);
+			console.log('Error while siging in google', e);
 			return { error: true };
 		}
 	};
 
 	render() {
+		const { style } = this.props;
 		return (
-			<View style={[styles.container, this.props.style]}>
+			<View style={[styles.container, style]}>
 				<View style={styles.button}>
 					<ProductButton full style={styles.facebookButton}>
 						FACEBOOK
@@ -119,6 +114,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
 	setLoading: (flag) => dispatch(setLoading(flag)),
+	updateUser: (isLoggedIn, user) => dispatch(updateUserStatus(isLoggedIn, user)),
 });
 
 export default connect(

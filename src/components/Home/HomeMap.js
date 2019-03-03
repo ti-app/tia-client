@@ -8,7 +8,7 @@ import ClusteredMap from '../Map/ClusteredMap';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { Container } from 'native-base';
-import { toggleSpotDetails } from '../../store/actions/ui-interactions';
+import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
 
 class HomeMap extends React.Component {
 	constructor(props) {

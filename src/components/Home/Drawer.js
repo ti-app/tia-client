@@ -7,7 +7,6 @@ import SideDrawerContent from './SideDrawerContent';
 
 class HomeDrawer extends React.Component {
 	state = {
-		drawerOpen: false,
 		drawerDisabled: false,
 	};
 
@@ -20,20 +19,26 @@ class HomeDrawer extends React.Component {
 	};
 
 	render() {
-		const { children } = this.props;
+		const { children, isDrawerOpen } = this.props;
+		const { drawerDisabled } = this.state;
+
 		return (
 			<Drawer
-				ref={(ref) => (this._drawer = ref)}
-				open={this.props.isDrawerOpen}
+				ref={(ref) => {
+					this._drawer = ref;
+				}}
+				open={isDrawerOpen}
 				type="static"
 				content={<SideDrawerContent {...this.props} />}
 				acceptDoubleTap
-				styles={{ main: { shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15 } }}
+				styles={{
+					main: { shadowColor: '#000000', shadowOpacity: 0.3, shadowRadius: 15 },
+				}}
 				captureGestures={false}
 				tweenDuration={100}
 				panThreshold={0.08}
-				disabled={this.state.drawerDisabled}
-				openDrawerOffset={(viewport) => {
+				disabled={drawerDisabled}
+				openDrawerOffset={() => {
 					return 100;
 				}}
 				panOpenMask={0.2}
@@ -45,7 +50,7 @@ class HomeDrawer extends React.Component {
 	}
 }
 
-const styles = StyleSheet.create({});
+// const styles = StyleSheet.create({});
 
 const mapStateToProps = (state) => ({
 	isDrawerOpen: state.ui.isDrawerOpen,

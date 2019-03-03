@@ -3,7 +3,7 @@ import {
 	TOGGLE_FILTER,
 	TOGGLE_SPOT_DETAILS,
 	SET_LOADING,
-} from '../actions/ui-interactions';
+} from '../actions/ui-interactions.action';
 
 const initialState = {
 	isDrawerOpen: false,

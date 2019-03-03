@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Slider } from 'react-native';
 import { Container, Content, View, Text, Button } from 'native-base';
-import { toggleFilter } from '../../store/actions/ui-interactions';
+import { toggleFilter } from '../../store/actions/ui-interactions.action';
 import { SelectTreeHealth } from '../shared/SelectTreeHealth';
 
 class FilterTree extends React.Component {

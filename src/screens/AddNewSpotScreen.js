@@ -9,6 +9,7 @@ import { OptionsBar } from '../components/Navigation/OptionsBar';
 import Tree from '../components/Map/Tree';
 import FormInput from '../components/shared/FormInput';
 import { SelectTreeHealth } from '../components/shared/SelectTreeHealth';
+import { addGroup } from '../store/actions/tree.action';
 
 class AddNewSpotScreen extends React.Component {
 	state = {
@@ -54,6 +55,11 @@ class AddNewSpotScreen extends React.Component {
 			console.log(pickerResult);
 			this.setState({ image: pickerResult.uri });
 		}
+	};
+
+	handleAddSpot = () => {
+		const { addGroup } = this.props;
+		addGroup();
 	};
 
 	render() {
@@ -110,13 +116,7 @@ class AddNewSpotScreen extends React.Component {
 						</TouchableOpacity>
 					)}
 					<View style={styles.addButtonContainer}>
-						<Button
-							style={styles.addButton}
-							success
-							onPress={() => {
-								console.log('add a tree and save this to database');
-							}}
-						>
+						<Button style={styles.addButton} success onPress={this.handleAddSpot}>
 							<Text> ADD </Text>
 						</Button>
 					</View>
@@ -160,11 +160,11 @@ const styles = StyleSheet.create({
 	addButton: { justifyContent: 'center', width: '100%' },
 });
 
-const mapStateToProps = (state) => ({});
-
-const mapDispatchToProps = (dispatch) => ({});
+const mapDispatchToProps = (dispatch) => ({
+	addGroup: (flag) => dispatch(addGroup(flag)),
+});
 
 export default connect(
-	mapStateToProps,
+	null,
 	mapDispatchToProps
 )(AddNewSpotScreen);

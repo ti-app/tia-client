@@ -10,10 +10,10 @@ import HomeNavigationBar from '../components/Navigation/HomeNavigationBar';
 import AddActionButton from '../components/shared/AddActionButton';
 import FilterTree from '../components/Home/FilterTree';
 import SpotDetails from '../components/Home/SpotDetails';
-import { fetchCurrentLocation } from '../store/actions/location';
+import { fetchCurrentLocation } from '../store/actions/location.action';
 import { OptionsBar } from '../components/Navigation/OptionsBar';
 import { SpotDetailsNavBar } from '../components/Navigation/SpotDetailsNavBar';
-import { toggleFilter, toggleSpotDetails } from '../store/actions/ui-interactions';
+import { toggleFilter, toggleSpotDetails } from '../store/actions/ui-interactions.action';
 
 class HomeScreen extends React.Component {
 	constructor(props) {
@@ -51,7 +51,8 @@ class HomeScreen extends React.Component {
 	};
 
 	componentDidMount() {
-		this.props.fetchCurrentLocation();
+		const { fetchCurrentLocation } = this.props;
+		fetchCurrentLocation();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -68,7 +69,7 @@ class HomeScreen extends React.Component {
 		const changeNavigationBar =
 			isFilterOpen !== prevProps.isFilterOpen || isSpotDetailsOpen !== prevProps.isSpotDetailsOpen;
 
-		const isFilterOrSpotDetailsNavBar = isFilterOpen | isSpotDetailsOpen;
+		const isFilterOrSpotDetailsNavBar = isFilterOpen || isSpotDetailsOpen;
 
 		if (changeNavigationBar) {
 			navigation.setParams({
@@ -105,7 +106,8 @@ class HomeScreen extends React.Component {
 	}
 
 	handleMyLocationClick() {
-		const { latitude, longitude } = this.props.currentLocation;
+		const { currentLocation } = this.props;
+		const { latitude, longitude } = currentLocation;
 		this.clusteredMapRef.getMapRef().animateToRegion({
 			latitude,
 			longitude,

@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, TouchableOpacity, AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
 
 import { Entypo } from '@expo/vector-icons';
 import { Toast } from 'native-base';
+import * as firebase from 'firebase';
+
 import ProductButton from '../shared/ProductButton';
 import FormInput from '../shared/FormInput';
 import ProductText from '../shared/ProductText';
-
-import * as firebase from 'firebase';
+import { setLoading } from '../../store/actions/ui-interactions.action';
 
 class LoginForm extends React.Component {
 	state = {
@@ -15,21 +17,21 @@ class LoginForm extends React.Component {
 		password: '',
 	};
 
-	onEmailChange(email) {
+	onEmailChange = (email) => {
 		this.setState({ email });
-	}
+	};
 
-	onPasswordChange(password) {
+	onPasswordChange = (password) => {
 		this.setState({ password });
-	}
+	};
 
 	onLoginClick = async () => {
-		console.log(this.state.email, this.state.password, 'Login Click');
-		const { setLoading } = this.props;
+		const { email, password } = this.state;
+		const { setLoading, navigation } = this.props;
 		setLoading(true);
 		firebase
 			.auth()
-			.signInWithEmailAndPassword(this.state.email, this.state.password)
+			.signInWithEmailAndPassword(email, password)
 			.then(async (firebaseUser) => {
 				try {
 					setLoading(false);
@@ -38,10 +40,8 @@ class LoginForm extends React.Component {
 						buttonText: 'Okay',
 						type: 'success',
 					});
-					console.log('Toast', Toast);
-					this.props.navigation.navigate('Home');
+					navigation.navigate('Home');
 					await AsyncStorage.setItem('USER', JSON.stringify(firebaseUser));
-					console.log('USER', firebaseUser);
 					// this.state({ email: '', password: ''});
 				} catch (error) {
 					setLoading(false);
@@ -65,22 +65,23 @@ class LoginForm extends React.Component {
 	};
 
 	render() {
+		const { style, navigation } = this.props;
 		return (
-			<View style={this.props.style}>
+			<View style={style}>
 				<FormInput
 					icon={<Entypo name="user" />}
 					placeholder="Email Address"
 					textContentType="emailAddress"
-					onChangeText={this.onEmailChange.bind(this)}
+					onChangeText={this.onEmailChange}
 				/>
 				<FormInput
 					icon={<Entypo name="lock" />}
 					placeholder="Password"
 					textContentType="password"
-					onChangeText={this.onPasswordChange.bind(this)}
-					secureTextEntry={true}
+					onChangeText={this.onPasswordChange}
+					secureTextEntry
 				/>
-				<TouchableOpacity onPress={() => this.props.navigation.navigate('ResetPassword')}>
+				<TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
 					<ProductText>Forgot Password?</ProductText>
 				</TouchableOpacity>
 				<View>

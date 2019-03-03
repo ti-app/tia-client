@@ -1,0 +1,38 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
+  "plugins": ["react", "import", "prettier"],
+  "extends": ["airbnb", "prettier"],
+  "rules": {
+    "arrow-body-style": "warn",
+    "import/extensions": "off",
+    "linebreak-style": "off",
+    "no-console": "off",
+    "no-underscore-dangle": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "react/jsx-pascal-case": ["error"],
+    "react/jsx-closing-bracket-location": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-indent": "off",
+    "react/jsx-indent-props": "off",
+    "react/sort-comp": "off",
+    "jsx-a11y/media-has-caption": "off",
+    "react/prop-types":"off",
+    "react/jsx-filename-extension":"off",
+    "no-use-before-define":"off",
+    "no-shadow":"off"
+  }
+}

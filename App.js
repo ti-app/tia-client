@@ -39,18 +39,21 @@ export default class App extends React.Component {
 	getLaunchStatus = async () => {
 		try {
 			const value = await AsyncStorage.getItem('LAUNCH_STATUS');
-			return value ? value : 'INITIAL';
+			return value || 'INITIAL';
 		} catch (error) {
 			console.log(error);
+			throw error;
 		}
 	};
 
 	render() {
-		if (this.state.showIntroduction) {
+		const { showIntroduction, isLoadingComplete } = this.state;
+		const { skipLoadingScreen } = this.props;
+		if (showIntroduction) {
 			return <AppIntroSlider slides={slides} onDone={this.onIntroductionDone} />;
 		}
 
-		if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+		if (!isLoadingComplete && !skipLoadingScreen) {
 			return (
 				<AppLoading
 					startAsync={loadResourcesAsync}
@@ -58,17 +61,17 @@ export default class App extends React.Component {
 					onFinish={this._handleFinishLoading}
 				/>
 			);
-		} else {
-			return (
-				<Root>
-					<Provider store={store}>
-						<StyleProvider style={getTheme(material)}>
-							<AppContent />
-						</StyleProvider>
-					</Provider>
-				</Root>
-			);
 		}
+
+		return (
+			<Root>
+				<Provider store={store}>
+					<StyleProvider style={getTheme(material)}>
+						<AppContent />
+					</StyleProvider>
+				</Provider>
+			</Root>
+		);
 	}
 
 	_handleLoadingError = (error) => {
@@ -101,6 +104,7 @@ const styles = StyleSheet.create({
 	},
 });
 
+/* eslint-disable */
 const slides = [
 	{
 		key: 'intro_1',
@@ -127,3 +131,4 @@ const slides = [
 		backgroundColor: '#22bcb5',
 	},
 ];
+/* eslint-enable */

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import { MaterialIcons, AntDesign, Entypo } from '@expo/vector-icons';
 
@@ -7,30 +7,33 @@ export default class AddActionButton extends Component {
 	state = {
 		clicked: false,
 	};
+
 	render() {
+		const { clicked } = this.state;
+		const { navigation } = this.props;
 		return (
 			<ActionButton
-				buttonColor="rgba(0,255,0,1)"
+				buttonColor="#00dbb0"
 				onPress={() =>
 					this.setState((prevState) => ({
 						clicked: !prevState.clicked,
 					}))
 				}
 				renderIcon={() =>
-					this.state.clicked ? (
+					clicked ? (
 						<AntDesign name="plus" size={40} style={styles.icon} />
 					) : (
 						<MaterialIcons name="add-location" size={40} style={styles.icon} />
 					)
 				}
 			>
-				<ActionButton.Item buttonColor="#3498db" title="Coming soon!" onPress={() => {}}>
+				<ActionButton.Item buttonColor="#f5a623" title="Coming soon!" onPress={() => {}}>
 					<AntDesign name="question" size={40} style={styles.icon} />
 				</ActionButton.Item>
 				<ActionButton.Item
-					buttonColor="#9b59b6"
+					buttonColor="#4267b2"
 					title="Add a tree"
-					onPress={() => this.props.navigation.navigate('AddNewSpot')}
+					onPress={() => navigation.navigate('AddNewSpot')}
 				>
 					<Entypo name="tree" size={40} style={styles.icon} />
 				</ActionButton.Item>

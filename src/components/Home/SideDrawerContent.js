@@ -1,35 +1,19 @@
 import React from 'react';
-import { StyleSheet, Image, AsyncStorage } from 'react-native';
-import { Toast, Text, Container, List, ListItem, Content, Icon } from 'native-base';
+import { StyleSheet, Image } from 'react-native';
+import { connect } from 'react-redux';
+import { Toast, Text, Container, List, ListItem, View } from 'native-base';
+import { FontAwesome } from '@expo/vector-icons';
+import { LinearGradient } from 'expo';
 import firebase from 'firebase';
-const routes = ['Home', 'Add a spot', 'Settings'];
 
-export default class SideDrawerContent extends React.Component {
-	constructor(props) {
-		super(props);
-		state = {
-			loggedInUser: '',
-		};
-	}
-
-	async componentDidMount() {
-		this._isMount = true;
-		const user = await AsyncStorage.getItem('USER');
-		if (this._isMount) {
-			this.setState({
-				loggedInUser: JSON.parse(user),
-			});
-		}
-	}
-
-	componentWillUnmount() {
-		this._isMount = false;
-	}
+class SideDrawerContent extends React.Component {
+	componentWillUnmount() {}
 
 	logout = async () => {
+		const { navigation } = this.props;
 		try {
 			await firebase.auth().signOut();
-			this.props.navigation.navigate('login');
+			navigation.navigate('login');
 			Toast.show({
 				text: 'Log out successfully',
 				buttonText: 'Okay',
@@ -43,48 +27,40 @@ export default class SideDrawerContent extends React.Component {
 	};
 
 	render() {
-		// const { loggedInUser } = this.state;
+		const { user } = this.props;
 		return (
-			<Container style={styles.container}>
-				<Content>
-					<Image
-						square
-						style={{
-							height: 80,
-							width: 70,
-							position: 'absolute',
-							alignSelf: 'center',
-							top: 20,
-							borderRadius: 10,
-						}}
-						source={{
-							uri:
-								'https://raw.githubusercontent.com/GeekyAnts/NativeBase-KitchenSink/master/assets/logo.png',
-						}}
-					/>
-					<List contentContainerStyle={{ top: 320 }}>
-						<ListItem button onPress={() => this.props.navigation.navigate(data)}>
-							{/* <Text>{this.state.loggedInUser.email}</Text> */}
-						</ListItem>
-					</List>
-					<List
-						dataArray={routes}
-						contentContainerStyle={{}}
-						renderRow={(data) => {
-							return (
-								<ListItem button onPress={() => this.props.navigation.navigate(data)}>
-									<Text>{data}</Text>
-								</ListItem>
-							);
-						}}
-					/>
+			<LinearGradient
+				colors={['#00dbb0', '#77ffe4']}
+				start={[0, 1]}
+				end={[1, 0]}
+				location={[0.59, 0.79]}
+			>
+				<View style={styles.container}>
+					{user && (
+						<View>
+							<View style={styles.userContainer}>
+								{user.photoURL ? (
+									<Image
+										square
+										style={styles.userPhoto}
+										source={{
+											uri: user.photoURL,
+										}}
+									/>
+								) : (
+									<FontAwesome style={styles.userIcon} name="user-circle" size={60} />
+								)}
+							</View>
+							<Text style={styles.displayName}>{user.displayName}</Text>
+						</View>
+					)}
 					<List>
 						<ListItem button onPress={this.logout}>
-							<Text>Log out</Text>
+							<Text style={styles.logoutText}>Log out</Text>
 						</ListItem>
 					</List>
-				</Content>
-			</Container>
+				</View>
+			</LinearGradient>
 		);
 	}
 }
@@ -93,9 +69,43 @@ const styles = StyleSheet.create({
 	container: {
 		display: 'flex',
 		flexDirection: 'column',
-		justifyContent: 'center',
+		justifyContent: 'space-around',
+		height: '100%',
 		width: '100%',
-		marginTop: 200,
-		zIndex: 99,
+	},
+
+	userContainer: {
+		height: 80,
+		width: 80,
+		borderWidth: 1,
+		borderRadius: 40,
+		alignSelf: 'center',
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+	},
+	userPhoto: {
+		height: 80,
+		width: 80,
+		borderRadius: 40,
+		alignSelf: 'center',
+	},
+	displayName: {
+		alignSelf: 'center',
+		color: 'white',
+		fontSize: 20,
+	},
+	userIcon: {
+		alignSelf: 'center',
+	},
+	logoutText: {
+		color: 'white',
+		fontSize: 20,
 	},
 });
+
+const mapStateToProps = (state) => ({
+	user: state.auth.user,
+});
+
+export default connect(mapStateToProps)(SideDrawerContent);

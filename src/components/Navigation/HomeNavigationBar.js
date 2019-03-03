@@ -4,7 +4,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { View, Text } from 'native-base';
 import Feather from '@expo/vector-icons/Feather';
 import Foundation from '@expo/vector-icons/Foundation';
-import { toggleDrawer, toggleFilter } from '../../store/actions/ui-interactions';
+import { toggleDrawer, toggleFilter } from '../../store/actions/ui-interactions.action';
 
 const HomeNavigationBar = ({ nearbySpotsCount, toggleDrawer, toggleFilter }) => (
 	<View style={styles.container}>

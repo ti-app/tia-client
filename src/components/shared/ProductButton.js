@@ -6,8 +6,8 @@ import ProductText from './ProductText';
 
 import { white } from '../../styles/colors';
 
-const ProductButton = (props) => (
-	<Button {...props}>
+const ProductButton = ({ onPress, ...props }) => (
+	<Button onPress={onPress} {...props}>
 		<ProductText {...props} style={[styles.text]} />
 	</Button>
 );

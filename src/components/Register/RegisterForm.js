@@ -1,15 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
-
 import { Entypo, EvilIcons, AntDesign } from '@expo/vector-icons';
-
-import FormInput from '../shared/FormInput';
-
-import ProductButton from '../shared/ProductButton';
-
+import Toast, { DURATION } from 'react-native-easy-toast';
 import * as firebase from 'firebase';
 
-import Toast, { DURATION } from 'react-native-easy-toast';
+import FormInput from '../shared/FormInput';
+import ProductButton from '../shared/ProductButton';
+import { setLoading } from '../../store/actions/ui-interactions.action';
 
 class RegisterPasswordForm extends React.Component {
 	constructor(props) {
@@ -114,6 +112,10 @@ class RegisterPasswordForm extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {},
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	setLoading: (flag) => dispatch(setLoading(flag)),
 });
 
 export default connect(
