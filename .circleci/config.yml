@@ -15,13 +15,13 @@ publish: &publish
         name: Login into Expo
         command: npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
 
-    - run:
-        name: Publish to Expo
-        command: npx expo publish --non-interactive --max-workers 1
+    # - run:
+    #     name: Publish to Expo
+    #     command: npx expo publish --non-interactive --max-workers 1
         # command: npx expo publish --non-interactive --max-workers 1 --release-channel $EXPO_RELEASE_CHANNEL
     - run:
         name: Build android
-        command: npm run build:andriod
+        command: npm run build:android
 
 jobs:
   publish_to_expo_dev:
