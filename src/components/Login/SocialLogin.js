@@ -43,6 +43,27 @@ class SocialLogin extends React.Component {
 			});
 	};
 
+	signInWithFBAsync = async () => {
+		const FBAPPID = '2439803646062305';
+		const options = {
+			permission: ['public_profile'],
+		};
+		const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(FBAPPID, options);
+
+		if (type == 'success') {
+			const credential = firebase.auth.FacebookAuthProvider.credential(token);
+			firebase
+				.auth()
+				.signInWithCredential(credential)
+				.then((response) => {
+					console.log('FB Login successfully ', response);
+				})
+				.catch((error) => {
+					console.log('FB Login error', error);
+				});
+		}
+	};
+
 	signInWithGoogleAsync = async () => {
 		const { setLoading, navigation } = this.props;
 		try {
@@ -76,7 +97,11 @@ class SocialLogin extends React.Component {
 		return (
 			<View style={[styles.container, style]}>
 				<View style={styles.button}>
-					<ProductButton full style={styles.facebookButton}>
+					<ProductButton
+						full
+						style={styles.facebookButton}
+						onPress={() => this.signInWithFBAsync()}
+					>
 						FACEBOOK
 					</ProductButton>
 				</View>
