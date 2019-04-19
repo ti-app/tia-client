@@ -1,5 +1,6 @@
 import { Location, Permissions } from 'expo';
 
+export const SET_MAP_CENTER = 'SET_MAP_CENTER';
 export const FETCH_CURRENT_LOCATION = 'FETCH_CURRENT_LOCATION';
 export const FETCH_CURRENT_LOCATION_SUCCESS = 'FETCH_CURRENT_LOCATION_SUCCESS';
 
@@ -31,5 +32,10 @@ export const fetchCurrentLocation = () => {
 
 export const fetchCurrentLocationSuccess = (locationData) => ({
 	type: FETCH_CURRENT_LOCATION_SUCCESS,
+	payload: locationData,
+});
+
+export const setMapCenter = (locationData) => ({
+	type: SET_MAP_CENTER,
 	payload: locationData,
 });

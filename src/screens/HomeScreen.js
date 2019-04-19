@@ -116,6 +116,10 @@ class HomeScreen extends React.Component {
 		});
 	}
 
+	handleOnMapLoad = (ref) => {
+		this.clusteredMapRef = ref;
+	};
+
 	render() {
 		const { isFilterOpen, isSpotDetailsOpen } = this.props;
 
@@ -126,18 +130,14 @@ class HomeScreen extends React.Component {
 						<FilterTree />
 					</View>
 				) : null}
-				<HomeMap
-					onMapLoad={(ref) => {
-						this.clusteredMapRef = ref;
-					}}
-				/>
+				<HomeMap onMapLoad={this.handleOnMapLoad} />
 				{isSpotDetailsOpen ? (
 					<View style={styles.spotDetailsContainer}>
 						<SpotDetails />
 					</View>
 				) : (
 					<React.Fragment>
-						<AddActionButton {...this.props} />
+						<AddActionButton {...this.props} clusteredMapRef={this.clusteredMapRef} />
 						<TouchableOpacity
 							style={styles.myLocationIcon}
 							onPress={() => this.handleMyLocationClick()}

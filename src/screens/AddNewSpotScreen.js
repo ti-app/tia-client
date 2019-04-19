@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
 import { Container, View, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
@@ -13,7 +13,9 @@ import { addGroup } from '../store/actions/tree.action';
 
 class AddNewSpotScreen extends React.Component {
 	state = {
-		image: null,
+		photo: null,
+		plants: 0,
+		health: null,
 	};
 
 	static navigationOptions = ({ navigation }) => {
@@ -44,26 +46,69 @@ class AddNewSpotScreen extends React.Component {
 		return header;
 	};
 
+	handleNumberOfPlantsChange = (numberOfPlants) => {
+		this.setState({ plants: numberOfPlants });
+	};
+
+	handleSelectedStatusChange = (selectedStatus) => {
+		const healthEntry = Object.entries(selectedStatus).find((_) => _[1] === true);
+		if (healthEntry && healthEntry[0]) {
+			this.setState({ health: healthEntry[0] });
+		}
+	};
+
 	takePhoto = async () => {
 		const { status: cameraPerm } = await Permissions.askAsync(Permissions.CAMERA);
 
 		const { status: cameraRollPerm } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
 		if (cameraPerm === 'granted' && cameraRollPerm === 'granted') {
-			console.log('luanching camersa');
+			console.log('launching camersa');
 			const pickerResult = await ImagePicker.launchCameraAsync({});
 			console.log(pickerResult);
-			this.setState({ image: pickerResult.uri });
+			this.setState({ photo: pickerResult.uri });
 		}
 	};
 
 	handleAddSpot = () => {
 		const { addGroup } = this.props;
-		addGroup();
+		const { photo, plants, health } = this.state;
+		const { mapCenter } = this.props;
+		const { latitude, longitude } = mapCenter;
+		const formData = this.createFormData(photo, {
+			plants,
+			health,
+			lat: latitude,
+			lng: longitude,
+		});
+		addGroup(formData);
+	};
+
+	createFormData = (uri, body) => {
+		const data = new FormData();
+		const filename = uri.split('/').pop();
+		const type = filename.split('.').pop();
+
+		data.append('photo', {
+			uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
+			type: `image/${type}`,
+			name: filename,
+		});
+
+		Object.keys(body).forEach((key) => {
+			data.append(key, body[key]);
+		});
+
+		return data;
+	};
+
+	getAddButtonStatus = () => {
+		const { photo, plants, health } = this.state;
+		return !(photo && plants && health);
 	};
 
 	render() {
-		const { image } = this.state;
+		const { photo } = this.state;
 		return (
 			<Container style={styles.container}>
 				<MapView
@@ -91,32 +136,35 @@ class AddNewSpotScreen extends React.Component {
 				<View style={styles.form}>
 					<View style={styles.plantCountInputContainer}>
 						<View style={styles.plantCountInput}>
-							<FormInput placeholder="NUMBER OF PLANTS?" />
+							<FormInput
+								placeholder="NUMBER OF PLANTS?"
+								keyboardType="number-pad"
+								onChangeText={this.handleNumberOfPlantsChange}
+							/>
 						</View>
 					</View>
 					<View style={styles.healthButtonGroup}>
 						<Text style={styles.healthOfPlantText}> Health of plant(s) </Text>
-						<SelectTreeHealth
-							onSelectedStatusChange={(selectedStatus) => {
-								console.log(selectedStatus);
-							}}
-						/>
+						<SelectTreeHealth onSelectedStatusChange={this.handleSelectedStatusChange} />
 					</View>
-					{image ? (
-						// <View style={styles.imageContainer}>
+					{photo ? (
 						<Image
-							source={{ uri: image }}
+							source={{ uri: photo }}
 							resizeMode="contain"
 							style={{ width: '100%', height: 150 }}
 						/>
 					) : (
-						// </View>
 						<TouchableOpacity style={styles.imageUploadContainer} onPress={this.takePhoto}>
 							<Text> Take a photo</Text>
 						</TouchableOpacity>
 					)}
 					<View style={styles.addButtonContainer}>
-						<Button style={styles.addButton} success onPress={this.handleAddSpot}>
+						<Button
+							style={styles.addButton}
+							disabled={this.getAddButtonStatus()}
+							success
+							onPress={this.handleAddSpot}
+						>
 							<Text> ADD </Text>
 						</Button>
 					</View>
@@ -160,11 +208,15 @@ const styles = StyleSheet.create({
 	addButton: { justifyContent: 'center', width: '100%' },
 });
 
+const mapStateToProps = (state) => ({
+	mapCenter: state.location.mapCenter,
+});
+
 const mapDispatchToProps = (dispatch) => ({
 	addGroup: (flag) => dispatch(addGroup(flag)),
 });
 
 export default connect(
-	null,
+	mapStateToProps,
 	mapDispatchToProps
 )(AddNewSpotScreen);

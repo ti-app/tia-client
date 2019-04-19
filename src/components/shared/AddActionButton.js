@@ -8,9 +8,14 @@ export default class AddActionButton extends Component {
 		clicked: false,
 	};
 
+	handleOnAddTreePress = () => {
+		const { navigation } = this.props;
+
+		navigation.navigate('AddNewSpot');
+	};
+
 	render() {
 		const { clicked } = this.state;
-		const { navigation } = this.props;
 		return (
 			<ActionButton
 				buttonColor="#00dbb0"
@@ -33,7 +38,7 @@ export default class AddActionButton extends Component {
 				<ActionButton.Item
 					buttonColor="#4267b2"
 					title="Add a tree"
-					onPress={() => navigation.navigate('AddNewSpot')}
+					onPress={this.handleOnAddTreePress}
 				>
 					<Entypo name="tree" size={40} style={styles.icon} />
 				</ActionButton.Item>

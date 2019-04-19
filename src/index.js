@@ -52,6 +52,7 @@ class AppContent extends React.Component {
 
 		if (user) {
 			const { accessToken } = JSON.parse(JSON.stringify(user)).stsTokenManager;
+			console.log(accessToken);
 			axios.interceptors.request.use(
 				(config) => {
 					setLoading(true);

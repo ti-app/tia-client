@@ -5,11 +5,13 @@ import { Marker } from 'react-native-maps';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
 
+import debounce from '../../utils/Debounce';
 import ClusteredMap from '../Map/ClusteredMap';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
 import { fetchTrees } from '../../store/actions/tree.action';
+import { setMapCenter } from '../../store/actions/location.action';
 
 class HomeMap extends React.Component {
 	constructor(props) {
@@ -40,7 +42,11 @@ class HomeMap extends React.Component {
 		}
 	}
 
-	onRegionChange = (region) => {};
+	onRegionChange = (region) => {
+		console.log('setting map center');
+		const { setMapCenter } = this.props;
+		setMapCenter(region);
+	};
 
 	renderMarker = (data) => {
 		const { toggleSpotDetails } = this.props;
@@ -123,7 +129,7 @@ class HomeMap extends React.Component {
 					data={mapData}
 					renderMarker={this.renderMarker}
 					renderCluster={this.renderCluster}
-					onRegionChange={this.onRegionChange}
+					onRegionChange={debounce(this.onRegionChange, 100, false)}
 				/>
 			</Container>
 		);
@@ -154,6 +160,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	toggleSpotDetails: () => dispatch(toggleSpotDetails()),
 	fetchTrees: (...param) => dispatch(fetchTrees(...param)),
+	setMapCenter: (location) => dispatch(setMapCenter(location)),
 });
 
 export default connect(
