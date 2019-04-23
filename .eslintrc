@@ -30,9 +30,10 @@
     "react/jsx-indent-props": "off",
     "react/sort-comp": "off",
     "jsx-a11y/media-has-caption": "off",
-    "react/prop-types":"off",
-    "react/jsx-filename-extension":"off",
-    "no-use-before-define":"off",
-    "no-shadow":"off"
+    "react/prop-types": "off",
+    "react/jsx-filename-extension": "off",
+    "no-use-before-define": "off",
+    "no-shadow": "off",
+    "import/no-extraneous-dependencies": "off"
   }
 }

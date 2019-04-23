@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
-
 import { Entypo } from '@expo/vector-icons';
 import { Toast } from 'native-base';
 import * as firebase from 'firebase';
