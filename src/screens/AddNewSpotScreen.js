@@ -2,9 +2,8 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
 import { Container, View, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
-import MapView, { Marker } from 'react-native-maps';
+import MapView from 'react-native-maps';
 import { ImagePicker, Permissions } from 'expo';
-import { Entypo } from '@expo/vector-icons';
 
 import { OptionsBar } from '../components/Navigation/OptionsBar';
 import Tree from '../components/Map/Tree';
