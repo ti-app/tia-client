@@ -1,10 +1,13 @@
 import { Location, Permissions } from 'expo';
+import { Toast } from 'native-base';
+
+import { fetchTrees } from './tree.action';
 
 export const SET_MAP_CENTER = 'SET_MAP_CENTER';
-export const FETCH_CURRENT_LOCATION = 'FETCH_CURRENT_LOCATION';
-export const FETCH_CURRENT_LOCATION_SUCCESS = 'FETCH_CURRENT_LOCATION_SUCCESS';
+export const FETCH_USER_LOCATION = 'FETCH_USER_LOCATION';
+export const FETCH_USER_LOCATION_SUCCESS = 'FETCH_USER_LOCATION_SUCCESS';
 
-export const fetchCurrentLocation = () => {
+export const fetchUserLocation = () => {
 	return async (dispatch) => {
 		try {
 			const { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -19,9 +22,9 @@ export const fetchCurrentLocation = () => {
 			setTimeout(async () => {
 				try {
 					const locationData = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
-					dispatch(fetchCurrentLocationSuccess(locationData));
+					dispatch(fetchUserLocationSuccess(locationData));
 				} catch (err) {
-					console.log('Error while getting current position', err);
+					console.log('Error while getting USER position', err);
 				}
 			});
 		} catch (err) {
@@ -30,10 +33,24 @@ export const fetchCurrentLocation = () => {
 	};
 };
 
-export const fetchCurrentLocationSuccess = (locationData) => ({
-	type: FETCH_CURRENT_LOCATION_SUCCESS,
+export const fetchUserLocationSuccess = (locationData) => ({
+	type: FETCH_USER_LOCATION_SUCCESS,
 	payload: locationData,
 });
+
+export const setMapCenterAndFetchTrees = (locationData) => {
+	return (dispatch) => {
+		dispatch(setMapCenter(locationData));
+		dispatch(fetchTrees(locationData));
+		Toast.show({
+			text: 'Getting nearby plants.',
+			duration: 1000,
+			textStyle: {
+				textAlign: 'center',
+			},
+		});
+	};
+};
 
 export const setMapCenter = (locationData) => ({
 	type: SET_MAP_CENTER,

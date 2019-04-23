@@ -1,7 +1,7 @@
-import { FETCH_CURRENT_LOCATION_SUCCESS, SET_MAP_CENTER } from '../actions/location.action';
+import { FETCH_USER_LOCATION_SUCCESS, SET_MAP_CENTER } from '../actions/location.action';
 
 const initialState = {
-	currentLocation: {
+	userLocation: {
 		latitude: 18.5740821,
 		longitude: 73.7777393,
 	},
@@ -13,8 +13,8 @@ const initialState = {
 
 const locationReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case FETCH_CURRENT_LOCATION_SUCCESS: {
-			return { ...state, currentLocation: action.payload.coords };
+		case FETCH_USER_LOCATION_SUCCESS: {
+			return { ...state, userLocation: action.payload.coords };
 		}
 
 		case SET_MAP_CENTER: {

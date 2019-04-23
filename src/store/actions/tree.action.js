@@ -1,5 +1,6 @@
 import apiClient from '../../utils/ApiClient';
 import showErrorToast from '../../utils/ErrorToast';
+import NavigationUtil from '../../utils/Navigation';
 
 export const ADD_GROUP = 'ADD_GROUP';
 export const FETCH_TREE = 'FETCH_TREE';
@@ -11,20 +12,20 @@ export const FETCH_TREE_SUCCESS = 'FETCH_TREE_SUCCESS';
  */
 export const addGroup = (treeGroup) => async (dispatch) => {
 	try {
-		const response = await apiClient({
+		await apiClient({
 			method: 'post',
 			url: '/tree_group',
 			data: treeGroup,
 			headers: { Accept: 'application/json', 'Content-Type': 'multipart/form-data' },
 		});
 
-		console.log('Response after adding a tree', response);
+		NavigationUtil.navigate('Home');
 	} catch (err) {
 		showErrorToast('Error adding a tree group.', err, dispatch);
 	}
 };
 
-export const fetchTrees = (location, radius = 100000, health = 'healthy,weak,almostDead') => async (
+export const fetchTrees = (location, radius = 10000, health = 'healthy,weak,almostDead') => async (
 	dispatch
 ) => {
 	try {
@@ -41,6 +42,7 @@ export const fetchTrees = (location, radius = 100000, health = 'healthy,weak,alm
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			noloading: true,
 		});
 		dispatch(fetchTreeSuccess(response.data));
 	} catch (err) {

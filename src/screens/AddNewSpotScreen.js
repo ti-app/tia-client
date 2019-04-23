@@ -4,6 +4,7 @@ import { Container, View, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
 import MapView, { Marker } from 'react-native-maps';
 import { ImagePicker, Permissions } from 'expo';
+import { Entypo } from '@expo/vector-icons';
 
 import { OptionsBar } from '../components/Navigation/OptionsBar';
 import Tree from '../components/Map/Tree';
@@ -16,6 +17,7 @@ class AddNewSpotScreen extends React.Component {
 		photo: null,
 		plants: 0,
 		health: null,
+		treeLocation: null,
 	};
 
 	static navigationOptions = ({ navigation }) => {
@@ -72,9 +74,8 @@ class AddNewSpotScreen extends React.Component {
 
 	handleAddSpot = () => {
 		const { addGroup } = this.props;
-		const { photo, plants, health } = this.state;
-		const { mapCenter } = this.props;
-		const { latitude, longitude } = mapCenter;
+		const { photo, plants, health, treeLocation } = this.state;
+		const { latitude, longitude } = treeLocation;
 		const formData = this.createFormData(photo, {
 			plants,
 			health,
@@ -107,29 +108,40 @@ class AddNewSpotScreen extends React.Component {
 		return !(photo && plants && health);
 	};
 
+	handleOnRegionChange = (region) => {
+		this.setState({ treeLocation: region });
+	};
+
 	render() {
 		const { photo } = this.state;
+		const { mapCenter } = this.props;
+		const { latitude, longitude } = mapCenter;
+
 		return (
 			<Container style={styles.container}>
-				<MapView
-					style={styles.mapView}
-					initialRegion={{
-						latitude: 37.78825,
-						longitude: -122.4324,
-						latitudeDelta: 0.0922,
-						longitudeDelta: 0.0421,
-					}}
-					scrollEnabled={false}
-					pitchEnabled={false}
-					rotateEnabled={false}
-				>
-					<Marker
-						key="unique-marker-id-here"
-						coordinate={{ latitude: 37.78825, longitude: -122.4324 }}
+				<View style={styles.mapView}>
+					<MapView
+						style={styles.mapView}
+						initialRegion={{
+							latitude,
+							longitude,
+							latitudeDelta: 0.0922,
+							longitudeDelta: 0.0421,
+						}}
+						onRegionChangeComplete={this.handleOnRegionChange}
+						// scrollEnabled={false}
+						// pitchEnabled={false}
+						// rotateEnabled={false}
 					>
+						{/* <Marker key="unique-marker-id-here" coordinate={{ latitude, longitude }}>
+              <View />
+            </Marker> */}
+					</MapView>
+
+					<View style={styles.markerFixed}>
 						<Tree status="healthy" />
-					</Marker>
-				</MapView>
+					</View>
+				</View>
 
 				<Text style={styles.whereIsItText}> Where is it?</Text>
 
@@ -182,6 +194,14 @@ const styles = StyleSheet.create({
 		display: 'flex',
 	},
 	mapView: { flex: 1 },
+	markerFixed: {
+		zIndex: 3,
+		left: '50%',
+		marginLeft: -12,
+		marginTop: -20,
+		position: 'absolute',
+		top: '50%',
+	},
 	form: { flex: 1, flexDirection: 'column', padding: 20, justifyContent: 'space-between' },
 	whereIsItText: {
 		fontSize: 25,

@@ -11,7 +11,7 @@ import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
 import { fetchTrees } from '../../store/actions/tree.action';
-import { setMapCenter } from '../../store/actions/location.action';
+import { setMapCenterAndFetchTrees } from '../../store/actions/location.action';
 
 class HomeMap extends React.Component {
 	constructor(props) {
@@ -24,28 +24,25 @@ class HomeMap extends React.Component {
 	componentDidMount() {}
 
 	componentDidUpdate(prevProps) {
-		const { latitude: prevLat, longitude: prevLng } = prevProps.currentLocation;
-		const { currentLocation, fetchTrees } = this.props;
-		const { latitude, longitude } = currentLocation;
+		const { latitude: prevUserLat, longitude: prevUserLng } = prevProps.userLocation;
+		const { userLocation, setMapCenterAndFetchTrees } = this.props;
+		const { latitude: userLatitude, longitude: userLongitude } = userLocation;
 
-		if ((latitude !== prevLat || longitude !== prevLng) && this.clusteredMapRef) {
-			fetchTrees(currentLocation);
-			this.clusteredMapRef.getMapRef().animateToRegion(
-				{
-					latitude,
-					longitude,
-					latitudeDelta: 0.508817991434235,
-					longitudeDelta: 0.15413663983345,
-				},
-				2000
-			);
+		if ((userLatitude !== prevUserLat || userLongitude !== prevUserLng) && this.clusteredMapRef) {
+			const mapLocation = {
+				latitude: userLatitude,
+				longitude: userLongitude,
+				latitudeDelta: 0.508817991434235,
+				longitudeDelta: 0.15413663983345,
+			};
+			this.clusteredMapRef.getMapRef().animateToRegion(mapLocation, 2000);
+			setMapCenterAndFetchTrees(mapLocation);
 		}
 	}
 
 	onRegionChange = (region) => {
-		console.log('setting map center');
-		const { setMapCenter } = this.props;
-		setMapCenter(region);
+		const { setMapCenterAndFetchTrees } = this.props;
+		setMapCenterAndFetchTrees(region);
 	};
 
 	renderMarker = (data) => {
@@ -96,9 +93,9 @@ class HomeMap extends React.Component {
 	};
 
 	render() {
-		const { currentLocation, trees } = this.props;
+		const { userLocation, trees } = this.props;
 
-		const { latitude, longitude } = currentLocation;
+		const { latitude, longitude } = userLocation;
 		const { onMapLoad } = this.props;
 
 		const mapData = trees.map((aTree) => {
@@ -129,7 +126,7 @@ class HomeMap extends React.Component {
 					data={mapData}
 					renderMarker={this.renderMarker}
 					renderCluster={this.renderCluster}
-					onRegionChange={debounce(this.onRegionChange, 100, false)}
+					onRegionChangeComplete={debounce(this.onRegionChange, 100, false)}
 				/>
 			</Container>
 		);
@@ -144,7 +141,7 @@ const styles = StyleSheet.create({
 });
 
 HomeMap.propTypes = {
-	currentLocation: PropTypes.shape({
+	userLocation: PropTypes.shape({
 		latitude: PropTypes.number.isRequired,
 		longitude: PropTypes.number.isRequired,
 	}).isRequired,
@@ -153,14 +150,14 @@ HomeMap.propTypes = {
 HomeMap.defaultProps = {};
 
 const mapStateToProps = (state) => ({
-	currentLocation: state.location.currentLocation,
+	userLocation: state.location.userLocation,
 	trees: state.tree.trees,
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	toggleSpotDetails: () => dispatch(toggleSpotDetails()),
 	fetchTrees: (...param) => dispatch(fetchTrees(...param)),
-	setMapCenter: (location) => dispatch(setMapCenter(location)),
+	setMapCenterAndFetchTrees: (location) => dispatch(setMapCenterAndFetchTrees(location)),
 });
 
 export default connect(

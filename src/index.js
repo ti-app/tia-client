@@ -15,6 +15,7 @@ import axios from 'axios';
 import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainNavigator';
 import firebaseConfig from './config/auth/FirebaseConfig.example';
+import NavigationUtil from './utils/Navigation';
 import { setLoading } from './store/actions/ui-interactions.action';
 import { updateUserStatus } from './store/actions/auth.action';
 
@@ -55,8 +56,10 @@ class AppContent extends React.Component {
 			console.log(accessToken);
 			axios.interceptors.request.use(
 				(config) => {
-					setLoading(true);
-					const { headers, ...rest } = config;
+					const { headers, noloading, ...rest } = config;
+					if (!noloading) {
+						setLoading(true);
+					}
 					return {
 						headers: {
 							'x-id-token': accessToken,
@@ -88,7 +91,15 @@ class AppContent extends React.Component {
 					</View>
 				) : null}
 				{Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-				{isAuthenticated ? <MainTabNavigator /> : <AppNavigator />}
+				{isAuthenticated ? (
+					<MainTabNavigator
+						ref={(navigatorRef) => {
+							NavigationUtil.setTopLevelNavigator(navigatorRef);
+						}}
+					/>
+				) : (
+					<AppNavigator />
+				)}
 			</View>
 		);
 	}
