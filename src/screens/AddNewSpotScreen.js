@@ -102,7 +102,7 @@ class AddNewSpotScreen extends React.Component {
 		return data;
 	};
 
-	getAddButtonStatus = () => {
+	isAddButtonDisabled = () => {
 		const { photo, plants, health } = this.state;
 		return !(photo && plants && health);
 	};
@@ -160,8 +160,11 @@ class AddNewSpotScreen extends React.Component {
 					)}
 					<View style={styles.addButtonContainer}>
 						<Button
-							style={styles.addButton}
-							disabled={this.getAddButtonStatus()}
+							style={[
+								styles.addButton,
+								this.isAddButtonDisabled() ? styles.addButtonDisabled : styles.addButtonEnabled,
+							]}
+							disabled={this.isAddButtonDisabled()}
 							success
 							onPress={this.handleAddSpot}
 						>
@@ -206,6 +209,8 @@ const styles = StyleSheet.create({
 	},
 	addButtonContainer: {},
 	addButton: { justifyContent: 'center', width: '100%' },
+	addButtonDisabled: { opacity: 0.4 },
+	addButtonEnabled: { opacity: 1 },
 });
 
 const mapStateToProps = (state) => ({
