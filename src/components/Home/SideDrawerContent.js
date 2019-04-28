@@ -26,6 +26,11 @@ class SideDrawerContent extends React.Component {
 		}
 	};
 
+	navigateTo = (to) => {
+		const { navigation } = this.props;
+		navigation.navigate(to);
+	};
+
 	render() {
 		const { user } = this.props;
 		return (
@@ -46,19 +51,31 @@ class SideDrawerContent extends React.Component {
 										source={{
 											uri: user.photoURL,
 										}}
+										onPress={() => this.navigateTo('UserProfile')}
 									/>
 								) : (
 									<FontAwesome style={styles.userIcon} name="user-circle" size={60} />
 								)}
 							</View>
-							<Text style={styles.displayName}>{user.displayName}</Text>
+							<Text style={styles.displayName} onPress={() => this.navigateTo('UserProfile')}>
+								{user.displayName}
+							</Text>
+							<List>
+								<ListItem button onPress={() => this.navigateTo('AddNewSpot')}>
+									<Text style={styles.text}>Add a Plant</Text>
+								</ListItem>
+								<ListItem button>
+									<Text style={styles.text}>Settings</Text>
+								</ListItem>
+								<ListItem button>
+									<Text style={styles.text}>History</Text>
+								</ListItem>
+								<ListItem button onPress={this.logout}>
+									<Text style={styles.text}>Log out</Text>
+								</ListItem>
+							</List>
 						</View>
 					)}
-					<List>
-						<ListItem button onPress={this.logout}>
-							<Text style={styles.logoutText}>Log out</Text>
-						</ListItem>
-					</List>
 				</View>
 			</LinearGradient>
 		);
@@ -67,13 +84,13 @@ class SideDrawerContent extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
+		top: 30,
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'space-around',
 		height: '100%',
 		width: '100%',
 	},
-
 	userContainer: {
 		height: 80,
 		width: 80,
@@ -94,11 +111,12 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		color: 'white',
 		fontSize: 20,
+		top: 5,
 	},
 	userIcon: {
 		alignSelf: 'center',
 	},
-	logoutText: {
+	text: {
 		color: 'white',
 		fontSize: 20,
 	},
