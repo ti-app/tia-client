@@ -10,8 +10,9 @@ import ClusteredMap from '../Map/ClusteredMap';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
-import { fetchTrees } from '../../store/actions/tree.action';
+import { fetchTrees, setTreeSpot, resetTreeSpot } from '../../store/actions/tree.action';
 import { setMapCenterAndFetchTrees } from '../../store/actions/location.action';
+import store from '../../store';
 
 class HomeMap extends React.Component {
 	constructor(props) {
@@ -36,7 +37,7 @@ class HomeMap extends React.Component {
 				longitudeDelta: 0.15413663983345,
 			};
 			this.clusteredMapRef.getMapRef().animateToRegion(mapLocation, 2000);
-			console.log('[HomeMap.js::componentDidUpdate], calling setMapCenterAndFetchTrees');
+			console.log('[HomeMap.js::componentDidUpdate] calling setMapCenterAndFetchTrees');
 			setMapCenterAndFetchTrees(mapLocation);
 		}
 	}
@@ -44,11 +45,11 @@ class HomeMap extends React.Component {
 	onRegionChange = (region) => {
 		const { setMapCenterAndFetchTrees, isSpotDetailsOpen } = this.props;
 		if (!isSpotDetailsOpen) {
-			console.log('[HomeMap.js::onRegionChange], calling setMapCenterAndFetchTrees');
+			console.log('[HomeMap.js::onRegionChange] calling setMapCenterAndFetchTrees');
 			setMapCenterAndFetchTrees(region);
 		} else {
 			console.log(
-				'[HomeMap.js::onRegionChange], avoiding call to setMapCenterAndFetchTrees because isSpotDetailsOpen is truthy'
+				'[HomeMap.js::onRegionChange] avoiding call to setMapCenterAndFetchTrees because isSpotDetailsOpen is truthy'
 			);
 		}
 	};
@@ -60,7 +61,7 @@ class HomeMap extends React.Component {
 				key={data.id}
 				coordinate={data.location}
 				onPress={() => {
-					toggleSpotDetails();
+					toggleSpotDetails(data);
 				}}
 			>
 				<Tree status={data.health} />
@@ -164,7 +165,19 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	toggleSpotDetails: () => dispatch(toggleSpotDetails()),
+	toggleSpotDetails: (spot) => {
+		dispatch(toggleSpotDetails());
+		const { isSpotDetailsOpen } = store.getState().ui;
+		if (isSpotDetailsOpen) {
+			// prettier-ignore
+			console.log('[HomeMap.js::mapDispatchToProps] isSpotDetailsOpen is truthy, dispatching setTreeSpot')
+			dispatch(setTreeSpot(spot));
+		} else {
+			// prettier-ignore
+			console.log('[HomeMap.js::mapDispatchToProps] isSpotDetailsOpen is falsy, dispatching resetTreeSpot')
+			dispatch(resetTreeSpot());
+		}
+	},
 	fetchTrees: (...param) => dispatch(fetchTrees(...param)),
 	setMapCenterAndFetchTrees: (location) => dispatch(setMapCenterAndFetchTrees(location)),
 });
