@@ -36,13 +36,21 @@ class HomeMap extends React.Component {
 				longitudeDelta: 0.15413663983345,
 			};
 			this.clusteredMapRef.getMapRef().animateToRegion(mapLocation, 2000);
+			console.log('[HomeMap.js::componentDidUpdate], calling setMapCenterAndFetchTrees');
 			setMapCenterAndFetchTrees(mapLocation);
 		}
 	}
 
 	onRegionChange = (region) => {
-		const { setMapCenterAndFetchTrees } = this.props;
-		setMapCenterAndFetchTrees(region);
+		const { setMapCenterAndFetchTrees, isSpotDetailsOpen } = this.props;
+		if (!isSpotDetailsOpen) {
+			console.log('[HomeMap.js::onRegionChange], calling setMapCenterAndFetchTrees');
+			setMapCenterAndFetchTrees(region);
+		} else {
+			console.log(
+				'[HomeMap.js::onRegionChange], avoiding call to setMapCenterAndFetchTrees because isSpotDetailsOpen is truthy'
+			);
+		}
 	};
 
 	renderMarker = (data) => {
@@ -152,6 +160,7 @@ HomeMap.defaultProps = {};
 const mapStateToProps = (state) => ({
 	userLocation: state.location.userLocation,
 	trees: state.tree.trees,
+	isSpotDetailsOpen: state.ui.isSpotDetailsOpen,
 });
 
 const mapDispatchToProps = (dispatch) => ({
