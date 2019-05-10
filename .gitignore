@@ -67,8 +67,6 @@ npm-debug.*
 *.key
 *.mobileprovision
 
-package-lock.json
-
 # Ignore config files
 src/config/auth/FirebaseConfig.js
 src/config/auth/FacebookConfig.js

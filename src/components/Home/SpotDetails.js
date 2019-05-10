@@ -3,10 +3,17 @@ import { connect } from 'react-redux';
 import { StyleSheet, Image } from 'react-native';
 import { View, Text, Container, Content, Button } from 'native-base';
 
+import { waterTree } from '../../store/actions/tree.action';
+
 class SpotDetails extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			waterButton: {
+				disabled: false,
+				text: 'WATERED',
+			},
+		};
 	}
 
 	renderWeekStatus = (weekStatus) => {
@@ -19,7 +26,22 @@ class SpotDetails extends React.Component {
 		);
 	};
 
+	updateWaterButton = (props) => {
+		this.setState({ waterButton: { ...props } });
+	};
+
+	waterTree = () => {
+		this.updateWaterButton({ disabled: true, text: 'please wait...' });
+		const { tree } = this.props;
+		const spotWatered = tree.spotDetails;
+		console.log(`[SpotDetails.js::waterTree] watering tree with id "${spotWatered.id}"`);
+		// I am sorry I am doing eslint disable for this one. Don't tell anyone. Shhhh....
+		// eslint-disable-next-line react/destructuring-assignment
+		this.props.waterTree(spotWatered);
+	};
+
 	render() {
+		const { waterButton } = this.state;
 		return (
 			<Container style={styles.container}>
 				<View style={styles.content}>
@@ -49,12 +71,15 @@ class SpotDetails extends React.Component {
 					<Text>82 more have watered here</Text>
 					<Button
 						style={styles.wateredButton}
+						/**
+						 * For some reason, the button does not look 'disabled'
+						 * even if waterButton.disabled is true :/
+						 */
+						disabled={waterButton.disabled}
 						success
-						onPress={() => {
-							console.log('watered the tree');
-						}}
+						onPress={this.waterTree}
 					>
-						<Text> WATERED </Text>
+						<Text> {waterButton.text} </Text>
 					</Button>
 				</View>
 			</Container>
@@ -89,9 +114,15 @@ const styles = StyleSheet.create({
 	wateredButton: { width: '100%', paddingRight: 8, paddingLeft: 8, textAlign: 'center' },
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapStateToProps = (state) => ({
+	tree: state.tree,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	waterTree: (tree) => dispatch(waterTree(tree)),
+});
 
 export default connect(
-	null,
+	mapStateToProps,
 	mapDispatchToProps
 )(SpotDetails);

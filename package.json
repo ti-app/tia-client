@@ -11,10 +11,9 @@
 		"eject": "expo eject"
 	},
 	"dependencies": {
-		"@expo/vector-icons": "^9.0.0",
 		"axios": "^0.18.0",
 		"color": "^3.1.0",
-		"expo": "^31.0.2",
+		"expo": "31.0.2",
 		"firebase": "^5.8.3",
 		"native-base": "2.8.2",
 		"prop-types": "^15.6.2",

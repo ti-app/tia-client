@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { connect } from 'react-redux';
 import * as firebase from 'firebase';
-import { Google } from 'expo';
+import { Google, Facebook } from 'expo';
 
 import ProductButton from '../shared/ProductButton';
 import { setLoading } from '../../store/actions/ui-interactions.action';
@@ -43,13 +43,35 @@ class SocialLogin extends React.Component {
 			});
 	};
 
+	signInWithFBAsync = async () => {
+		const FBAPPID = '2439803646062305';
+		const options = {
+			permission: ['public_profile'],
+		};
+		const { type, token } = await Facebook.logInWithReadPermissionsAsync(FBAPPID, options);
+
+		if (type === 'success') {
+			const credential = firebase.auth.FacebookAuthProvider.credential(token);
+			firebase
+				.auth()
+				.signInWithCredential(credential)
+				.then((response) => {
+					console.log('FB Login successfully ', response);
+				})
+				.catch((error) => {
+					console.log('FB Login error', error);
+				});
+		}
+	};
+
 	signInWithGoogleAsync = async () => {
 		const { setLoading, navigation } = this.props;
 		try {
 			const result = await Google.logInAsync({
-				androidClientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
 				behavior: 'web',
+				androidClientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
 				iosClientId: '67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com',
+				clientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
 				androidStandaloneAppClientId:
 					'67755937701-bh1enrj7rlg0s5hi131qsf4emo76vi3t.apps.googleusercontent.com',
 				scopes: ['profile', 'email'],
@@ -76,7 +98,11 @@ class SocialLogin extends React.Component {
 		return (
 			<View style={[styles.container, style]}>
 				<View style={styles.button}>
-					<ProductButton full style={styles.facebookButton}>
+					<ProductButton
+						full
+						style={styles.facebookButton}
+						onPress={() => this.signInWithFBAsync()}
+					>
 						FACEBOOK
 					</ProductButton>
 				</View>
