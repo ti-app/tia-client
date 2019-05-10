@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, Image } from 'react-native';
-import { View, Text, Container, Content, Button } from 'native-base';
+import { View, Text, Container, Button } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { waterTree } from '../../store/actions/tree.action';
 
@@ -40,14 +41,35 @@ class SpotDetails extends React.Component {
 		this.props.waterTree(spotWatered);
 	};
 
+	/**
+	 * TODO:
+	 * Rather than just rendering the delete button for all the users,
+	 * First check if the user logged in has enough authorization to delete the plant
+	 * If he is the OWNER or MODERATOR, he should be able to delete it.
+	 * Other wise, do not render the delete button
+	 */
+	getDeleteButton = () => {
+		const { styles } = this.props;
+		return (
+			<View style={styles.deleteButton}>
+				<MaterialIcons name="delete" size={24} color="red" />
+			</View>
+		);
+	};
+
 	render() {
+		console.log('[SpotDetails.js::render] tree', this.props.tree.spotDetails);
+		console.log('[SpotDetails.js::render] user', this.props.user);
 		const { waterButton } = this.state;
 		return (
 			<Container style={styles.container}>
 				<View style={styles.content}>
 					<View style={styles.heading}>
-						<Text style={styles.addressLabel}>Two Stones</Text>
-						<Text style={styles.distanceLabel}>1.3 km FROM HOME</Text>
+						<View style={styles.plantHeading}>
+							<Text style={styles.addressLabel}>Two Stones</Text>
+							<Text style={styles.distanceLabel}>1.3 km FROM HOME</Text>
+						</View>
+						{this.getDeleteButton()}
 					</View>
 					<View style={styles.weekStatusContainer}>
 						{this.renderWeekStatus([
@@ -101,7 +123,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		height: '100%',
 	},
-	heading: { display: 'flex', flexDirection: 'row' },
+	heading: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between' },
 	addressLabel: { fontSize: 20, textAlignVertical: 'bottom', paddingRight: 8 },
 	distanceLabel: { fontSize: 12, color: 'gray', textAlignVertical: 'bottom' },
 	weekStatus: { display: 'flex', flexDirection: 'row' },
@@ -112,10 +134,20 @@ const styles = StyleSheet.create({
 	almostDead: { backgroundColor: 'red' },
 	lastWateredText: { fontSize: 12, color: 'gray' },
 	wateredButton: { width: '100%', paddingRight: 8, paddingLeft: 8, textAlign: 'center' },
+	plantHeading: {
+		flex: 1,
+		display: 'flex',
+		flexDirection: 'row',
+	},
+	deleteButton: {
+		padding: 8,
+		borderColor: 'black',
+	},
 });
 
 const mapStateToProps = (state) => ({
 	tree: state.tree,
+	user: state.user,
 });
 
 const mapDispatchToProps = (dispatch) => ({
