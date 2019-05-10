@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import { View, Text, Container, Button } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { waterTree } from '../../store/actions/tree.action';
+import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
+import { waterTree, deleteTree, resetTreeSpot } from '../../store/actions/tree.action';
 
 class SpotDetails extends React.Component {
 	constructor(props) {
@@ -41,6 +42,37 @@ class SpotDetails extends React.Component {
 		this.props.waterTree(spotWatered);
 	};
 
+	deletePlantConfirmed = () => {
+		const { deleteTree, tree, toggleSpotDetails, resetTreeSpot } = this.props;
+		const treeToDelete = tree.spotDetails;
+		deleteTree(treeToDelete);
+		toggleSpotDetails();
+		resetTreeSpot();
+	};
+
+	showConfirmDeleteAlert = () => {
+		// Works on both iOS and Android
+		Alert.alert(
+			'Delete Plant',
+			'Are you sure? All the data associated this plant will be lost. You will not be able to undo this operation.',
+			[
+				{
+					text: 'Yes, Delete',
+					onPress: this.deletePlantConfirmed,
+					style: 'destructive',
+				},
+				{
+					text: 'Cancel',
+					onPress: () => {
+						/** NOOP */
+					},
+					style: 'cancel',
+				},
+			],
+			{ cancelable: false }
+		);
+	};
+
 	/**
 	 * TODO:
 	 * Rather than just rendering the delete button for all the users,
@@ -49,17 +81,24 @@ class SpotDetails extends React.Component {
 	 * Other wise, do not render the delete button
 	 */
 	getDeleteButton = () => {
-		const { styles } = this.props;
 		return (
-			<View style={styles.deleteButton}>
+			<TouchableOpacity style={styles.deleteButton} onPress={this.showConfirmDeleteAlert}>
 				<MaterialIcons name="delete" size={24} color="red" />
+			</TouchableOpacity>
+		);
+	};
+
+	getDeletionBackdrop = () => {
+		const { deleting } = this.state;
+		if (!deleting) return null;
+		return (
+			<View style={styles.deletionBackdrop}>
+				<Text>Deleting Plant...</Text>
 			</View>
 		);
 	};
 
 	render() {
-		console.log('[SpotDetails.js::render] tree', this.props.tree.spotDetails);
-		console.log('[SpotDetails.js::render] user', this.props.user);
 		const { waterButton } = this.state;
 		return (
 			<Container style={styles.container}>
@@ -152,6 +191,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	waterTree: (tree) => dispatch(waterTree(tree)),
+	deleteTree: (tree) => dispatch(deleteTree(tree)),
+	resetTreeSpot: () => dispatch(resetTreeSpot()),
+	toggleSpotDetails: () => dispatch(toggleSpotDetails),
 });
 
 export default connect(
