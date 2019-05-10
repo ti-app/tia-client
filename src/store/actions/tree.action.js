@@ -11,6 +11,7 @@ export const SET_TREE_SPOT = 'SET_TREE_SPOT';
 export const RESET_TREE_SPOT = 'RESET_TREE_SPOT';
 export const WATER_TREE_SUCCESS = 'WATER_TREE_SUCCESS';
 export const WATER_TREE_FAILURE = 'WATER_TREE_FAILURE';
+export const DELETE_TREE = 'DELETE_TREE';
 
 /**
  * Accepts parameter treeGroup which should be a FormData including an Image.
@@ -78,7 +79,34 @@ export const waterTree = (tree) => async (dispatch) => {
 			},
 		});
 	} catch (err) {
-		showErrorToast('Error fetching nearby trees.', err, dispatch);
+		showErrorToast('Error watering the trees', err, dispatch);
+		dispatch(waterTreeFailure(err));
+	}
+};
+
+export const deleteTree = (tree) => async (dispatch) => {
+	try {
+		const { id } = tree;
+		const url = `/tree/${id}`;
+		console.log(`[tree-action::deleteTree] making request to "${url}"`);
+		const response = await apiClient({
+			url,
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			method: 'DELETE',
+			noloading: true,
+		});
+		console.log(`[tree-action::deleteTree] request to "${url}" was successful`);
+		Toast.show({
+			text: 'Tree was successfully deleted',
+			duration: 1000,
+			textStyle: {
+				textAlign: 'center',
+			},
+		});
+	} catch (err) {
+		showErrorToast('Error deleting the tree.', err, dispatch);
 		dispatch(waterTreeFailure(err));
 	}
 };
