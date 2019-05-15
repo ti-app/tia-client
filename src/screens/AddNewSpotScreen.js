@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity, Image, Platform } from 'react-native';
 import { Container, View, Text, Button } from 'native-base';
 import { connect } from 'react-redux';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import { ImagePicker, Permissions } from 'expo';
 
-import { OptionsBar } from '../components/Navigation/OptionsBar';
+import OptionsBar from '../components/Navigation/OptionsBar';
 import Tree from '../components/Map/Tree';
 import FormInput from '../components/shared/FormInput';
 import { SelectTreeHealth } from '../components/shared/SelectTreeHealth';
@@ -27,12 +27,6 @@ class AddNewSpotScreen extends React.Component {
 					leftOption={{
 						label: 'Cancel',
 						action: () => navigation.navigate('Home'),
-					}}
-					rightOption={{
-						label: 'Save',
-						action: () => {
-							console.log('Save new spot and do something with it');
-						},
 					}}
 				/>
 			),
@@ -86,14 +80,16 @@ class AddNewSpotScreen extends React.Component {
 
 	createFormData = (uri, body) => {
 		const data = new FormData();
-		const filename = uri.split('/').pop();
-		const type = filename.split('.').pop();
+		if (uri) {
+			const filename = uri.split('/').pop();
+			const type = filename.split('.').pop();
 
-		data.append('photo', {
-			uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
-			type: `image/${type}`,
-			name: filename,
-		});
+			data.append('photo', {
+				uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
+				type: `image/${type}`,
+				name: filename,
+			});
+		}
 
 		Object.keys(body).forEach((key) => {
 			data.append(key, body[key]);
@@ -103,8 +99,8 @@ class AddNewSpotScreen extends React.Component {
 	};
 
 	isAddButtonDisabled = () => {
-		const { photo, plants, health } = this.state;
-		return !(photo && plants && health);
+		const { plants, health } = this.state;
+		return !(plants && health);
 	};
 
 	handleOnRegionChange = (region) => {
@@ -112,9 +108,9 @@ class AddNewSpotScreen extends React.Component {
 	};
 
 	render() {
-		const { photo } = this.state;
-		const { mapCenter } = this.props;
-		const { latitude, longitude } = mapCenter;
+		const { photo, health } = this.state;
+		const { userLocation } = this.props;
+		const { latitude, longitude } = userLocation;
 
 		return (
 			<Container style={styles.container}>
@@ -128,18 +124,18 @@ class AddNewSpotScreen extends React.Component {
 							longitudeDelta: 0.0421,
 						}}
 						onRegionChangeComplete={this.handleOnRegionChange}
-						// scrollEnabled={false}
-						// pitchEnabled={false}
-						// rotateEnabled={false}
+						scrollEnabled={false}
+						pitchEnabled={false}
+						rotateEnabled={false}
 					>
-						{/* <Marker key="unique-marker-id-here" coordinate={{ latitude, longitude }}>
-              <View />
-            </Marker> */}
+						<Marker key="unique-marker-id-here" coordinate={{ latitude, longitude }}>
+							<Tree status={health || 'healthy'} />
+						</Marker>
 					</MapView>
 
-					<View style={styles.markerFixed}>
-						<Tree status="healthy" />
-					</View>
+					{/* <View style={styles.markerFixed}>
+                        <Tree status="healthy" />
+                    </View> */}
 				</View>
 
 				<Text style={styles.whereIsItText}> Where is it?</Text>
@@ -234,6 +230,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
 	mapCenter: state.location.mapCenter,
+	userLocation: state.location.userLocation,
 });
 
 const mapDispatchToProps = (dispatch) => ({

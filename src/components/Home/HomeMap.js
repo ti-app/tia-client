@@ -136,6 +136,7 @@ class HomeMap extends React.Component {
 					renderMarker={this.renderMarker}
 					renderCluster={this.renderCluster}
 					onRegionChangeComplete={debounce(this.onRegionChange, 100, false)}
+					showsUserLocation
 				/>
 			</Container>
 		);
