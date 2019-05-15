@@ -10,8 +10,36 @@ import { space } from '../../styles/variables';
 import ProductButton from '../shared/ProductButton';
 
 export default class ResetPasswordForm extends React.Component {
+	state = {
+		email: '',
+	};
+
+	onEmailChange = (email) => {
+		this.setState({
+			email,
+		});
+	};
+
 	onResetClick() {
-		console.log('Reset password clicked');
+		const { email } = this.state;
+		const auth = firebase.auth();
+
+		auth
+			.sendPasswordResetEmail(email)
+			.then(function() {
+				Toast.show({
+					text: `Email has been sent! `,
+					buttonText: 'Okay',
+					type: 'success',
+				});
+			})
+			.catch(function(error) {
+				Toast.show({
+					text: `Issue while reseting password`,
+					buttonText: 'Okay',
+					type: 'error',
+				});
+			});
 	}
 
 	render() {
@@ -21,10 +49,11 @@ export default class ResetPasswordForm extends React.Component {
 					icon={<Entypo name="user" />}
 					placeholder="Email Address"
 					textContentType="emailAddress"
-				/>
+					onChangeText={this.onEmailChange}
+				/>{' '}
 				<ProductButton full success onPress={this.onResetClick}>
-					SEND PASSWORD RESET LINK
-				</ProductButton>
+					SEND PASSWORD RESET LINK{' '}
+				</ProductButton>{' '}
 			</View>
 		);
 	}
