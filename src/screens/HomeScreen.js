@@ -21,7 +21,7 @@ class HomeScreen extends React.Component {
 		this.clusteredMapRef = React.createRef();
 		this.state = {
 			defaultHeaderOptions: {
-				headerTitle: <HomeNavigationBar nearbySpotsCount={12} />,
+				headerTitle: <HomeNavigationBar nearbySpotsCount={0} />,
 				headerTransparent: true,
 				headerStyle: {
 					height: 80,
@@ -36,7 +36,7 @@ class HomeScreen extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 		const header = navigation.getParam('header', {
-			headerTitle: <HomeNavigationBar nearbySpotsCount={12} />,
+			headerTitle: <HomeNavigationBar nearbySpotsCount={0} />,
 			headerTransparent: true,
 			headerStyle: {
 				height: 80,
@@ -62,17 +62,17 @@ class HomeScreen extends React.Component {
 			navigation,
 			isSpotDetailsOpen,
 			toggleSpotDetails,
+			trees,
 		} = this.props;
 		const { defaultHeaderOptions } = this.state;
 		const { headerStyle: defaultHeaderStyle } = defaultHeaderOptions;
 
 		const changeNavigationBar =
 			isFilterOpen !== prevProps.isFilterOpen || isSpotDetailsOpen !== prevProps.isSpotDetailsOpen;
-
 		const isFilterOrSpotDetailsNavBar = isFilterOpen || isSpotDetailsOpen;
-
 		if (changeNavigationBar) {
 			navigation.setParams({
+				treeCount: trees.length,
 				header: {
 					...defaultHeaderOptions,
 					headerStyle: {
@@ -97,9 +97,16 @@ class HomeScreen extends React.Component {
 							case isSpotDetailsOpen:
 								return <SpotDetailsNavBar leftOption={{ action: () => toggleSpotDetails() }} />;
 							default:
-								return <HomeNavigationBar nearbySpotsCount={12} />;
+								return <HomeNavigationBar nearbySpotsCount={trees.length} />;
 						}
 					})(),
+				},
+			});
+		} else if (trees.length !== prevProps.trees.length && !isFilterOpen && !isSpotDetailsOpen) {
+			navigation.setParams({
+				header: {
+					...defaultHeaderOptions,
+					headerTitle: <HomeNavigationBar nearbySpotsCount={trees.length} />,
 				},
 			});
 		}
@@ -175,6 +182,7 @@ const mapStateToProps = (state) => ({
 	isFilterOpen: state.ui.isFilterOpen,
 	userLocation: state.location.userLocation,
 	isSpotDetailsOpen: state.ui.isSpotDetailsOpen,
+	trees: state.tree.trees,
 });
 
 const mapDispatchToProps = (dispatch) => ({
