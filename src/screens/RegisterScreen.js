@@ -39,10 +39,6 @@ export default class Register extends React.Component {
 		this.setState({ isKeyboardOpen: false });
 	}
 
-	onRegisterPress() {
-		console.log('Reset Password clicked!');
-	}
-
 	render() {
 		return (
 			<Container style={styles.container}>
@@ -93,5 +89,4 @@ const styles = StyleSheet.create({
 	onboard: {
 		alignSelf: 'center',
 	},
-	form: {},
 });
