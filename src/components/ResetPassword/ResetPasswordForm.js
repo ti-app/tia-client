@@ -1,23 +1,22 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-
-// import { RkButton } from 'react-native-ui-kitten';
+import { StyleSheet, View, Text } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
-
 import FormInput from '../shared/FormInput';
-
 import { space } from '../../styles/variables';
 import ProductButton from '../shared/ProductButton';
+import { Toast } from 'native-base';
+import * as firebase from 'firebase';
 
 export default class ResetPasswordForm extends React.Component {
-	state = {
-		email: '',
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			email: '',
+		};
+	}
 
 	onEmailChange = (email) => {
-		this.setState({
-			email,
-		});
+		this.setState({ email });
 	};
 
 	onResetClick() {
@@ -33,7 +32,7 @@ export default class ResetPasswordForm extends React.Component {
 					type: 'success',
 				});
 			})
-			.catch(function(error) {
+			.catch(function() {
 				Toast.show({
 					text: `Issue while reseting password`,
 					buttonText: 'Okay',
@@ -49,11 +48,12 @@ export default class ResetPasswordForm extends React.Component {
 					icon={<Entypo name="user" />}
 					placeholder="Email Address"
 					textContentType="emailAddress"
-					onChangeText={this.onEmailChange}
-				/>{' '}
-				<ProductButton full success onPress={this.onResetClick}>
-					SEND PASSWORD RESET LINK{' '}
-				</ProductButton>{' '}
+					onChangeText={this.onEmailChange.bind(this)}
+				/>
+				<ProductButton full success onPress={this.onResetClick.bind(this)}>
+					<Text>SEND PASSWORD RESET LINK</Text>
+				</ProductButton>
+				<Toast ref="toast" />
 			</View>
 		);
 	}
