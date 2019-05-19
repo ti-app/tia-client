@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { StyleSheet, View, AsyncStorage } from 'react-native';
 import { Entypo, EvilIcons, AntDesign } from '@expo/vector-icons';
-import Toast, { DURATION } from 'react-native-easy-toast';
+import { Toast } from 'native-base';
 import * as firebase from 'firebase';
 
 import FormInput from '../shared/FormInput';
@@ -35,11 +35,13 @@ class RegisterPasswordForm extends React.Component {
 	onRegisterClick() {
 		const { setLoading } = this.props;
 		setLoading(true);
+		console.log('calling createUserWithEmailAndPassword ....', this.state);
 		firebase
 			.auth()
 			.createUserWithEmailAndPassword(this.state.email, this.state.password)
 			.then(
 				(resp) => {
+					console.log('Working till here ....', resp);
 					firebase
 						.auth()
 						.currentUser.updateProfile({
@@ -47,8 +49,13 @@ class RegisterPasswordForm extends React.Component {
 						})
 						.then(async (updateUser) => {
 							try {
+								console.log('User is updated', updateUser);
 								setLoading(false);
-								this.refs.toast.show(`Welcome ${this.state.email} !`);
+								Toast.show({
+									text: `Welcome! Successfully registerd in TIA`,
+									buttonText: 'Great',
+									type: 'success',
+								});
 								this.props.navigation.navigate('Home');
 								this.state = {
 									showPassword: false,
@@ -58,11 +65,22 @@ class RegisterPasswordForm extends React.Component {
 								};
 								await AsyncStorage.setItem('USER', resp);
 							} catch (error) {
-								console.log(error);
+								Toast.show({
+									text: `Something bad happened!`,
+									buttonText: 'Oops',
+									type: 'error',
+								});
+								console.log('Error while registering', error);
 							}
 						});
 				},
 				(error) => {
+					setLoading(false);
+					Toast.show({
+						text: `${error.message}`,
+						buttonText: 'Oops',
+						type: 'error',
+					});
 					console.log(error.message);
 				}
 			);
