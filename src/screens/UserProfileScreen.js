@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage } from 'react-native';
 
-import { OptionsBar } from '../components/Navigation/OptionsBar';
+import OptionsBar from '../components/Navigation/OptionsBar';
 // import UserStarRating from "../components/shared/UserStarRating";
 // import BioTextInput from "../components/shared/BioTextInput";
 
@@ -23,7 +23,6 @@ export default class UserProfileScreen extends Component {
 			const user = await AsyncStorage.getItem('USER');
 			return JSON.parse(user) || 'INITIAL';
 		} catch (error) {
-			console.log(error);
 			throw error;
 		}
 	}

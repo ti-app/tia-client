@@ -44,6 +44,7 @@ class SocialLogin extends React.Component {
 	};
 
 	signInWithFBAsync = async () => {
+		setLoading(true);
 		const FBAPPID = '2439803646062305';
 		const options = {
 			permission: ['public_profile'],
@@ -51,22 +52,28 @@ class SocialLogin extends React.Component {
 		const { type, token } = await Facebook.logInWithReadPermissionsAsync(FBAPPID, options);
 
 		if (type === 'success') {
+			setLoading(true);
 			const credential = firebase.auth.FacebookAuthProvider.credential(token);
 			firebase
 				.auth()
-				.signInWithCredential(credential)
+				.signInAndRetrieveDataWithCredential(credential)
 				.then((response) => {
+					setLoading(false);
 					console.log('FB Login successfully ', response);
 				})
 				.catch((error) => {
+					setLoading(false);
 					console.log('FB Login error', error);
 				});
+		} else {
+			setLoading(false);
 		}
 	};
 
 	signInWithGoogleAsync = async () => {
 		const { setLoading, navigation } = this.props;
 		try {
+			setLoading(true);
 			const result = await Google.logInAsync({
 				behavior: 'web',
 				androidClientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
