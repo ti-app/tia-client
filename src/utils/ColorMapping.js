@@ -1,7 +1,7 @@
 export const getColorByTreeStatus = (status) => {
 	return {
-		healthy: 'green',
-		weak: 'orange',
-		almostDead: 'red',
+		healthy: '#00dbb0',
+		weak: '#f5a623',
+		almostDead: '#ea4335',
 	}[status];
 };

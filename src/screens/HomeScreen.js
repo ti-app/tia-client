@@ -10,7 +10,7 @@ import HomeNavigationBar from '../components/Navigation/HomeNavigationBar';
 import AddActionButton from '../components/shared/AddActionButton';
 import FilterTree from '../components/Home/FilterTree';
 import SpotDetails from '../components/Home/SpotDetails';
-import { fetchCurrentLocation } from '../store/actions/location.action';
+import { fetchUserLocation } from '../store/actions/location.action';
 import { OptionsBar } from '../components/Navigation/OptionsBar';
 import { SpotDetailsNavBar } from '../components/Navigation/SpotDetailsNavBar';
 import { toggleFilter, toggleSpotDetails } from '../store/actions/ui-interactions.action';
@@ -21,7 +21,7 @@ class HomeScreen extends React.Component {
 		this.clusteredMapRef = React.createRef();
 		this.state = {
 			defaultHeaderOptions: {
-				headerTitle: <HomeNavigationBar nearbySpotsCount={12} />,
+				headerTitle: <HomeNavigationBar nearbySpotsCount={0} />,
 				headerTransparent: true,
 				headerStyle: {
 					height: 80,
@@ -36,7 +36,7 @@ class HomeScreen extends React.Component {
 
 	static navigationOptions = ({ navigation }) => {
 		const header = navigation.getParam('header', {
-			headerTitle: <HomeNavigationBar nearbySpotsCount={12} />,
+			headerTitle: <HomeNavigationBar nearbySpotsCount={0} />,
 			headerTransparent: true,
 			headerStyle: {
 				height: 80,
@@ -51,8 +51,8 @@ class HomeScreen extends React.Component {
 	};
 
 	componentDidMount() {
-		const { fetchCurrentLocation } = this.props;
-		fetchCurrentLocation();
+		const { fetchUserLocation } = this.props;
+		fetchUserLocation();
 	}
 
 	componentDidUpdate(prevProps) {
@@ -62,17 +62,17 @@ class HomeScreen extends React.Component {
 			navigation,
 			isSpotDetailsOpen,
 			toggleSpotDetails,
+			trees,
 		} = this.props;
 		const { defaultHeaderOptions } = this.state;
 		const { headerStyle: defaultHeaderStyle } = defaultHeaderOptions;
 
 		const changeNavigationBar =
 			isFilterOpen !== prevProps.isFilterOpen || isSpotDetailsOpen !== prevProps.isSpotDetailsOpen;
-
 		const isFilterOrSpotDetailsNavBar = isFilterOpen || isSpotDetailsOpen;
-
 		if (changeNavigationBar) {
 			navigation.setParams({
+				treeCount: trees.length,
 				header: {
 					...defaultHeaderOptions,
 					headerStyle: {
@@ -97,17 +97,24 @@ class HomeScreen extends React.Component {
 							case isSpotDetailsOpen:
 								return <SpotDetailsNavBar leftOption={{ action: () => toggleSpotDetails() }} />;
 							default:
-								return <HomeNavigationBar nearbySpotsCount={12} />;
+								return <HomeNavigationBar nearbySpotsCount={trees.length} />;
 						}
 					})(),
+				},
+			});
+		} else if (trees.length !== prevProps.trees.length && !isFilterOpen && !isSpotDetailsOpen) {
+			navigation.setParams({
+				header: {
+					...defaultHeaderOptions,
+					headerTitle: <HomeNavigationBar nearbySpotsCount={trees.length} />,
 				},
 			});
 		}
 	}
 
 	handleMyLocationClick() {
-		const { currentLocation } = this.props;
-		const { latitude, longitude } = currentLocation;
+		const { userLocation } = this.props;
+		const { latitude, longitude } = userLocation;
 		this.clusteredMapRef.getMapRef().animateToRegion({
 			latitude,
 			longitude,
@@ -115,6 +122,10 @@ class HomeScreen extends React.Component {
 			longitudeDelta: 0.15413663983345,
 		});
 	}
+
+	handleOnMapLoad = (ref) => {
+		this.clusteredMapRef = ref;
+	};
 
 	render() {
 		const { isFilterOpen, isSpotDetailsOpen } = this.props;
@@ -126,18 +137,14 @@ class HomeScreen extends React.Component {
 						<FilterTree />
 					</View>
 				) : null}
-				<HomeMap
-					onMapLoad={(ref) => {
-						this.clusteredMapRef = ref;
-					}}
-				/>
+				<HomeMap onMapLoad={this.handleOnMapLoad} {...this.props} />
 				{isSpotDetailsOpen ? (
 					<View style={styles.spotDetailsContainer}>
 						<SpotDetails />
 					</View>
 				) : (
 					<React.Fragment>
-						<AddActionButton {...this.props} />
+						<AddActionButton {...this.props} clusteredMapRef={this.clusteredMapRef} />
 						<TouchableOpacity
 							style={styles.myLocationIcon}
 							onPress={() => this.handleMyLocationClick()}
@@ -173,13 +180,14 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => ({
 	isFilterOpen: state.ui.isFilterOpen,
-	currentLocation: state.location.currentLocation,
+	userLocation: state.location.userLocation,
 	isSpotDetailsOpen: state.ui.isSpotDetailsOpen,
+	trees: state.tree.trees,
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	toggleFilter: () => dispatch(toggleFilter()),
-	fetchCurrentLocation: () => dispatch(fetchCurrentLocation()),
+	fetchUserLocation: () => dispatch(fetchUserLocation()),
 	toggleSpotDetails: () => dispatch(toggleSpotDetails()),
 });
 
