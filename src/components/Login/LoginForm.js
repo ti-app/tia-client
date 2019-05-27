@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, TouchableOpacity, AsyncStorage, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Entypo } from '@expo/vector-icons';
 import { Toast } from 'native-base';
 import * as firebase from 'firebase';
-
+import { space } from '../../styles/variables';
 import ProductButton from '../shared/ProductButton';
 import FormInput from '../shared/FormInput';
 import ProductText from '../shared/ProductText';
@@ -80,7 +80,10 @@ class LoginForm extends React.Component {
 					onChangeText={this.onPasswordChange}
 					secureTextEntry
 				/>
-				<TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
+				<TouchableOpacity
+					style={styles.forgetPassword}
+					onPress={() => navigation.navigate('ResetPassword')}
+				>
 					<ProductText>Forgot Password?</ProductText>
 				</TouchableOpacity>
 				<View>
@@ -101,3 +104,10 @@ export default connect(
 	null,
 	mapDispatchToProps
 )(LoginForm);
+
+const styles = StyleSheet.create({
+	forgetPassword: {
+		paddingTop: space.base,
+		paddingBottom: space.base,
+	},
+});
