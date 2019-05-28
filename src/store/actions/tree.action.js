@@ -112,8 +112,8 @@ export const waterTree = (tree) => async (dispatch) => {
 
 export const deleteTree = (tree) => async (dispatch) => {
 	try {
-		const { id } = tree;
-		const url = `/tree/${id}`;
+		const { _id } = tree;
+		const url = `/tree/${_id}`;
 		console.log(`[tree-action::deleteTree] making request to "${url}"`);
 		await apiClient({
 			url,
