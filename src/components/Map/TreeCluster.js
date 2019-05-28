@@ -1,27 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { StyleSheet, View, Text } from 'react-native';
 import { getColorByTreeStatus } from '../../utils/ColorMapping';
 
-export default class TreeCluster extends React.Component {
-	render() {
-		const { pointCount, status } = this.props;
-		return (
-			<View style={{ ...styles.clusterContainer, backgroundColor: getColorByTreeStatus(status) }}>
-				<Text style={styles.clusterText}>{pointCount}</Text>
-			</View>
-		);
-	}
-}
-
-TreeCluster.propTypes = {
-	pointCount: PropTypes.number.isRequired,
-	status: PropTypes.string.isRequired,
-};
-
-TreeCluster.defaultProps = {
-	pointCount: 0,
-	status: 'healthy',
+export default ({ pointCount, status }) => {
+	return (
+		<View style={{ ...styles.clusterContainer, backgroundColor: getColorByTreeStatus(status) }}>
+			<Text style={styles.clusterText}>{pointCount}</Text>
+		</View>
+	);
 };
 
 const styles = StyleSheet.create({

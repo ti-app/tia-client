@@ -5,6 +5,7 @@ import { Marker } from 'react-native-maps';
 import { Container } from 'native-base';
 import { connect } from 'react-redux';
 
+import { getAvgHealthStatus } from '../../utils/HealtStatus';
 import debounce from '../../utils/Debounce';
 import ClusteredMap from '../Map/ClusteredMap';
 import TreeCluster from '../Map/TreeCluster';
@@ -63,22 +64,10 @@ class HomeMap extends React.Component {
 	renderCluster = (cluster, onPress) => {
 		const { pointCount, clusterId, coordinate } = cluster;
 
-		// TODO: get all points in a cluster with following commented code
-		// and calculate average of the health status of thee and decide cluster's
-		// health status
 		const clusteringEngine = this.clusteredMapRef.getClusteringEngine();
 		const clusteredPoints = clusteringEngine.getLeaves(clusterId, 100);
 
-		const healthList = ['almostDead', 'weak', 'healthy'];
-
 		const clusteredPointHealthList = clusteredPoints.map((point) => point.properties.item.health);
-
-		let totalHealthScore = 0;
-		clusteredPointHealthList.forEach((_) => {
-			totalHealthScore += healthList.indexOf(_);
-		});
-		totalHealthScore /= parseFloat(clusteredPoints.length);
-		totalHealthScore = parseInt(Math.round(totalHealthScore), 10);
 
 		return (
 			<Marker
@@ -87,7 +76,10 @@ class HomeMap extends React.Component {
 				coordinate={coordinate}
 				onPress={onPress}
 			>
-				<TreeCluster pointCount={pointCount} status={healthList[totalHealthScore]} />
+				<TreeCluster
+					pointCount={pointCount}
+					status={getAvgHealthStatus(clusteredPointHealthList)}
+				/>
 			</Marker>
 		);
 	};
