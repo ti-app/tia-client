@@ -1,52 +1,46 @@
 /* eslint-disable react/prefer-stateless-function */
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-// import { getColorByTreeStatus } from '../../utils/ColorMapping';
-import Tree from './Tree';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { StyleSheet, View, Text } from 'react-native';
+import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
+import { getColorByTreeStatus } from '../../utils/ColorMapping';
 
-const renderTree = (id, top, left, status) => (
-	<View key={id} style={{ top, left }}>
-		<Tree status={status} />
-	</View>
-);
+class Spot extends Component {
+	// state = {
+	//     splittedTrees: false
+	// };
 
-export default ({ trees }) => {
-	const division = 360 / trees.length;
-	const radius = 50;
-	const offsetToParentCenter = 60;
-	const offsetToChildCenter = 10;
-	const totalOffset = offsetToParentCenter - offsetToChildCenter;
+	render() {
+		const { trees, health } = this.props;
 
-	return (
-		<View style={styles.parentView}>
-			{trees.map(({ id, status }, i) => {
-				const y = Math.sin(division * i * (Math.PI / 180)) * radius;
-				const x = Math.cos(division * i * (Math.PI / 180)) * radius;
-				const top = y + totalOffset;
-				const left = x + totalOffset;
-				return renderTree(id, top, left, status);
-			})}
-		</View>
-	);
-};
+		return (
+			<View style={{ ...styles.treeGroup, backgroundColor: getColorByTreeStatus(health) }}>
+				<Text style={styles.treeCountText}>{trees.length}</Text>
+			</View>
+		);
+	}
+}
 
 const styles = StyleSheet.create({
-	parentView: {
-		position: 'relative',
-		width: 120,
-		height: 120,
-		// borderWidth: 2,
-		// borderColor: '#f00'
+	treeGroup: {
+		width: 20,
+		height: 20,
+		borderRadius: 10,
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
-	outerCircle: {
-		position: 'absolute',
-		backgroundColor: '#228B22',
-		padding: 5,
-		borderRadius: 25,
-	},
-	innerCircle: {
-		backgroundColor: '#ffffff',
-		padding: 5,
-		borderRadius: 25,
+	treeCountText: {
+		color: 'white',
 	},
 });
+
+const mapDispatchToProps = (dispatch) => ({
+	toggleSpotDetails: () => dispatch(toggleSpotDetails),
+});
+
+export default connect(
+	null,
+	mapDispatchToProps
+)(Spot);

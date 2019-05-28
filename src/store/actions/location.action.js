@@ -1,7 +1,7 @@
 import { Location, Permissions } from 'expo';
 import { Toast } from 'native-base';
 
-import { fetchTrees } from './tree.action';
+import { fetchTreeGroups } from './tree.action';
 
 export const SET_MAP_CENTER = 'SET_MAP_CENTER';
 export const FETCH_USER_LOCATION = 'FETCH_USER_LOCATION';
@@ -38,10 +38,10 @@ export const fetchUserLocationSuccess = (locationData) => ({
 	payload: locationData,
 });
 
-export const setMapCenterAndFetchTrees = (locationData) => {
+export const setMapCenterAndFetchTreeGroups = (locationData) => {
 	return (dispatch) => {
 		dispatch(setMapCenter(locationData));
-		dispatch(fetchTrees(locationData));
+		dispatch(fetchTreeGroups(locationData));
 		Toast.show({
 			text: 'Getting nearby plants.',
 			duration: 1000,

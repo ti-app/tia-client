@@ -62,7 +62,7 @@ class HomeScreen extends React.Component {
 			navigation,
 			isSpotDetailsOpen,
 			toggleSpotDetails,
-			trees,
+			treeGroups,
 		} = this.props;
 		const { defaultHeaderOptions } = this.state;
 		const { headerStyle: defaultHeaderStyle } = defaultHeaderOptions;
@@ -72,7 +72,7 @@ class HomeScreen extends React.Component {
 		const isFilterOrSpotDetailsNavBar = isFilterOpen || isSpotDetailsOpen;
 		if (changeNavigationBar) {
 			navigation.setParams({
-				treeCount: trees.length,
+				treeCount: treeGroups.length,
 				header: {
 					...defaultHeaderOptions,
 					headerStyle: {
@@ -97,16 +97,20 @@ class HomeScreen extends React.Component {
 							case isSpotDetailsOpen:
 								return <SpotDetailsNavBar leftOption={{ action: () => toggleSpotDetails() }} />;
 							default:
-								return <HomeNavigationBar nearbySpotsCount={trees.length} />;
+								return <HomeNavigationBar nearbySpotsCount={treeGroups.length} />;
 						}
 					})(),
 				},
 			});
-		} else if (trees.length !== prevProps.trees.length && !isFilterOpen && !isSpotDetailsOpen) {
+		} else if (
+			treeGroups.length !== prevProps.treeGroups.length &&
+			!isFilterOpen &&
+			!isSpotDetailsOpen
+		) {
 			navigation.setParams({
 				header: {
 					...defaultHeaderOptions,
-					headerTitle: <HomeNavigationBar nearbySpotsCount={trees.length} />,
+					headerTitle: <HomeNavigationBar nearbySpotsCount={treeGroups.length} />,
 				},
 			});
 		}
@@ -182,7 +186,7 @@ const mapStateToProps = (state) => ({
 	isFilterOpen: state.ui.isFilterOpen,
 	userLocation: state.location.userLocation,
 	isSpotDetailsOpen: state.ui.isSpotDetailsOpen,
-	trees: state.tree.trees,
+	treeGroups: state.tree.treeGroups,
 });
 
 const mapDispatchToProps = (dispatch) => ({

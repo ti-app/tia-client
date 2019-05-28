@@ -11,12 +11,19 @@ export default ({ status }) => (
 const styles = StyleSheet.create({
 	outerCircle: {
 		backgroundColor: '#228B22',
-		padding: 5,
-		borderRadius: 25,
+		padding: 0,
+		borderRadius: 7.5,
+		width: 15,
+		height: 15,
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	innerCircle: {
 		backgroundColor: '#ffffff',
-		padding: 5,
-		borderRadius: 25,
+		width: 10,
+		height: 10,
+		borderRadius: 5,
 	},
 });

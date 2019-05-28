@@ -1,23 +1,34 @@
 import { Toast } from 'native-base';
+// import axios from 'axios';
 
 import apiClient from '../../utils/ApiClient';
+
 import showErrorToast from '../../utils/ErrorToast';
 import NavigationUtil from '../../utils/Navigation';
 
 export const ADD_GROUP = 'ADD_GROUP';
 export const FETCH_TREE = 'FETCH_TREE';
-export const FETCH_TREE_SUCCESS = 'FETCH_TREE_SUCCESS';
+export const FETCH_TREE_GROUP_SUCCESS = 'FETCH_TREE_GROUP_SUCCESS';
 export const SET_TREE_SPOT = 'SET_TREE_SPOT';
 export const RESET_TREE_SPOT = 'RESET_TREE_SPOT';
 export const WATER_TREE_SUCCESS = 'WATER_TREE_SUCCESS';
 export const WATER_TREE_FAILURE = 'WATER_TREE_FAILURE';
 export const DELETE_TREE = 'DELETE_TREE';
 
+// TODO: Need to implement cancel on refetch for treegroups. Following commented implmentaion is not working well.
+// const { CancelToken } = axios;
+// let cancel;
+
 /**
  * Accepts parameter treeGroup which should be a FormData including an Image.
  * @param {FormData} treeGroup
  */
-export const addGroup = (treeGroup) => async (dispatch) => {
+export const addGroup = (treeGroup) => async (dispatch, getState) => {
+	const state = getState();
+	const {
+		location: { mapCenter },
+	} = state;
+
 	try {
 		await apiClient({
 			method: 'post',
@@ -27,19 +38,30 @@ export const addGroup = (treeGroup) => async (dispatch) => {
 		});
 
 		NavigationUtil.navigate('Home');
+		fetchTreeGroups({
+			...mapCenter,
+			latitudeDelta: 0.508817991434235,
+			longitudeDelta: 0.15413663983345,
+		});
 	} catch (err) {
 		showErrorToast('Error adding a tree group.', err, dispatch);
 	}
 };
 
-export const fetchTrees = (location, radius = 10000, health = 'healthy,weak,almostDead') => async (
-	dispatch
-) => {
+export const fetchTreeGroups = (
+	location,
+	radius = 10000,
+	health = 'healthy,weak,almostDead'
+) => async (dispatch) => {
 	try {
 		const { latitude: lat, longitude: lng } = location;
 
+		// if (cancel) {
+		//     cancel();
+		// }
+
 		const response = await apiClient({
-			url: '/tree',
+			url: '/tree_group',
 			params: {
 				lat,
 				lng,
@@ -49,9 +71,13 @@ export const fetchTrees = (location, radius = 10000, health = 'healthy,weak,almo
 			headers: {
 				'Content-Type': 'application/json',
 			},
+			// cancelToken: new CancelToken(function executor(c) {
+			//     cancel = c;
+			// }),
 			noloading: true,
 		});
-		dispatch(fetchTreeSuccess(response.data));
+		// cancel = null;
+		dispatch(fetchTreeGroupsSuccess(response.data));
 	} catch (err) {
 		showErrorToast('Error fetching nearby trees.', err, dispatch);
 	}
@@ -59,8 +85,8 @@ export const fetchTrees = (location, radius = 10000, health = 'healthy,weak,almo
 
 export const waterTree = (tree) => async (dispatch) => {
 	try {
-		const { id } = tree;
-		const url = `/tree/water/${id}`;
+		const { _id } = tree;
+		const url = `/tree/water/${_id}`;
 		console.log(`[tree-action::waterTree] making request to "${url}"`);
 		const response = await apiClient({
 			url,
@@ -89,7 +115,7 @@ export const deleteTree = (tree) => async (dispatch) => {
 		const { id } = tree;
 		const url = `/tree/${id}`;
 		console.log(`[tree-action::deleteTree] making request to "${url}"`);
-		const response = await apiClient({
+		await apiClient({
 			url,
 			headers: {
 				'Content-Type': 'application/json',
@@ -111,8 +137,8 @@ export const deleteTree = (tree) => async (dispatch) => {
 	}
 };
 
-export const fetchTreeSuccess = (payload) => ({
-	type: FETCH_TREE_SUCCESS,
+export const fetchTreeGroupsSuccess = (payload) => ({
+	type: FETCH_TREE_GROUP_SUCCESS,
 	payload,
 });
 
