@@ -1,12 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, Image } from 'react-native';
-import { View, Text, Container, Content, Button } from 'native-base';
+import { StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Container, Button } from 'native-base';
+import { MaterialIcons } from '@expo/vector-icons';
+
+import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
+import { waterTree, deleteTree, resetTreeSpot } from '../../store/actions/tree.action';
 
 class SpotDetails extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			waterButton: {
+				disabled: false,
+				text: 'WATERED',
+			},
+		};
 	}
 
 	renderWeekStatus = (weekStatus) => {
@@ -19,13 +28,87 @@ class SpotDetails extends React.Component {
 		);
 	};
 
+	updateWaterButton = (props) => {
+		this.setState({ waterButton: { ...props } });
+	};
+
+	waterTree = () => {
+		this.updateWaterButton({ disabled: true, text: 'please wait...' });
+		const { tree } = this.props;
+		const spotWatered = tree.spotDetails;
+		console.log(`[SpotDetails.js::waterTree] watering tree with id "${spotWatered.id}"`);
+		// I am sorry I am doing eslint disable for this one. Don't tell anyone. Shhhh....
+		// eslint-disable-next-line react/destructuring-assignment
+		this.props.waterTree(spotWatered);
+	};
+
+	deletePlantConfirmed = () => {
+		const { deleteTree, tree, toggleSpotDetails, resetTreeSpot } = this.props;
+		const treeToDelete = tree.spotDetails;
+		deleteTree(treeToDelete);
+		toggleSpotDetails();
+		resetTreeSpot();
+	};
+
+	showConfirmDeleteAlert = () => {
+		// Works on both iOS and Android
+		Alert.alert(
+			'Delete Plant',
+			'Are you sure? All the data associated this plant will be lost. You will not be able to undo this operation.',
+			[
+				{
+					text: 'Yes, Delete',
+					onPress: this.deletePlantConfirmed,
+					style: 'destructive',
+				},
+				{
+					text: 'Cancel',
+					onPress: () => {
+						/** NOOP */
+					},
+					style: 'cancel',
+				},
+			],
+			{ cancelable: false }
+		);
+	};
+
+	/**
+	 * TODO:
+	 * Rather than just rendering the delete button for all the users,
+	 * First check if the user logged in has enough authorization to delete the plant
+	 * If he is the OWNER or MODERATOR, he should be able to delete it.
+	 * Other wise, do not render the delete button
+	 */
+	getDeleteButton = () => {
+		return (
+			<TouchableOpacity style={styles.deleteButton} onPress={this.showConfirmDeleteAlert}>
+				<MaterialIcons name="delete" size={24} color="red" />
+			</TouchableOpacity>
+		);
+	};
+
+	getDeletionBackdrop = () => {
+		const { deleting } = this.state;
+		if (!deleting) return null;
+		return (
+			<View style={styles.deletionBackdrop}>
+				<Text>Deleting Plant...</Text>
+			</View>
+		);
+	};
+
 	render() {
+		const { waterButton } = this.state;
 		return (
 			<Container style={styles.container}>
 				<View style={styles.content}>
 					<View style={styles.heading}>
-						<Text style={styles.addressLabel}>Two Stones</Text>
-						<Text style={styles.distanceLabel}>1.3 km FROM HOME</Text>
+						<View style={styles.plantHeading}>
+							<Text style={styles.addressLabel}>Two Stones</Text>
+							<Text style={styles.distanceLabel}>1.3 km FROM HOME</Text>
+						</View>
+						{this.getDeleteButton()}
 					</View>
 					<View style={styles.weekStatusContainer}>
 						{this.renderWeekStatus([
@@ -49,12 +132,15 @@ class SpotDetails extends React.Component {
 					<Text>82 more have watered here</Text>
 					<Button
 						style={styles.wateredButton}
+						/**
+						 * For some reason, the button does not look 'disabled'
+						 * even if waterButton.disabled is true :/
+						 */
+						disabled={waterButton.disabled}
 						success
-						onPress={() => {
-							console.log('watered the tree');
-						}}
+						onPress={this.waterTree}
 					>
-						<Text> WATERED </Text>
+						<Text> {waterButton.text} </Text>
 					</Button>
 				</View>
 			</Container>
@@ -76,7 +162,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		height: '100%',
 	},
-	heading: { display: 'flex', flexDirection: 'row' },
+	heading: { display: 'flex', flexDirection: 'row', justifyContent: 'space-between' },
 	addressLabel: { fontSize: 20, textAlignVertical: 'bottom', paddingRight: 8 },
 	distanceLabel: { fontSize: 12, color: 'gray', textAlignVertical: 'bottom' },
 	weekStatus: { display: 'flex', flexDirection: 'row' },
@@ -87,11 +173,30 @@ const styles = StyleSheet.create({
 	almostDead: { backgroundColor: 'red' },
 	lastWateredText: { fontSize: 12, color: 'gray' },
 	wateredButton: { width: '100%', paddingRight: 8, paddingLeft: 8, textAlign: 'center' },
+	plantHeading: {
+		flex: 1,
+		display: 'flex',
+		flexDirection: 'row',
+	},
+	deleteButton: {
+		padding: 8,
+		borderColor: 'black',
+	},
 });
 
-const mapDispatchToProps = (dispatch) => ({});
+const mapStateToProps = (state) => ({
+	tree: state.tree,
+	user: state.user,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	waterTree: (tree) => dispatch(waterTree(tree)),
+	deleteTree: (tree) => dispatch(deleteTree(tree)),
+	resetTreeSpot: () => dispatch(resetTreeSpot()),
+	toggleSpotDetails: () => dispatch(toggleSpotDetails),
+});
 
 export default connect(
-	null,
+	mapStateToProps,
 	mapDispatchToProps
 )(SpotDetails);

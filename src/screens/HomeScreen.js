@@ -11,7 +11,7 @@ import AddActionButton from '../components/shared/AddActionButton';
 import FilterTree from '../components/Home/FilterTree';
 import SpotDetails from '../components/Home/SpotDetails';
 import { fetchUserLocation } from '../store/actions/location.action';
-import { OptionsBar } from '../components/Navigation/OptionsBar';
+import OptionsBar from '../components/Navigation/OptionsBar';
 import { SpotDetailsNavBar } from '../components/Navigation/SpotDetailsNavBar';
 import { toggleFilter, toggleSpotDetails } from '../store/actions/ui-interactions.action';
 

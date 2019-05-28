@@ -29,13 +29,6 @@ const uiInteractionsReducer = (state = initialState, action) => {
 				isSpotDetailsOpen: !state.isSpotDetailsOpen,
 			};
 		}
-
-		case TOGGLE_SPOT_DETAILS: {
-			return {
-				isSpotDetailsOpen: !state.isSpotDetailsOpen,
-			};
-		}
-
 		case SET_LOADING: {
 			return {
 				loading: action.flag,
