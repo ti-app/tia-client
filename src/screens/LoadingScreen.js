@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
 import firebase from 'firebase';
-import { setLoading } from '../store/actions/ui-interactions.action';
 
 export default class Loading extends React.Component {
 	componentDidMount() {
@@ -13,7 +12,7 @@ export default class Loading extends React.Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text>Loading</Text>
+				<Text>Life without love is like a tree without blossoms or fruit.</Text>
 				<ActivityIndicator size="large" />
 			</View>
 		);
