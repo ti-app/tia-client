@@ -45,7 +45,6 @@ class HomeScreen extends React.Component {
 				backgroundColor: '#ffff',
 				opacity: 0.8,
 			},
-			headerLeft: null,
 		});
 		return header;
 	};
