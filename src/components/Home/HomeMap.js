@@ -80,7 +80,7 @@ class HomeMap extends React.Component {
 		if (
 			splittedTreeGroup &&
 			splittedTreeGroup.id === data.id &&
-			splittedTreeGroup.trees.length === data.trees.length
+			JSON.stringify(splittedTreeGroup.trees) === JSON.stringify(data.trees) // TODO: This could create some problem. But right now this is the only faster and easier I can think of.
 		) {
 			const { trees } = splittedTreeGroup;
 			const division = 360 / trees.length;
