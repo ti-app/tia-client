@@ -24,7 +24,7 @@ class AddNewSpotScreen extends React.Component {
 		const header = navigation.getParam('header', {
 			headerTitle: (
 				<OptionsBar
-					title="Add a new spot"
+					title="Add a spot"
 					leftOption={{
 						label: 'Cancel',
 						action: () => navigation.navigate('Home'),

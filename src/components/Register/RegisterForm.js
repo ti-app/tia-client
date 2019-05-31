@@ -41,7 +41,6 @@ class RegisterPasswordForm extends React.Component {
 			.createUserWithEmailAndPassword(this.state.email, this.state.password)
 			.then(
 				(resp) => {
-					console.log('Working till here ....', resp);
 					firebase
 						.auth()
 						.currentUser.updateProfile({
@@ -49,21 +48,20 @@ class RegisterPasswordForm extends React.Component {
 						})
 						.then(async (updateUser) => {
 							try {
-								console.log('User is updated', updateUser);
 								setLoading(false);
+								this.props.navigation.navigate('Home');
+								this.setState({
+									showPassword: false,
+									email: '',
+									password: '',
+									location: '',
+								});
 								Toast.show({
 									text: `Welcome! Successfully registerd in TIA`,
 									buttonText: 'Great',
 									type: 'success',
 								});
-								this.props.navigation.navigate('Home');
-								this.state = {
-									showPassword: false,
-									email: '',
-									password: '',
-									location: '',
-								};
-								await AsyncStorage.setItem('USER', resp);
+								// await AsyncStorage.setItem('USER', resp);
 							} catch (error) {
 								Toast.show({
 									text: `Something bad happened!`,
