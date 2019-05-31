@@ -102,7 +102,7 @@ class SpotDetails extends React.Component {
 		const { waterButton } = this.state;
 		const { tree } = this.props;
 		const { spotDetails } = tree;
-		const { photo } = spotDetails;
+		const photo = spotDetails ? spotDetails.photo : null;
 
 		return (
 			<Container style={styles.container}>

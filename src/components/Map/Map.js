@@ -1,13 +1,14 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import ClusteredMapView from 'react-native-maps-super-cluster';
+// import ClusteredMapView from 'react-native-maps-super-cluster';
+import MapView from 'react-native-maps';
 
 export default class HomeScreen extends React.Component {
 	render() {
 		const { onMapLoad } = this.props;
 
 		return (
-			<ClusteredMapView
+			<MapView
 				ref={(r) => {
 					onMapLoad(r);
 				}}

@@ -38,11 +38,11 @@ export const addGroup = (treeGroup) => async (dispatch, getState) => {
 		});
 
 		NavigationUtil.navigate('Home');
-		fetchTreeGroups({
-			...mapCenter,
-			latitudeDelta: 0.508817991434235,
-			longitudeDelta: 0.15413663983345,
-		});
+		dispatch(
+			fetchTreeGroups({
+				...mapCenter,
+			})
+		);
 	} catch (err) {
 		showErrorToast('Error adding a tree group.', err, dispatch);
 	}
@@ -83,7 +83,12 @@ export const fetchTreeGroups = (
 	}
 };
 
-export const waterTree = (tree) => async (dispatch) => {
+export const waterTree = (tree) => async (dispatch, getState) => {
+	const state = getState();
+	const {
+		location: { mapCenter },
+	} = state;
+
 	try {
 		const { _id } = tree;
 		const url = `/tree/water/${_id}`;
@@ -104,13 +109,24 @@ export const waterTree = (tree) => async (dispatch) => {
 				textAlign: 'center',
 			},
 		});
+
+		dispatch(
+			fetchTreeGroups({
+				...mapCenter,
+			})
+		);
 	} catch (err) {
 		showErrorToast('Error watering the trees', err, dispatch);
 		dispatch(waterTreeFailure(err));
 	}
 };
 
-export const deleteTree = (tree) => async (dispatch) => {
+export const deleteTree = (tree) => async (dispatch, getState) => {
+	const state = getState();
+	const {
+		location: { mapCenter },
+	} = state;
+
 	try {
 		const { _id } = tree;
 		const url = `/tree/${_id}`;
@@ -131,6 +147,11 @@ export const deleteTree = (tree) => async (dispatch) => {
 				textAlign: 'center',
 			},
 		});
+		dispatch(
+			fetchTreeGroups({
+				...mapCenter,
+			})
+		);
 	} catch (err) {
 		showErrorToast('Error deleting the tree.', err, dispatch);
 		dispatch(waterTreeFailure(err));

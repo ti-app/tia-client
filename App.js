@@ -23,7 +23,6 @@ export default class App extends React.Component {
 
 	async componentWillMount() {
 		const launchStatus = await this.getLaunchStatus();
-		console.log(launchStatus);
 		this.setState({ showIntroduction: launchStatus === 'INITIAL' });
 	}
 

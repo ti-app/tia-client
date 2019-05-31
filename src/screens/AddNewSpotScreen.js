@@ -10,6 +10,7 @@ import Tree from '../components/Map/Tree';
 import FormInput from '../components/shared/FormInput';
 import { SelectTreeHealth } from '../components/shared/SelectTreeHealth';
 import { addGroup } from '../store/actions/tree.action';
+import { fetchUserLocation } from '../store/actions/location.action';
 
 class AddNewSpotScreen extends React.Component {
 	state = {
@@ -41,6 +42,11 @@ class AddNewSpotScreen extends React.Component {
 		return header;
 	};
 
+	componentWillMount() {
+		const { fetchUserLocation } = this.props;
+		fetchUserLocation();
+	}
+
 	handleNumberOfPlantsChange = (numberOfPlants) => {
 		this.setState({ plants: numberOfPlants });
 	};
@@ -58,9 +64,7 @@ class AddNewSpotScreen extends React.Component {
 		const { status: cameraRollPerm } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
 		if (cameraPerm === 'granted' && cameraRollPerm === 'granted') {
-			console.log('launching camersa');
 			const pickerResult = await ImagePicker.launchCameraAsync({});
-			console.log(pickerResult);
 			this.setState({ photo: pickerResult.uri });
 		}
 	};
@@ -127,6 +131,7 @@ class AddNewSpotScreen extends React.Component {
 						scrollEnabled={false}
 						pitchEnabled={false}
 						rotateEnabled={false}
+						zoomEnabled={false}
 					>
 						<Marker key="unique-marker-id-here" coordinate={{ latitude, longitude }}>
 							<Tree status={health || 'healthy'} />
@@ -235,6 +240,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	addGroup: (flag) => dispatch(addGroup(flag)),
+	fetchUserLocation: () => dispatch(fetchUserLocation()),
 });
 
 export default connect(

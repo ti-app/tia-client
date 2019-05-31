@@ -7,20 +7,20 @@ import { connect } from 'react-redux';
 
 import { getAvgHealthStatus } from '../../utils/HealtStatus';
 import debounce from '../../utils/Debounce';
-import ClusteredMap from '../Map/ClusteredMap';
+import Map from '../Map/Map';
 import TreeCluster from '../Map/TreeCluster';
 import Tree from '../Map/Tree';
 import Spot from '../Map/Spot';
 import { toggleSpotDetails } from '../../store/actions/ui-interactions.action';
 import { fetchTreeGroups, setTreeSpot, resetTreeSpot } from '../../store/actions/tree.action';
-import { setMapCenterAndFetchTreeGroups } from '../../store/actions/location.action';
+import { setMapCenterAndFetchTreeGroups, setMapCenter } from '../../store/actions/location.action';
 import store from '../../store';
 
 class HomeMap extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.clusteredMapRef = React.createRef();
+		this.mapRef = React.createRef();
 		this.state = {
 			splittedTreeGroup: null,
 		};
@@ -33,27 +33,28 @@ class HomeMap extends React.Component {
 		const { userLocation, setMapCenterAndFetchTreeGroups } = this.props;
 		const { latitude: userLatitude, longitude: userLongitude } = userLocation;
 
-		if ((userLatitude !== prevUserLat || userLongitude !== prevUserLng) && this.clusteredMapRef) {
+		if ((userLatitude !== prevUserLat || userLongitude !== prevUserLng) && this.mapRef) {
 			const mapLocation = {
 				latitude: userLatitude,
 				longitude: userLongitude,
-				latitudeDelta: 0.508817991434235,
-				longitudeDelta: 0.15413663983345,
+				latitudeDelta: 0.023569992395493955,
+				longitudeDelta: 0.0216786190867424,
 			};
-			this.clusteredMapRef.getMapRef().animateToRegion(mapLocation, 2000);
+			this.mapRef.animateToRegion(mapLocation, 2000);
 			console.log('[HomeMap.js::componentDidUpdate] calling setMapCenterAndFetchTreeGroups');
 			setMapCenterAndFetchTreeGroups(mapLocation);
 		}
 	}
 
 	onRegionChange = (region) => {
-		const { setMapCenterAndFetchTreeGroups, isSpotDetailsOpen } = this.props;
+		console.log(region);
+		const { setMapCenter, isSpotDetailsOpen } = this.props;
 		if (!isSpotDetailsOpen) {
-			console.log('[HomeMap.js::onRegionChange] calling setMapCenterAndFetchTreeGroups');
-			setMapCenterAndFetchTreeGroups(region);
+			console.log('[HomeMap.js::onRegionChange] calling setMapCenter');
+			setMapCenter(region);
 		} else {
 			console.log(
-				'[HomeMap.js::onRegionChange] avoiding call to setMapCenterAndFetchTreeGroups because isSpotDetailsOpen is truthy'
+				'[HomeMap.js::onRegionChange] avoiding call to setMapCenter because isSpotDetailsOpen is truthy'
 			);
 		}
 	};
@@ -61,8 +62,6 @@ class HomeMap extends React.Component {
 	renderMarker = (data) => {
 		const { splittedTreeGroup } = this.state;
 		const { toggleSpotDetails } = this.props;
-
-		console.log(data);
 
 		if (data.trees.length === 1) {
 			return (
@@ -78,8 +77,11 @@ class HomeMap extends React.Component {
 			);
 		}
 
-		if (splittedTreeGroup && splittedTreeGroup.id === data.id) {
-			console.log('data._id', data.id);
+		if (
+			splittedTreeGroup &&
+			splittedTreeGroup.id === data.id &&
+			splittedTreeGroup.trees.length === data.trees.length
+		) {
 			const { trees } = splittedTreeGroup;
 			const division = 360 / trees.length;
 			const radius = 0.00003;
@@ -105,7 +107,7 @@ class HomeMap extends React.Component {
 
 		return (
 			<Marker
-				key={data._id}
+				key={data.id}
 				coordinate={data.location}
 				onPress={() => {
 					this.setState({ splittedTreeGroup: data });
@@ -119,7 +121,7 @@ class HomeMap extends React.Component {
 	renderCluster = (cluster, onPress) => {
 		const { pointCount, clusterId, coordinate } = cluster;
 
-		const clusteringEngine = this.clusteredMapRef.getClusteringEngine();
+		const clusteringEngine = this.mapRef.getClusteringEngine();
 		const clusteredPoints = clusteringEngine.getLeaves(clusterId, 100);
 
 		const clusteredPointHealthList = clusteredPoints.map((point) => point.properties.item.health);
@@ -145,8 +147,8 @@ class HomeMap extends React.Component {
 		const { latitude, longitude } = userLocation;
 		const { onMapLoad } = this.props;
 
-		const mapData = treeGroups.map((aTree) => {
-			const { _id, health, location, ...rest } = aTree;
+		const mapData = treeGroups.map((treeGroup) => {
+			const { _id, health, location, ...rest } = treeGroup;
 			const { coordinates } = location;
 			return {
 				id: _id,
@@ -158,24 +160,26 @@ class HomeMap extends React.Component {
 
 		return (
 			<Container style={styles.container}>
-				<ClusteredMap
+				<Map
 					onMapLoad={(ref) => {
-						this.clusteredMapRef = ref;
+						this.mapRef = ref;
 						onMapLoad(ref);
 					}}
 					initialRegion={{
 						latitude,
 						longitude,
-						latitudeDelta: 0.508817991434235,
-						longitudeDelta: 0.15413663983345,
+						latitudeDelta: 0.023569992395493955,
+						longitudeDelta: 0.0216786190867424,
 					}}
 					x
-					data={mapData}
-					renderMarker={this.renderMarker}
-					renderCluster={this.renderCluster}
+					// data={mapData}
+					// renderMarker={this.renderMarker}
+					// renderCluster={this.renderCluster}
 					onRegionChangeComplete={debounce(this.onRegionChange, 100, false)}
 					showsUserLocation
-				/>
+				>
+					{mapData.map((treeGroup) => this.renderMarker(treeGroup))}
+				</Map>
 			</Container>
 		);
 	}
@@ -218,6 +222,7 @@ const mapDispatchToProps = (dispatch) => ({
 		}
 	},
 	fetchTreeGroups: (...param) => dispatch(fetchTreeGroups(...param)),
+	setMapCenter: (location) => dispatch(setMapCenter(location)),
 	setMapCenterAndFetchTreeGroups: (location) => dispatch(setMapCenterAndFetchTreeGroups(location)),
 });
 

@@ -16,7 +16,7 @@ class FilterTree extends React.Component {
 	}
 
 	render() {
-		const { distance } = this.state;
+		const { distance, minDistance, maxDistance } = this.state;
 
 		return (
 			<Container style={styles.container}>
@@ -26,8 +26,8 @@ class FilterTree extends React.Component {
 						<Slider
 							style={styles.slider}
 							step={1}
-							minimumValue={this.state.minDistance}
-							maximumValue={this.state.maxDistance}
+							minimumValue={minDistance}
+							maximumValue={maxDistance}
 							value={distance}
 							onValueChange={(val) => this.setState({ distance: val })}
 							thumbTintColor="rgb(252, 228, 149)"
@@ -36,7 +36,7 @@ class FilterTree extends React.Component {
 						/>
 					</View>
 					<View style={styles.currentDistanceView}>
-						<Text style={styles.currentDistance}>{this.state.distance + 'km'}</Text>
+						<Text style={styles.currentDistance}>{`${distance}km`}</Text>
 					</View>
 					<Text style={styles.textStyle}>How much water you can carry?</Text>
 					<View style={styles.view}>

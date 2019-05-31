@@ -22,6 +22,7 @@ export const fetchUserLocation = () => {
 			setTimeout(async () => {
 				try {
 					const locationData = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
+					console.log(locationData);
 					dispatch(fetchUserLocationSuccess(locationData));
 				} catch (err) {
 					console.log('Error while getting USER position', err);

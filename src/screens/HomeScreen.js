@@ -18,7 +18,7 @@ import { toggleFilter, toggleSpotDetails } from '../store/actions/ui-interaction
 class HomeScreen extends React.Component {
 	constructor(props) {
 		super(props);
-		this.clusteredMapRef = React.createRef();
+		this.mapRef = React.createRef();
 		this.state = {
 			defaultHeaderOptions: {
 				headerTitle: <HomeNavigationBar nearbySpotsCount={0} />,
@@ -119,16 +119,16 @@ class HomeScreen extends React.Component {
 	handleMyLocationClick() {
 		const { userLocation } = this.props;
 		const { latitude, longitude } = userLocation;
-		this.clusteredMapRef.getMapRef().animateToRegion({
+		this.mapRef.animateToRegion({
 			latitude,
 			longitude,
-			latitudeDelta: 0.508817991434235,
-			longitudeDelta: 0.15413663983345,
+			latitudeDelta: 0.023569992395493955,
+			longitudeDelta: 0.0216786190867424,
 		});
 	}
 
 	handleOnMapLoad = (ref) => {
-		this.clusteredMapRef = ref;
+		this.mapRef = ref;
 	};
 
 	render() {
@@ -148,7 +148,7 @@ class HomeScreen extends React.Component {
 					</View>
 				) : (
 					<React.Fragment>
-						<AddActionButton {...this.props} clusteredMapRef={this.clusteredMapRef} />
+						<AddActionButton {...this.props} mapRef={this.mapRef} />
 						<TouchableOpacity
 							style={styles.myLocationIcon}
 							onPress={() => this.handleMyLocationClick()}
