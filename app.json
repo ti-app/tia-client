@@ -29,7 +29,8 @@
 					"apiKey": "AIzaSyDsbsg9Vv4LPlVHTRwJ3NQSAQMBS3ICa1w",
 					"certificateHash": "B7BEFE0AB86EF4BBAA4D54F394CE351471518023"
 				}
-			}
+			},
+			"permissions": []
 		}
 	}
 }
