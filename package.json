@@ -3,7 +3,8 @@
 	"main": "node_modules/expo/AppEntry.js",
 	"private": true,
 	"scripts": {
-		"start": "expo start",
+		"start": "expo start -c",
+		"optimize": "expo optimize",
 		"start:debug": "export REACT_DEBUGGER=\"unset ELECTRON_RUN_AS_NODE && open -g 'rndebugger://set-debugger-loc?port=19001' ||\" && npm start",
 		"android": "expo start --android",
 		"ios": "expo start --ios",
@@ -11,14 +12,15 @@
 		"eject": "expo eject"
 	},
 	"dependencies": {
+		"@expo/vector-icons": "^9.0.0",
 		"axios": "^0.18.0",
 		"color": "^3.1.0",
-		"expo": "31.0.2",
+		"expo": "^32.0.0",
 		"firebase": "^5.8.3",
 		"native-base": "2.8.2",
 		"prop-types": "^15.6.2",
 		"react": "16.5.0",
-		"react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+		"react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
 		"react-native-action-button": "^2.8.5",
 		"react-native-app-intro-slider": "^1.0.1",
 		"react-native-drawer": "^2.5.1",
@@ -41,6 +43,7 @@
 		"eslint-plugin-jsx-a11y": "^6.2.1",
 		"eslint-plugin-prettier": "^3.0.1",
 		"eslint-plugin-react": "^7.12.4",
+		"expo-cli": "^2.11.6",
 		"husky": "^1.1.4",
 		"lint-staged": "^8.0.5",
 		"prettier": "^1.16.4"

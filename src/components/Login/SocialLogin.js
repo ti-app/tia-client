@@ -72,15 +72,25 @@ class SocialLogin extends React.Component {
 
 	signInWithGoogleAsync = async () => {
 		const { setLoading, navigation } = this.props;
+		const GOOGLE_CLIENTID_ANDROID_STANDALONE =
+			'67755937701-bh1enrj7rlg0s5hi131qsf4emo76vi3t.apps.googleusercontent.com';
+		const GOOGLE_CLIENTID_ANDROID_EXPO =
+			'67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com';
+		const GOOGLE_CLIENTID_IOS_EXPO =
+			'67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com';
+		const WEB_CLIENT_ID = '67755937701-5371f081rqom8d5lhc6m9hmdqlspjpmv.apps.googleusercontent.com';
 		try {
 			setLoading(true);
 			const result = await Google.logInAsync({
 				behavior: 'web',
-				androidClientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
-				iosClientId: '67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com',
-				clientId: '67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com',
-				androidStandaloneAppClientId:
-					'67755937701-bh1enrj7rlg0s5hi131qsf4emo76vi3t.apps.googleusercontent.com',
+				androidClientId:
+					Expo.Constants.appOwnership === 'standalone'
+						? GOOGLE_CLIENTID_ANDROID_STANDALONE
+						: GOOGLE_CLIENTID_ANDROID_EXPO,
+				iosClientId: GOOGLE_CLIENTID_IOS_EXPO,
+				androidStandaloneAppClientId: GOOGLE_CLIENTID_ANDROID_STANDALONE,
+				iosStandaloneAppClientId: GOOGLE_CLIENTID_ANDROID_STANDALONE,
+				webClientId: WEB_CLIENT_ID,
 				scopes: ['profile', 'email'],
 			});
 

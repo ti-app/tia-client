@@ -4,9 +4,9 @@
 		"description": "This project is really great.",
 		"slug": "tia",
 		"privacy": "public",
-		"sdkVersion": "31.0.0",
+		"sdkVersion": "32.0.0",
 		"platforms": ["ios", "android"],
-		"version": "1.0.0",
+		"version": "1.0.1",
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
 		"splash": {
@@ -24,13 +24,13 @@
 		},
 		"android": {
 			"package": "com.tiaorg.tia",
+			"versionCode": 36,
 			"config": {
 				"googleSignIn": {
 					"apiKey": "AIzaSyDsbsg9Vv4LPlVHTRwJ3NQSAQMBS3ICa1w",
 					"certificateHash": "B7BEFE0AB86EF4BBAA4D54F394CE351471518023"
 				}
-			},
-			"permissions": []
+			}
 		}
 	}
 }
