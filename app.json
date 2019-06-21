@@ -24,7 +24,7 @@
 		},
 		"android": {
 			"package": "com.tiaorg.tia",
-			"versionCode": 35.1,
+			"versionCode": 36,
 			"config": {
 				"googleSignIn": {
 					"apiKey": "AIzaSyDsbsg9Vv4LPlVHTRwJ3NQSAQMBS3ICa1w",
