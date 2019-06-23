@@ -46,7 +46,9 @@
 		"expo-cli": "^2.11.6",
 		"husky": "^1.1.4",
 		"lint-staged": "^8.0.5",
-		"prettier": "^1.16.4"
+		"metro-react-native-babel-preset": "^0.54.1",
+		"prettier": "^1.16.4",
+		"react-native-dotenv": "^0.2.0"
 	},
 	"rnpm": {
 		"assets": [
