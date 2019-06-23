@@ -8,6 +8,14 @@ import ProductButton from '../shared/ProductButton';
 import { setLoading } from '../../store/actions/ui-interactions.action';
 import { updateUserStatus } from '../../store/actions/auth.action';
 
+import {
+	GOOGLE_CLIENTID_ANDROID_STANDALONE,
+	GOOGLE_CLIENTID_ANDROID_EXPO,
+	GOOGLE_CLIENTID_IOS_EXPO,
+	WEB_CLIENT_ID,
+	FB_APP_ID,
+} from 'react-native-dotenv';
+
 class SocialLogin extends React.Component {
 	isUserEqual = (googleUser, firebaseUser) => {
 		if (firebaseUser) {
@@ -36,20 +44,19 @@ class SocialLogin extends React.Component {
 			.auth()
 			.signInAndRetrieveDataWithCredential(credential)
 			.then(async (result) => {
-				console.log('user registered in firebase', result);
+				console.log('user registered!', result);
 			})
 			.catch((error) => {
-				console.log('error while singing with firebase', error);
+				console.log('error while signing!', error);
 			});
 	};
 
 	signInWithFBAsync = async () => {
 		setLoading(true);
-		const FBAPPID = '2439803646062305';
 		const options = {
 			permission: ['public_profile'],
 		};
-		const { type, token } = await Facebook.logInWithReadPermissionsAsync(FBAPPID, options);
+		const { type, token } = await Facebook.logInWithReadPermissionsAsync(FB_APP_ID, options);
 
 		if (type === 'success') {
 			setLoading(true);
@@ -72,13 +79,7 @@ class SocialLogin extends React.Component {
 
 	signInWithGoogleAsync = async () => {
 		const { setLoading, navigation } = this.props;
-		const GOOGLE_CLIENTID_ANDROID_STANDALONE =
-			'67755937701-bh1enrj7rlg0s5hi131qsf4emo76vi3t.apps.googleusercontent.com';
-		const GOOGLE_CLIENTID_ANDROID_EXPO =
-			'67755937701-gkp25qm93ou22ggejl7iu0faj0m0o58k.apps.googleusercontent.com';
-		const GOOGLE_CLIENTID_IOS_EXPO =
-			'67755937701-tcogrlq8kf6ht00k57qt225hta46lt5t.apps.googleusercontent.com';
-		const WEB_CLIENT_ID = '67755937701-5371f081rqom8d5lhc6m9hmdqlspjpmv.apps.googleusercontent.com';
+
 		try {
 			setLoading(true);
 			const result = await Google.logInAsync({

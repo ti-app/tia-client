@@ -14,7 +14,14 @@ import axios from 'axios';
 
 import AppNavigator from './navigation/AppNavigator';
 import MainTabNavigator from './navigation/MainNavigator';
-import firebaseConfig from './config/auth/FirebaseConfig.example';
+import {
+	FIREBASE_CONFIG_API_KEY,
+	FIREBASE_CONFIG_AUTH_DOMAIN,
+	FIREBASE_CONFIG_DATABASE_URL,
+	FIREBASE_CONFIG_PROJECT_ID,
+	FIREBASE_CONFIG_STORAGE_BUCKET,
+	FIREBASE_CONFIG_MESSAGING_SENDER_ID,
+} from 'react-native-dotenv';
 import NavigationUtil from './utils/Navigation';
 import { setLoading } from './store/actions/ui-interactions.action';
 import { updateUserStatus } from './store/actions/auth.action';
@@ -31,6 +38,15 @@ class AppContent extends React.Component {
 		setLoading(true);
 		// Initialize firebase...
 		if (!firebase.apps.length) {
+			const firebaseConfig = {
+				apiKey: FIREBASE_CONFIG_API_KEY,
+				authDomain: FIREBASE_CONFIG_AUTH_DOMAIN,
+				databaseURL: FIREBASE_CONFIG_DATABASE_URL,
+				projectId: FIREBASE_CONFIG_PROJECT_ID,
+				storageBucket: FIREBASE_CONFIG_STORAGE_BUCKET,
+				messagingSenderId: FIREBASE_CONFIG_MESSAGING_SENDER_ID,
+			};
+			console.log(firebaseConfig);
 			firebase.initializeApp(firebaseConfig);
 		}
 		firebase.auth().onAuthStateChanged(this.onAuthStateChanged);
