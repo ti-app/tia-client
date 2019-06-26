@@ -1,5 +1,4 @@
 import { Location, Permissions } from 'expo';
-import { Toast } from 'native-base';
 
 import { fetchTreeGroups } from './tree.action';
 
@@ -43,13 +42,6 @@ export const setMapCenterAndFetchTreeGroups = (locationData) => {
 	return (dispatch) => {
 		dispatch(setMapCenter(locationData));
 		dispatch(fetchTreeGroups(locationData));
-		Toast.show({
-			text: 'Getting nearby plants.',
-			duration: 1000,
-			textStyle: {
-				textAlign: 'center',
-			},
-		});
 	};
 };
 

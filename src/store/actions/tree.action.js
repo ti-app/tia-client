@@ -50,15 +50,11 @@ export const addGroup = (treeGroup) => async (dispatch, getState) => {
 
 export const fetchTreeGroups = (
 	location,
-	radius = 10000,
+	radius = 500,
 	health = 'healthy,weak,almostDead'
 ) => async (dispatch) => {
 	try {
 		const { latitude: lat, longitude: lng } = location;
-
-		// if (cancel) {
-		//     cancel();
-		// }
 
 		const response = await apiClient({
 			url: '/tree_group',
@@ -71,13 +67,18 @@ export const fetchTreeGroups = (
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			// cancelToken: new CancelToken(function executor(c) {
-			//     cancel = c;
-			// }),
+
 			noloading: true,
 		});
-		// cancel = null;
 		dispatch(fetchTreeGroupsSuccess(response.data));
+		Toast.show({
+			text: 'Getting nearby plants.',
+			duration: 2000,
+			textStyle: {
+				textAlign: 'center',
+			},
+		});
+		console.log('Getting Nearby Trees.');
 	} catch (err) {
 		showErrorToast('Error fetching nearby trees.', err, dispatch);
 	}

@@ -122,8 +122,8 @@ class HomeScreen extends React.Component {
 		this.mapRef.animateToRegion({
 			latitude,
 			longitude,
-			latitudeDelta: 0.023569992395493955,
-			longitudeDelta: 0.0216786190867424,
+			latitudeDelta: 0.011582007226706992,
+			longitudeDelta: 0.010652057826519012,
 		});
 	}
 

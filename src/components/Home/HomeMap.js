@@ -37,8 +37,8 @@ class HomeMap extends React.Component {
 			const mapLocation = {
 				latitude: userLatitude,
 				longitude: userLongitude,
-				latitudeDelta: 0.023569992395493955,
-				longitudeDelta: 0.0216786190867424,
+				latitudeDelta: 0.011582007226706992,
+				longitudeDelta: 0.010652057826519012,
 			};
 			this.mapRef.animateToRegion(mapLocation, 2000);
 			console.log('[HomeMap.js::componentDidUpdate] calling setMapCenterAndFetchTreeGroups');
@@ -168,8 +168,8 @@ class HomeMap extends React.Component {
 					initialRegion={{
 						latitude,
 						longitude,
-						latitudeDelta: 0.023569992395493955,
-						longitudeDelta: 0.0216786190867424,
+						latitudeDelta: 0.011582007226706992,
+						longitudeDelta: 0.010652057826519012,
 					}}
 					x
 					// data={mapData}

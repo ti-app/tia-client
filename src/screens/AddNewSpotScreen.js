@@ -17,7 +17,7 @@ class AddNewSpotScreen extends React.Component {
 		photo: null,
 		plants: 0,
 		health: null,
-		treeLocation: null,
+		centerBias: 0.00015,
 	};
 
 	static navigationOptions = ({ navigation }) => {
@@ -71,8 +71,9 @@ class AddNewSpotScreen extends React.Component {
 
 	handleAddSpot = () => {
 		const { addGroup } = this.props;
-		const { photo, plants, health, treeLocation } = this.state;
-		const { latitude, longitude } = treeLocation;
+		const { photo, plants, health } = this.state;
+		const { userLocation } = this.props;
+		const { latitude, longitude } = userLocation;
 		const formData = this.createFormData(photo, {
 			plants,
 			health,
@@ -107,12 +108,14 @@ class AddNewSpotScreen extends React.Component {
 		return !(plants && health);
 	};
 
-	handleOnRegionChange = (region) => {
-		this.setState({ treeLocation: region });
-	};
+	// handleOnRegionChange = region => {
+	//     const { latitude } = region;
+	//     const { centerBias } = this.state;
+	//     this.setState({ treeLocation: { ...region, latitude: latitude - centerBias } }); // Removed centerBias to get actual location of tree
+	// };
 
 	render() {
-		const { photo, health } = this.state;
+		const { photo, health, centerBias } = this.state;
 		const { userLocation } = this.props;
 		const { latitude, longitude } = userLocation;
 
@@ -122,12 +125,12 @@ class AddNewSpotScreen extends React.Component {
 					<MapView
 						style={styles.mapView}
 						initialRegion={{
-							latitude,
+							latitude: latitude + centerBias, // Added bias for center of map to align it properly in the viewport, temporary solution. TODO: Think of better way.
 							longitude,
-							latitudeDelta: 0.0922,
-							longitudeDelta: 0.0421,
+							latitudeDelta: 0.000882007226706992,
+							longitudeDelta: 0.000752057826519012,
 						}}
-						onRegionChangeComplete={this.handleOnRegionChange}
+						// onRegionChangeComplete={this.handleOnRegionChange}
 						scrollEnabled={false}
 						pitchEnabled={false}
 						rotateEnabled={false}
